@@ -18,7 +18,6 @@ class BarChart extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     const { data } = nextProps;
 
-    console.log('data', data);
     if (!data) return {};
 
     const titles = data.map(d => d.title);
@@ -26,42 +25,36 @@ class BarChart extends Component {
       .scaleBand()
       .domain(titles)
       .range([margin.left, width - margin.right])
-      .paddingInner(0.05);
+      .paddingInner(0.75)
+      .paddingOuter(.4);
 
-    // 2. map high temp to y-position
-    // get min/max of high temp
     const [yMin, yMax] = d3.extent(data, d => d.lifetime_gross);
-    console.log('yMin', yMin);
-    console.log('yMax', yMax);
     const yScale = d3
       .scaleLinear()
       .domain([0, yMax])
-      // .range([height - margin.bottom, margin.top]);
-      .range([0, height]);
+      .range([0, height - margin.bottom - margin.top]);
+    const yAxisScale = d3
+      .scaleLinear()
+      .domain([0, yMax])
+      .range([height - margin.bottom, margin.top]);
 
-    console.log('yScale max', yScale(yMax))
-
-
-    // array of objects: x, y, height
     const bars = data.map(d => {
       console.log('height', yScale(d.lifetime_gross));
       return {
-        x: xScale(d.title) + 63,
+        x: xScale(d.title),
         y: height - yScale(d.lifetime_gross) - margin.bottom,
         height: yScale(d.lifetime_gross),
         fill: '#f4f4f4'
       };
     });
 
-    return { bars, xScale, yScale };
+    return { bars, xScale, yScale, yAxisScale };
   }
 
   componentDidUpdate() {
     this.xAxis.scale(this.state.xScale);
-    // this.xAxis.scale();
     d3.select(this.refs.xAxis).call(this.xAxis);
-    this.yAxis.scale(this.state.yScale);
-    // this.yAxis.scale();
+    this.yAxis.scale(this.state.yAxisScale);
     d3.select(this.refs.yAxis).call(this.yAxis);
   }
 
@@ -69,7 +62,7 @@ class BarChart extends Component {
     return (
       <svg width={width} height={height}>
         {this.state.bars.map(d => (
-          <rect x={d.x} y={d.y} width={20} height={d.height} fill={d.fill} />
+          <rect x={d.x} y={d.y} width={this.state.xScale.bandwidth()} height={d.height} fill={d.fill} />
         ))}
         <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
         <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
