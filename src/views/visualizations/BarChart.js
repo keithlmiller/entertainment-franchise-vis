@@ -7,13 +7,12 @@ const margin = { top: 20, right: 5, bottom: 20, left: 45 };
 class BarChart extends Component {
   state = {
     bars: [],
+    yTickFormat: 1000000,
+    yTickLabel: 'M',
   };
 
   xAxis = d3.axisBottom();
-  yAxis = d3.axisLeft()
-    .tickFormat(
-      d => `$${parseInt((d) / 1000000)}M`
-    );
+  yAxis = d3.axisLeft();
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { data } = nextProps;
@@ -29,6 +28,8 @@ class BarChart extends Component {
       .paddingOuter(.4);
 
     const [yMin, yMax] = d3.extent(data, d => d.lifetime_gross);
+    const yTickFormat = yMax >= 1000000 ? 1000000 : 1000;
+    const yTickLabel = yMax >= 1000000 ? 'M' : 'k';
     const yScale = d3
       .scaleLinear()
       .domain([0, yMax])
@@ -48,21 +49,37 @@ class BarChart extends Component {
       };
     });
 
-    return { bars, xScale, yScale, yAxisScale };
+    return { bars, xScale, yScale, yAxisScale, yTickFormat, yTickLabel };
   }
 
   componentDidUpdate() {
-    this.xAxis.scale(this.state.xScale);
+    const {
+      xScale,
+      yAxisScale,
+      yTickFormat,
+      yTickLabel,
+    } = this.state;
+    this.xAxis
+      .scale(xScale);
     d3.select(this.refs.xAxis).call(this.xAxis);
-    this.yAxis.scale(this.state.yAxisScale);
+    this.yAxis
+      .scale(yAxisScale)
+      .tickFormat(
+        d => `$${parseInt((d) / yTickFormat)}${yTickLabel}`
+      );
     d3.select(this.refs.yAxis).call(this.yAxis);
   }
 
   render() {
+    const {
+      bars,
+      xScale,
+    } = this.state;
+
     return (
       <svg width={width} height={height}>
-        {this.state.bars.map(d => (
-          <rect x={d.x} y={d.y} width={this.state.xScale.bandwidth()} height={d.height} fill={d.fill} />
+        {bars.map(d => (
+          <rect x={d.x} y={d.y} width={xScale.bandwidth()} height={d.height} fill={d.fill} />
         ))}
         <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
         <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />

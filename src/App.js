@@ -20,13 +20,30 @@ class App extends Component {
         boxOfficeData.push(data);
       }
     ).then(() => {
-      // console.log('boxOfficeData', boxOfficeData);
 
-      const firstTen = boxOfficeData.slice(0, 5)
-
-      console.log('firstTen', firstTen);
-      this.setState({ data: firstTen })
+      const firstFive = this.getFirstX(boxOfficeData, 5);
+      const randFiveAdjacent = this.getRandXAdjacent(boxOfficeData, 5);
+      const randFive = this.getRandX(boxOfficeData, 5);
+      this.setState({ data: randFive })
     });
+  }
+
+  getRandIndex = (boxOfficeData, numMovies) => Math.floor(Math.random() * Math.floor(boxOfficeData.length - numMovies));
+
+  getFirstX = (boxOfficeData, numMovies) => boxOfficeData.slice(0, numMovies);
+
+  getRandXAdjacent = (boxOfficeData, numMovies) => {
+    const startingPoint = this.getRandIndex(boxOfficeData, numMovies);
+    return boxOfficeData.slice(startingPoint, startingPoint + numMovies);
+  }
+
+  getRandX = (boxOfficeData, numMovies) => {
+    let randMovies = [];
+    for (let i=0; i<numMovies; i++) {
+      const movieIndex = this.getRandIndex(boxOfficeData, 1);
+      randMovies.push(boxOfficeData[movieIndex]);
+    }
+    return randMovies;
   }
 
   render() {
