@@ -15,11 +15,11 @@ class BarChart extends Component {
   yAxis = d3.axisLeft();
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { data } = nextProps;
+    const { visData } = nextProps;
 
-    if (!data) return {};
+    if (!visData) return {};
 
-    const titles = data.map(d => d.title);
+    const titles = visData.map(d => d.title);
     const xScale = d3
       .scaleBand()
       .domain(titles)
@@ -27,7 +27,7 @@ class BarChart extends Component {
       .paddingInner(0.75)
       .paddingOuter(.4);
 
-    const [yMin, yMax] = d3.extent(data, d => d.lifetime_gross);
+    const [yMin, yMax] = d3.extent(visData, d => parseInt(d.lifetime_gross));
     const yTickFormat = yMax >= 1000000 ? 1000000 : 1000;
     const yTickLabel = yMax >= 1000000 ? 'M' : 'k';
     const yScale = d3
@@ -39,8 +39,7 @@ class BarChart extends Component {
       .domain([0, yMax])
       .range([height - margin.bottom, margin.top]);
 
-    const bars = data.map(d => {
-      console.log('height', yScale(d.lifetime_gross));
+    const bars = visData.map(d => {
       return {
         x: xScale(d.title),
         y: height - yScale(d.lifetime_gross) - margin.bottom,

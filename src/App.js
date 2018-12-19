@@ -9,7 +9,8 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-        data: [],
+        visData: [],
+        rawData: [],
     };
   }
 
@@ -20,11 +21,9 @@ class App extends Component {
         boxOfficeData.push(data);
       }
     ).then(() => {
-
+      console.log('boxOfficeData', boxOfficeData);
       const firstFive = this.getFirstX(boxOfficeData, 5);
-      const randFiveAdjacent = this.getRandXAdjacent(boxOfficeData, 5);
-      const randFive = this.getRandX(boxOfficeData, 5);
-      this.setState({ data: randFive })
+      this.setState({ visData: firstFive, rawData: boxOfficeData })
     });
   }
 
@@ -47,10 +46,14 @@ class App extends Component {
   }
 
   render() {
+    const { rawData, visData } = this.state;
     return (
       <div className="App">
         <header className="App-header">
-          <BarChart data={this.state.data}/>
+          <BarChart visData={visData}/>
+          <button onClick={() => this.setState({ ...this.state, visData: this.getFirstX(rawData, 5) })}>Top Movies</button>
+          <button onClick={() => this.setState({ ...this.state, visData: this.getRandX(rawData, 5) })}>Random Movies</button>
+          <button onClick={() => this.setState({ ...this.state, visData: this.getRandXAdjacent(rawData, 5) })}>Random Peer Movies</button>
 
         </header>
       </div>
