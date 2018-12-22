@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import data from './data/boxoffice.csv';
+import movieDataExtended from './data/movies_details.json';
 import BarChart from './views/visualizations/BarChart';
 import './App.css';
 
@@ -11,6 +12,8 @@ class App extends Component {
     this.state = {
         visData: [],
         rawData: [],
+        extendedRawData: [],
+        extendedVisData: [],
     };
   }
 
@@ -21,10 +24,22 @@ class App extends Component {
         boxOfficeData.push(data);
       }
     ).then(() => {
-      console.log('boxOfficeData', boxOfficeData);
       const firstFive = this.getFirstX(boxOfficeData, 5);
-      this.setState({ visData: firstFive, rawData: boxOfficeData })
+
+      const movieDataExtendedArray =
+        Object.keys(movieDataExtended).map((key) => movieDataExtended[key]);
+      const firstExtendedFive = this.getFirstX(movieDataExtendedArray, 5);
+
+      this.setState({
+        ...this.state,
+        extendedRawData: movieDataExtendedArray,
+        extendedVisData: firstExtendedFive,
+        visData: firstFive,
+        rawData: boxOfficeData,
+      });
     });
+
+    console.log('movieDataExtended', movieDataExtended);
   }
 
   getRandIndex = (boxOfficeData, numMovies) => Math.floor(Math.random() * Math.floor(boxOfficeData.length - numMovies));
