@@ -5,7 +5,7 @@ const width = 650;
 const height = 400;
 const margin = { top: 20, right: 5, bottom: 20, left: 35 };
 
-class Chart extends Component {
+class TimelineChart extends Component {
   state = {
     bars: []
   };
@@ -22,4 +22,4 @@ class Chart extends Component {
   }
 }
 
-export default Chart;
+export default TimelineChart;

@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import data from './data/boxoffice.csv';
 import movieDataExtended from './data/movies_details.json';
 import BarChart from './views/visualizations/BarChart';
+import RatingsBarChart from './views/visualizations/RatingsBarChart';
 import './App.css';
 
 class App extends Component {
@@ -38,8 +39,6 @@ class App extends Component {
         rawData: boxOfficeData,
       });
     });
-
-    console.log('movieDataExtended', movieDataExtended);
   }
 
   getRandIndex = (boxOfficeData, numMovies) => Math.floor(Math.random() * Math.floor(boxOfficeData.length - numMovies));
@@ -60,15 +59,26 @@ class App extends Component {
     return randMovies;
   }
 
+  updateData = (updateFunc, numItems) => {
+    const { rawData, extendedRawData } = this.state;
+
+    return () => this.setState({
+      ...this.state,
+      visData: updateFunc(rawData, numItems),
+      extendedVisData: updateFunc(extendedRawData, numItems)
+    });
+  }
+
   render() {
-    const { rawData, visData } = this.state;
+    const { visData, extendedVisData } = this.state;
     return (
       <div className="App">
         <header className="App-header">
-          <BarChart visData={visData}/>
-          <button onClick={() => this.setState({ ...this.state, visData: this.getFirstX(rawData, 5) })}>Top Movies</button>
-          <button onClick={() => this.setState({ ...this.state, visData: this.getRandX(rawData, 5) })}>Random Movies</button>
-          <button onClick={() => this.setState({ ...this.state, visData: this.getRandXAdjacent(rawData, 5) })}>Random Peer Movies</button>
+          <BarChart visData={visData} />
+          <RatingsBarChart visData={extendedVisData} />
+          <button onClick={this.updateData(this.getFirstX, 5)}>Top Movies</button>
+          <button onClick={this.updateData(this.getRandX, 5)}>Random Movies</button>
+          <button onClick={this.updateData(this.getRandXAdjacent, 5)}>Random Peer Movies</button>
 
         </header>
       </div>
