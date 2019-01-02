@@ -4,6 +4,7 @@ import data from './data/boxoffice.csv';
 import movieDataExtended from './data/movies_details.json';
 import BarChart from './views/visualizations/BarChart';
 import RatingsBarChart from './views/visualizations/RatingsBarChart';
+import ScatterPlot from './views/visualizations/ScatterPlot';
 import './App.css';
 
 class App extends Component {
@@ -71,11 +72,13 @@ class App extends Component {
 
   render() {
     const { visData, extendedVisData } = this.state;
+
     return (
       <div className="App">
         <header className="App-header">
-          <BarChart visData={visData} />
+          {/* <BarChart visData={visData} /> */}
           <RatingsBarChart visData={extendedVisData} />
+          <ScatterPlot visData={visData} />
           <button onClick={this.updateData(this.getFirstX, 5)}>Top Movies</button>
           <button onClick={this.updateData(this.getRandX, 5)}>Random Movies</button>
           <button onClick={this.updateData(this.getRandXAdjacent, 5)}>Random Peer Movies</button>
