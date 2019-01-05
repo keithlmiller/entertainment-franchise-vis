@@ -4,6 +4,8 @@ import data from './data/boxoffice.csv';
 import movieDataExtended from './data/movies_details.json';
 import BarChart from './views/visualizations/BarChart';
 import RatingsBarChart from './views/visualizations/RatingsBarChart';
+import LineChart from './views/visualizations/LineChart'
+import { groupBy } from './utils/data-utils';
 import './App.css';
 
 class App extends Component {
@@ -15,6 +17,7 @@ class App extends Component {
         rawData: [],
         extendedRawData: [],
         extendedVisData: [],
+        timelineData: [],
     };
   }
 
@@ -30,6 +33,7 @@ class App extends Component {
       const movieDataExtendedArray =
         Object.keys(movieDataExtended).map((key) => movieDataExtended[key]);
       const firstExtendedFive = this.getFirstX(movieDataExtendedArray, 5);
+      const moviesPerYear = this.getMoviesPerYear(boxOfficeData);
 
       this.setState({
         ...this.state,
@@ -37,6 +41,7 @@ class App extends Component {
         extendedVisData: firstExtendedFive,
         visData: firstFive,
         rawData: boxOfficeData,
+        timelineData: moviesPerYear,
       });
     });
   }
@@ -59,6 +64,26 @@ class App extends Component {
     return randMovies;
   }
 
+  getMoviesPerYear = (data) => {
+    const groupedData = groupBy(data, 'year');
+    const moviesPerYear = Object.entries(groupedData)
+      .map(year => ({year: year[0], numMovies: year[1].length}));
+    return moviesPerYear;
+  }
+
+  updateDateRange = () => {
+    console.log('updateDateRange');
+  }
+
+  getMoviesInDateRange = (movieData, range) => {
+    const [beginning, end] = range;
+    const moviesInDateRange = movieData.map(
+      d => parseInt(d.year) >= beginning && parseInt(d.year) <= end 
+    )
+
+    return movieData;
+  }
+
   updateData = (updateFunc, numItems) => {
     const { rawData, extendedRawData } = this.state;
 
@@ -70,12 +95,15 @@ class App extends Component {
   }
 
   render() {
-    const { visData, extendedVisData } = this.state;
+    const { visData, extendedVisData, timelineData } = this.state;
+
     return (
       <div className="App">
         <header className="App-header">
           <BarChart visData={visData} />
           <RatingsBarChart visData={extendedVisData} />
+          <LineChart visData={timelineData} updateRange={this.updateDateRange} />
+
           <button onClick={this.updateData(this.getFirstX, 5)}>Top Movies</button>
           <button onClick={this.updateData(this.getRandX, 5)}>Random Movies</button>
           <button onClick={this.updateData(this.getRandXAdjacent, 5)}>Random Peer Movies</button>
