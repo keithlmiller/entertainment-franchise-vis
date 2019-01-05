@@ -1,12 +1,21 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
+import '../../App.css';
 const width = 800;
 const height = 400;
-const margin = { top: 20, right: 5, bottom: 20, left: 45 };
+const margin = { top: 20, right: 45, bottom: 20, left: 45 };
 
 class LineChart extends Component {
   xAxis = d3.axisBottom();
   yAxis = d3.axisLeft();
+
+  constructor(props) {
+    super(props);
+    this.state = {
+        displayMinYear: null,
+        displayMaxYear: null,
+    };
+  }
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { visData } = nextProps;
@@ -41,9 +50,7 @@ class LineChart extends Component {
       .on("end", this.brushmove);
     d3.select(this.refs.brush)
       .call(this.brush)
-      .call(this.brush.move, [5, 100]);
-
-
+      .call(this.brush.move, [margin.left, 100]);
 
     this.xAxis.scale(this.state.xScale);
     d3.select(this.refs.xAxis).call(this.xAxis);
@@ -72,13 +79,26 @@ class LineChart extends Component {
     }
     const [x1, x2] = d3.event.selection;
     const range = [this.state.xScale.invert(x1), this.state.xScale.invert(x2)];
+    const [minYear, maxYear] = range;
+    const displayMinYear = Math.floor(minYear);
+    const displayMaxYear = Math.floor(maxYear);
+    this.setState({
+        ...this.state,
+        x1, x2,
+        displayMinYear,
+        displayMaxYear,
+    });
 
-    updateRange();
+    updateRange(range);
   }
 
   render() {
     const {
-      line
+      line,
+      x1, 
+      x2,
+      displayMinYear,
+      displayMaxYear,
     } = this.state;
 
     const {
@@ -88,7 +108,9 @@ class LineChart extends Component {
     return (
       <svg width={width} height={height}>
         <path fill='none' stroke='#f4f4f4' stroke-width={1.5} d={line(visData)} />
+        {displayMinYear && <text x={x1 - 40} y={height/4} class='year-text'>{displayMinYear}</text>}
         <g ref="brush" />
+        {displayMaxYear && <text x={x2 + 10} y={height/4} class='year-text'>{displayMaxYear}</text>}
         <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
         <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
       </svg>

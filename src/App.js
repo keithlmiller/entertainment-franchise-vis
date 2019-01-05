@@ -71,17 +71,22 @@ class App extends Component {
     return moviesPerYear;
   }
 
-  updateDateRange = () => {
-    console.log('updateDateRange');
+  getMoviesInDateRange = (range, data) => {
+    const [minYear, maxYear] = range;
+    const moviesInRange = data.filter((movie) => (movie.year > minYear && movie.year < maxYear));
+
+    return moviesInRange;
   }
 
-  getMoviesInDateRange = (movieData, range) => {
-    const [beginning, end] = range;
-    const moviesInDateRange = movieData.map(
-      d => parseInt(d.year) >= beginning && parseInt(d.year) <= end 
-    )
-
-    return movieData;
+  updateDateRange = (range) => {
+    if (range) {
+      const moviesInRange = this.getMoviesInDateRange(range, this.state.rawData);
+      const topFiveInRange = this.getFirstX(moviesInRange, 5);
+      this.setState({
+        ...this.state,
+        visData: topFiveInRange,
+      });
+    }
   }
 
   updateData = (updateFunc, numItems) => {
@@ -101,8 +106,8 @@ class App extends Component {
       <div className="App">
         <header className="App-header">
           <BarChart visData={visData} />
-          <RatingsBarChart visData={extendedVisData} />
           <LineChart visData={timelineData} updateRange={this.updateDateRange} />
+          <RatingsBarChart visData={extendedVisData} />
 
           <button onClick={this.updateData(this.getFirstX, 5)}>Top Movies</button>
           <button onClick={this.updateData(this.getRandX, 5)}>Random Movies</button>
