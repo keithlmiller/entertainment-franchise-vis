@@ -5,7 +5,7 @@ import movieDataExtended from './data/movies_details.json';
 import BarChart from './views/visualizations/BarChart';
 import ScatterPlot from './views/visualizations/ScatterPlot';
 import LineChart from './views/visualizations/LineChart'
-import { groupBy } from './utils/data-utils';
+import { groupBy, getRandIndex, getFirstX, getRandXAdjacent, getRandX } from './utils/data-utils';
 import './App.css';
 
 class App extends Component {
@@ -28,11 +28,11 @@ class App extends Component {
         boxOfficeData.push(data);
       }
     ).then(() => {
-      const firstFive = this.getFirstX(boxOfficeData, 5);
+      const firstFive = getFirstX(boxOfficeData, 5);
 
       const movieDataExtendedArray =
         Object.keys(movieDataExtended).map((key) => movieDataExtended[key]);
-      const firstExtendedFive = this.getFirstX(movieDataExtendedArray, 5);
+      const firstExtendedFive = getFirstX(movieDataExtendedArray, 5);
       const moviesPerYear = this.getMoviesPerYear(boxOfficeData);
 
       this.setState({
@@ -44,24 +44,6 @@ class App extends Component {
         timelineData: moviesPerYear,
       });
     });
-  }
-
-  getRandIndex = (boxOfficeData, numMovies) => Math.floor(Math.random() * Math.floor(boxOfficeData.length - numMovies));
-
-  getFirstX = (boxOfficeData, numMovies) => boxOfficeData.slice(0, numMovies);
-
-  getRandXAdjacent = (boxOfficeData, numMovies) => {
-    const startingPoint = this.getRandIndex(boxOfficeData, numMovies);
-    return boxOfficeData.slice(startingPoint, startingPoint + numMovies);
-  }
-
-  getRandX = (boxOfficeData, numMovies) => {
-    let randMovies = [];
-    for (let i=0; i<numMovies; i++) {
-      const movieIndex = this.getRandIndex(boxOfficeData, 1);
-      randMovies.push(boxOfficeData[movieIndex]);
-    }
-    return randMovies;
   }
 
   getMoviesPerYear = (data) => {
@@ -81,7 +63,7 @@ class App extends Component {
   updateDateRange = (range) => {
     if (range) {
       const moviesInRange = this.getMoviesInDateRange(range, this.state.rawData);
-      const topFiveInRange = this.getFirstX(moviesInRange, 5);
+      const topFiveInRange = getFirstX(moviesInRange, 5);
       this.setState({
         ...this.state,
         visData: topFiveInRange,
@@ -108,9 +90,9 @@ class App extends Component {
           <BarChart visData={visData} />
           <LineChart visData={timelineData} updateRange={this.updateDateRange} />
 
-          <button onClick={this.updateData(this.getFirstX, 5)}>Top Movies</button>
-          <button onClick={this.updateData(this.getRandX, 5)}>Random Movies</button>
-          <button onClick={this.updateData(this.getRandXAdjacent, 5)}>Random Peer Movies</button>
+          <button onClick={this.updateData(getFirstX, 5)}>Top Movies</button>
+          <button onClick={this.updateData(getRandX, 5)}>Random Movies</button>
+          <button onClick={this.updateData(getRandXAdjacent, 5)}>Random Peer Movies</button>
 
         </header>
       </div>
