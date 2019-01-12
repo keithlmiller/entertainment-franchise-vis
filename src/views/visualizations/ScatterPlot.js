@@ -43,7 +43,7 @@ class ScatterPlot extends Component {
         x: xScale(new Date(d.year)),
         y: height - yScale(parseInt(d.lifetime_gross)) - margin.bottom,
         fill: '#f4f4f4',
-        title: d.title,
+        ...d,
       };
     });
 
@@ -69,6 +69,16 @@ class ScatterPlot extends Component {
     d3.select(this.refs.yAxis).call(this.yAxis);
   }
 
+  handleHoverEnter = (x, y, title, gross) => {
+    console.log('handleHoverEnter', x);
+    console.log('title', title)
+    console.log('gross', gross)
+  }
+
+  handleHoverExit = (x, y) => {
+    console.log('handleHoverExit x', x);
+  }
+
   render() {
     const {
       dots,
@@ -77,7 +87,14 @@ class ScatterPlot extends Component {
     return (
       <svg width={width} height={height}>
         {dots.map(d => (
-          <circle cx={d.x} cy={d.y} r={3.5} fill={d.fill}>
+          <circle
+            cx={d.x}
+            cy={d.y}
+            r={3.5}
+            fill={d.fill}
+            onMouseOver={() => this.handleHoverEnter(d.x, d.y, d.title, d.lifetime_gross)}
+            onMouseOut={() => this.handleHoverExit(d.x, d.y)}
+          >
             <title>{d.title}</title>
           </circle>
         ))}
