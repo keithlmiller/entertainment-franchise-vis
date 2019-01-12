@@ -92,6 +92,20 @@ class LineChart extends Component {
     updateRange(range);
   }
 
+  getBrushLabelPos = (brushX, defaultPos = 'left') => {
+    const leftLabel = brushX - 40;
+    const rightLabel = brushX + 10;
+    const isLeftDefault = defaultPos === 'left';
+    const atRightEdge = brushX > width - 90;
+    const atLeftEdge = brushX < 90;
+
+    if (isLeftDefault) {
+        return atLeftEdge ? rightLabel : leftLabel;
+    } else {
+        return atRightEdge ? leftLabel : rightLabel;
+    }
+  }
+
   render() {
     const {
       line,
@@ -108,9 +122,9 @@ class LineChart extends Component {
     return (
       <svg width={width} height={height}>
         <path fill='none' stroke='#f4f4f4' stroke-width={1.5} d={line(visData)} />
-        {displayMinYear && <text x={x1 - 40} y={height/4} class='year-text'>{displayMinYear}</text>}
+        {displayMinYear && <text x={this.getBrushLabelPos(x1, 'left')} y={height/4} className='year-text'>{displayMinYear}</text>}
         <g ref="brush" />
-        {displayMaxYear && <text x={x2 + 10} y={height/4} class='year-text'>{displayMaxYear}</text>}
+        {displayMaxYear && <text x={this.getBrushLabelPos(x2, 'right')} y={height/4} className='year-text'>{displayMaxYear}</text>}
         <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
         <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
       </svg>

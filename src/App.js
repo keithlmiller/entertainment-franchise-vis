@@ -5,7 +5,7 @@ import movieDataExtended from './data/movies_details.json';
 import BarChart from './views/visualizations/BarChart';
 import RatingsBarChart from './views/visualizations/RatingsBarChart';
 import LineChart from './views/visualizations/LineChart'
-import { groupBy } from './utils/data-utils';
+import { groupBy, getMoviesInRange, getTopByProperty } from './utils/data-utils';
 import './App.css';
 
 class App extends Component {
@@ -71,20 +71,18 @@ class App extends Component {
     return moviesPerYear;
   }
 
-  getMoviesInDateRange = (range, data) => {
-    const [minYear, maxYear] = range;
-    const moviesInRange = data.filter((movie) => (movie.year > minYear && movie.year < maxYear));
-
-    return moviesInRange;
-  }
-
   updateDateRange = (range) => {
     if (range) {
-      const moviesInRange = this.getMoviesInDateRange(range, this.state.rawData);
+      const moviesInRange = getMoviesInRange(range, this.state.rawData, 'year');
+      const moviesInRangeExtended = getMoviesInRange(range, this.state.extendedRawData, 'Year');
+      const topRatedInRange = getTopByProperty(moviesInRangeExtended, 'Metascore');
       const topFiveInRange = this.getFirstX(moviesInRange, 5);
+      const firstFiveExtended = this.getFirstX(topRatedInRange, 5);
+
       this.setState({
         ...this.state,
         visData: topFiveInRange,
+        extendedVisData: firstFiveExtended,
       });
     }
   }
