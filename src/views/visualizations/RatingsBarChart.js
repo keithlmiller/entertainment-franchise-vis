@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
+import '../../App.css';
 const width = 800;
 const height = 400;
 const margin = { top: 20, right: 5, bottom: 20, left: 45 };
@@ -36,6 +37,7 @@ class RatingsBarChart extends Component {
 
     const bars = visData.map(d => {
       return {
+        value: d.Metascore,
         x: xScale(d.Title),
         y: height - yScale(parseInt(d.Metascore)) - margin.bottom,
         height: yScale(parseInt(d.Metascore)),
@@ -69,8 +71,12 @@ class RatingsBarChart extends Component {
     return (
       <svg width={width} height={height}>
         {bars.map(d => (
-          <rect x={d.x} y={d.y} width={xScale.bandwidth()} height={d.height} fill={d.fill} />
+          <React.Fragment>
+            <rect x={d.x} y={d.y} width={xScale.bandwidth()} height={d.height} fill={d.fill} />
+            <text x={d.x + xScale.bandwidth()/2} y={d.y + 40} className='bar-value'>{d.value}</text>
+          </React.Fragment>
         ))}
+        {!bars.length && <text x={width/2} y={height/2} className='no-data-message'>No Ratings Data Available</text>}
         <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
         <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
       </svg>
