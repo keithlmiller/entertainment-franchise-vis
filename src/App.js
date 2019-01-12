@@ -89,11 +89,10 @@ class App extends Component {
         <header className="App-header">
           <BarChart visData={visData} />
           <LineChart visData={timelineData} updateRange={this.updateDateRange} />
+          <ScatterPlot visData={visData} />
 
           <button onClick={this.updateData(getFirstX, 5)}>Top Movies</button>
           <button onClick={this.updateData(getRandX, 5)}>Random Movies</button>
-          <button onClick={this.updateData(getRandXAdjacent, 5)}>Random Peer Movies</button>
-
         </header>
       </div>
     );
