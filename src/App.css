@@ -29,6 +29,13 @@
 
 .bar-value {
   fill: #282c34;
+  font-weight: bold;
+  text-anchor: middle;
+}
+
+.no-data-message {
+  fill: #f4f4f4;
+  text-anchor: middle;
 }
 
 @keyframes App-logo-spin {

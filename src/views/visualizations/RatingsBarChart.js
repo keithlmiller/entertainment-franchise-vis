@@ -73,9 +73,10 @@ class RatingsBarChart extends Component {
         {bars.map(d => (
           <React.Fragment>
             <rect x={d.x} y={d.y} width={xScale.bandwidth()} height={d.height} fill={d.fill} />
-            <text x={d.x + xScale.bandwidth() / 10} y={d.y + 40} className='bar-value'>{d.value}</text>
+            <text x={d.x + xScale.bandwidth()/2} y={d.y + 40} className='bar-value'>{d.value}</text>
           </React.Fragment>
         ))}
+        {!bars.length && <text x={width/2} y={height/2} className='no-data-message'>No Ratings Data Available</text>}
         <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
         <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
       </svg>
