@@ -19,6 +19,8 @@ class App extends Component {
         extendedRawData: [],
         extendedVisData: [],
         timelineData: [],
+        defaultChartWidth: 400,
+        defaultChartHeight: 200,
     };
   }
 
@@ -81,19 +83,26 @@ class App extends Component {
   }
 
   render() {
-    const { visData, extendedVisData, timelineData } = this.state;
+    const { 
+      visData,
+      extendedVisData,
+      timelineData,
+      defaultChartWidth,
+      defaultChartHeight,
+    } = this.state;
 
     return (
       <div className="App">
-        <header className="App-header">
-          <BarChart visData={visData} />
-          <ScatterPlot visData={visData} />
-          <LineChart visData={timelineData} updateRange={this.updateDateRange} />
-          <RatingsBarChart visData={extendedVisData} />
-
-          <button onClick={this.updateData(getFirstX, 5)}>Top Movies</button>
-          <button onClick={this.updateData(getRandX, 5)}>Random Movies</button>
-        </header>
+        <div className='visualizations-container'>
+          <BarChart visData={visData} width={defaultChartWidth} height={defaultChartHeight} />
+          <ScatterPlot visData={visData} width={defaultChartWidth} height={defaultChartHeight}  />
+          <RatingsBarChart visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight}  /> 
+        </div>
+        <div className='buttons-container'>
+            <button onClick={this.updateData(getFirstX, 5)}>Top Movies</button>
+            <button onClick={this.updateData(getRandX, 5)}>Random Movies</button>  
+          </div>
+        <LineChart visData={timelineData} updateRange={this.updateDateRange} fixedBottom={true} />
       </div>
     );
   }

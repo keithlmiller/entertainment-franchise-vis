@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import * as d3 from "d3";
 import '../../App.css';
 const width = 800;
-const height = 400;
+const height = 200;
 const margin = { top: 20, right: 45, bottom: 20, left: 45 };
 
 class LineChart extends Component {
@@ -117,17 +117,26 @@ class LineChart extends Component {
 
     const {
         visData,
+        fixedBottom,
     } = this.props;
 
     return (
-      <svg width={width} height={height}>
-        <path fill='none' stroke='#f4f4f4' stroke-width={1.5} d={line(visData)} />
-        {displayMinYear && <text x={this.getBrushLabelPos(x1, 'left')} y={height/4} className='year-text'>{displayMinYear}</text>}
-        <g ref="brush" />
-        {displayMaxYear && <text x={this.getBrushLabelPos(x2, 'right')} y={height/4} className='year-text'>{displayMaxYear}</text>}
-        <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
-        <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
-      </svg>
+        <div className={`brush-timeline ${fixedBottom ? 'timeline-fixed' : 'timeline-standard'}`}>
+            <div className='timeline-explanation'>
+                <h3 className='timeline-title'>Movies Released Per Year</h3>
+                <p className='timeline-description'>Click and drag to select a range of time to explore with the graphs above</p>
+            </div>
+            
+            <svg width={width} height={height}>
+                <path fill='none' stroke='#f4f4f4' stroke-width={1.5} d={line(visData)} />
+                {displayMinYear && <text x={this.getBrushLabelPos(x1, 'left')} y={height/4} className='year-text'>{displayMinYear}</text>}
+                <g ref="brush" />
+                {displayMaxYear && <text x={this.getBrushLabelPos(x2, 'right')} y={height/4} className='year-text'>{displayMaxYear}</text>}
+                <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
+                <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
+            </svg>
+        </div>
+      
     );
   }
 }

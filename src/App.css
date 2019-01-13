@@ -1,5 +1,8 @@
 .App {
+  min-height: 100vh;
   text-align: center;
+  color: #f4f4f4;
+  background-color: #282c34;
 }
 
 .App-logo {
@@ -7,19 +10,17 @@
   height: 40vmin;
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
 .App-link {
   color: #61dafb;
+}
+
+.visualizations-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  padding-top: 100px;
+  font-size: calc(10px + 2vmin);
+  color: #f4f4f4;
 }
 
 .year-text {
@@ -29,6 +30,7 @@
 
 .bar-value {
   fill: #282c34;
+  font-size: 16px;
   font-weight: bold;
   text-anchor: middle;
 }
@@ -36,6 +38,26 @@
 .no-data-message {
   fill: #f4f4f4;
   text-anchor: middle;
+}
+
+.brush-timeline {
+  display: flex;
+}
+
+.timeline-explanation {
+  width: 20%;
+  padding: 30px;
+  font-size: 16px;
+  text-align: left;
+}
+
+.timeline-fixed {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  height: 200px;
+  background: #000;
 }
 
 @keyframes App-logo-spin {

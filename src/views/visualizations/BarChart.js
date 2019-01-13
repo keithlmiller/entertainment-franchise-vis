@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
-const width = 800;
-const height = 400;
 const margin = { top: 20, right: 5, bottom: 20, left: 45 };
 
 class BarChart extends Component {
@@ -15,7 +13,7 @@ class BarChart extends Component {
   yAxis = d3.axisLeft();
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { visData } = nextProps;
+    const { visData, width, height } = nextProps;
 
     if (!visData) return {};
 
@@ -74,6 +72,8 @@ class BarChart extends Component {
       bars,
       xScale,
     } = this.state;
+
+    const { width, height } = this.props;
 
     return (
       <svg width={width} height={height}>
