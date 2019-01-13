@@ -1,13 +1,21 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
+import Tooltip from '../../components/tooltip/tooltip';
 const margin = { top: 20, right: 5, bottom: 20, left: 45 };
 
 class ScatterPlot extends Component {
-  state = {
+  initialState = {
     dots: [],
     yTickFormat: 1000000,
     yTickLabel: 'M',
-  };
+    isTooltipOpen: false,
+    tooltipTitle: '',
+    tooltipValue: '',
+    hoverX: 0,
+    hoverY: 0,
+  }
+
+  state = {...this.initialState};
 
   xAxis = d3.axisBottom();
   yAxis = d3.axisLeft();
@@ -70,36 +78,74 @@ class ScatterPlot extends Component {
     console.log('handleHoverEnter', x);
     console.log('title', title)
     console.log('gross', gross)
+    const formattedGross = d3.format(',')(gross);
+    this.showTooltip(title, formattedGross);
   }
 
   handleHoverExit = (x, y) => {
-    console.log('handleHoverExit x', x);
+    this.closeTooltip();
+  }
+
+  showTooltip = (title, value) => {
+    console.log('value', value);
+    this.setState({
+      ...this.state,
+      isTooltipOpen: true,
+      tooltipTitle: title,
+      tooltipValue: value,
+    })
+  }
+
+  showTooltip = (title, value) => {
+    this.setState({
+      ...this.state,
+      isTooltipOpen: true,
+      tooltipTitle: title,
+      tooltipValue: value,
+    });
+  }
+
+  closeTooltip = () => {
+    this.setState({
+      ...this.state,
+      isTooltipOpen: false,
+      tooltipTitle: this.initialState.tooltipTitle,
+      tooltipValue: this.initialState.tooltipValue,
+    });
   }
 
   render() {
     const {
       dots,
+      isTooltipOpen,
+      tooltipTitle,
+      tooltipValue,
+      hoverX,
+      hoverY,
     } = this.state;
 
     const { width, height } = this.props;
 
     return (
-      <svg width={width} height={height}>
-        {dots.map(d => (
-          <circle
-            cx={d.x}
-            cy={d.y}
-            r={3.5}
-            fill={d.fill}
-            onMouseOver={() => this.handleHoverEnter(d.x, d.y, d.title, d.lifetime_gross)}
-            onMouseOut={() => this.handleHoverExit(d.x, d.y)}
-          >
-            <title>{d.title}</title>
-          </circle>
-        ))}
-        <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
-        <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
-      </svg>
+      <div className='output-chart'>
+        <svg width={width} height={height}>
+          {dots.map(d => (
+            <circle
+              cx={d.x}
+              cy={d.y}
+              r={3.5}
+              fill={d.fill}
+              onMouseOver={() => this.handleHoverEnter(d.x, d.y, d.title, d.lifetime_gross)}
+              onMouseOut={() => this.handleHoverExit(d.x, d.y)}
+            >
+              <title>{d.title}</title>
+            </circle>
+          ))}
+          <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
+          <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
+        </svg>
+        {isTooltipOpen && <Tooltip title={tooltipTitle} gross={tooltipValue} x={hoverX} y={hoverY}  />}
+      </div>
     );
   }
 }

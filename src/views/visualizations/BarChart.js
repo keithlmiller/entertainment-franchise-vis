@@ -76,13 +76,15 @@ class BarChart extends Component {
     const { width, height } = this.props;
 
     return (
-      <svg width={width} height={height}>
-        {bars.map(d => (
-          <rect x={d.x} y={d.y} width={xScale.bandwidth()} height={d.height} fill={d.fill} />
-        ))}
-        <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
-        <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
-      </svg>
+      <div className='output-chart'>
+        <svg width={width} height={height}>
+          {bars.map(d => (
+            <rect x={d.x} y={d.y} width={xScale.bandwidth()} height={d.height} fill={d.fill} />
+          ))}
+          <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
+          <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
+        </svg>
+      </div>
     );
   }
 }

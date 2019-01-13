@@ -18,9 +18,13 @@
   display: flex;
   flex-flow: row wrap;
   justify-content: space-around;
-  padding-top: 100px;
   font-size: calc(10px + 2vmin);
   color: #f4f4f4;
+}
+
+.section-title {
+  font-size: 24px;
+  padding-top: 30px;
 }
 
 .year-text {

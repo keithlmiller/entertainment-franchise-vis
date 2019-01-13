@@ -8,6 +8,7 @@ import ScatterPlot from './views/visualizations/ScatterPlot';
 import LineChart from './views/visualizations/LineChart'
 import { groupBy, getFirstX, getRandX, getMoviesInRange, getTopByProperty } from './utils/data-utils';
 import './App.css';
+// import 'normalize.css';
 
 class App extends Component {
 
@@ -93,6 +94,7 @@ class App extends Component {
 
     return (
       <div className="App">
+        <h1 className='section-title'>Top Grossing Films US Box Office</h1>
         <div className='visualizations-container'>
           <BarChart visData={visData} width={defaultChartWidth} height={defaultChartHeight} />
           <ScatterPlot visData={visData} width={defaultChartWidth} height={defaultChartHeight}  />
