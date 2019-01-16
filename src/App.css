@@ -22,6 +22,10 @@
   color: #f4f4f4;
 }
 
+.output-chart {
+  position: relative;
+}
+
 .section-title {
   font-size: 24px;
   padding-top: 30px;
@@ -56,12 +60,18 @@
 }
 
 .timeline-fixed {
+  display: flex;
+  align-items: center;
   position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
   height: 200px;
   background: #000;
+}
+
+.timeline-fixed.timeline-collapsed {
+  height: 80px;
 }
 
 @keyframes App-logo-spin {

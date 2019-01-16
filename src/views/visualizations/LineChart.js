@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import * as d3 from "d3";
 import '../../App.css';
 const width = 800;
-const height = 200;
 const margin = { top: 20, right: 45, bottom: 20, left: 45 };
 
 class LineChart extends Component {
@@ -14,11 +13,14 @@ class LineChart extends Component {
     this.state = {
         displayMinYear: null,
         displayMaxYear: null,
+        height: 200,
+        collapsed: false,
     };
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
     const { visData } = nextProps;
+    const { height } = prevState;
 
     if (!visData) return {};
     const xExtent = d3.extent(visData, d => d.year);
@@ -37,10 +39,12 @@ class LineChart extends Component {
         .x(d => xScale(parseInt(d.year)))
         .y(d => yScale(d.numMovies));
 
-    return { line, xScale, yScale };
+    return { ...prevState, line, xScale, yScale };
   }
 
   componentDidMount() {
+    const { height } = this.state;
+
     this.brush = d3
       .brushX()
       .extent([
@@ -106,8 +110,18 @@ class LineChart extends Component {
     }
   }
 
+  handleToggleHeight = () => {
+    this.setState({
+      ...this.state,
+      height: this.state.height === 200 ? 75 : 200,
+      collapsed: !this.state.collapsed,
+    })
+  }
+
   render() {
     const {
+      height,
+      collapsed,
       line,
       x1, 
       x2,
@@ -121,11 +135,14 @@ class LineChart extends Component {
     } = this.props;
 
     return (
-        <div className={`brush-timeline ${fixedBottom ? 'timeline-fixed' : 'timeline-standard'}`}>
+        <div
+          className={`brush-timeline ${fixedBottom ? 'timeline-fixed' : 'timeline-standard'} ${collapsed ? 'timeline-collapsed' : ''}`}>
             <div className='timeline-explanation'>
                 <h3 className='timeline-title'>Movies Released Per Year</h3>
-                <p className='timeline-description'>Click and drag to select a range of time to explore with the graphs above</p>
+                {!collapsed && <p className='timeline-description'>Click and drag to select a range of time to explore with the graphs above</p>}
             </div>
+
+            <button className='toggle-chart-height' onClick={this.handleToggleHeight}>Toggle Height</button>
             
             <svg width={width} height={height}>
                 <path fill='none' stroke='#f4f4f4' stroke-width={1.5} d={line(visData)} />

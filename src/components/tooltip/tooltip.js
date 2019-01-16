@@ -1,10 +1,15 @@
 import React from "react";
 import './tooltip.css';
 
-export default function Tooltip({title, gross}) {
+export default function Tooltip({title, gross, x, y}) {
+    const positionStyles = {
+        top: y + 3,
+        left: x + 3,
+    }
+
     return (
-        <div className='tooltip'>
-            <h6 className='tootip-title'>{title}</h6>
+        <div className='tooltip' style={positionStyles}>
+            <div className='tootip-title'>{title}</div>
             <p>Gross: {gross}</p>
         </div>
     )

@@ -75,33 +75,22 @@ class ScatterPlot extends Component {
   }
 
   handleHoverEnter = (x, y, title, gross) => {
-    console.log('handleHoverEnter', x);
-    console.log('title', title)
-    console.log('gross', gross)
     const formattedGross = d3.format(',')(gross);
-    this.showTooltip(title, formattedGross);
+    this.showTooltip(title, formattedGross, x, y);
   }
 
   handleHoverExit = (x, y) => {
     this.closeTooltip();
   }
 
-  showTooltip = (title, value) => {
-    console.log('value', value);
+  showTooltip = (title, value, x, y) => {
     this.setState({
       ...this.state,
       isTooltipOpen: true,
       tooltipTitle: title,
       tooltipValue: value,
-    })
-  }
-
-  showTooltip = (title, value) => {
-    this.setState({
-      ...this.state,
-      isTooltipOpen: true,
-      tooltipTitle: title,
-      tooltipValue: value,
+      hoverX: x,
+      hoverY: y,
     });
   }
 
