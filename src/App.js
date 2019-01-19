@@ -6,7 +6,8 @@ import BarChart from './views/visualizations/BarChart';
 import RatingsBarChart from './views/visualizations/RatingsBarChart';
 import ScatterPlot from './views/visualizations/ScatterPlot';
 import LineChart from './views/visualizations/LineChart'
-import { groupBy, getFirstX, getRandX, getMoviesInRange, getTopByProperty } from './utils/data-utils';
+import GenresFilter from './views/filters/GenresFilter/GenresFilter';
+import { groupBy, getFirstX, getRandX, getMoviesInRange, sortByPropertyAsc } from './utils/data-utils';
 import './App.css';
 // import 'normalize.css';
 
@@ -38,6 +39,7 @@ class App extends Component {
         Object.keys(movieDataExtended).map((key) => movieDataExtended[key]);
       const firstExtendedFive = getFirstX(movieDataExtendedArray, 5);
       const moviesPerYear = this.getMoviesPerYear(boxOfficeData);
+      const genresList = this.getGenresData(movieDataExtendedArray);
 
       this.setState({
         ...this.state,
@@ -46,6 +48,7 @@ class App extends Component {
         visData: firstFive,
         rawData: boxOfficeData,
         timelineData: moviesPerYear,
+        genresList,
       });
     });
   }
@@ -57,11 +60,18 @@ class App extends Component {
     return moviesPerYear;
   }
 
+  getMoviesPerYearExtended = (data) => {
+    const groupedData = groupBy(data, 'Year');
+    const moviesPerYear = Object.entries(groupedData)
+      .map(year => ({year: year[0], numMovies: year[1].length}));
+    return moviesPerYear;
+  }
+
   updateDateRange = (range) => {
     if (range) {
       const moviesInRange = getMoviesInRange(range, this.state.rawData, 'year');
       const moviesInRangeExtended = getMoviesInRange(range, this.state.extendedRawData, 'Year');
-      const topRatedInRange = getTopByProperty(moviesInRangeExtended, 'Metascore');
+      const topRatedInRange = sortByPropertyAsc(moviesInRangeExtended, 'Metascore');
       const topFiveInRange = getFirstX(moviesInRange, 5);
       const firstFiveExtended = getFirstX(topRatedInRange, 5);
 
@@ -83,6 +93,48 @@ class App extends Component {
     });
   }
 
+
+  // get number of movies per genre
+  // get revenue per genre per year
+  // get list of genres
+  getGenresData(data) {
+    const genresData = data.map((movie) => movie.Genre.split(', '));
+    const genresFlat = genresData.flat(1);
+    const genresList = [...new Set(genresFlat)].sort();
+
+    return genresList;
+  }
+
+  // get all movies that have specified genre
+  getMoviesOfGenre(genre, movies) {
+    return movies.filter((movie) => movie.Genre.split(', ').includes(genre));
+  }
+
+  // get number of movies of each genre per year
+  // this will be used to get the line chart data, with a line per genre
+  getMoviesOfGenrePerYear(movies) {
+    const genresList = this.getGenresData(movies);
+    const moviesOfGenrePerYear = genresList.map((genre) => {
+      return { [genre]: this.getMoviesPerYearExtended(this.getMoviesOfGenre(genre, movies))}
+    })
+
+    return moviesOfGenrePerYear;
+  }
+
+
+
+  filterMoviesByGenre(genre) {
+    const { extendedRawData } = this.state;
+
+    let moviesOfGenre = this.getMoviesOfGenre(genre, extendedRawData);
+    moviesOfGenre = sortByPropertyAsc(moviesOfGenre, 'Metascore');
+
+    this.setState({
+      ...this.state,
+      extendedVisData: getFirstX(moviesOfGenre, 5)
+    });
+  }
+
   render() {
     const { 
       visData,
@@ -90,6 +142,7 @@ class App extends Component {
       timelineData,
       defaultChartWidth,
       defaultChartHeight,
+      genresList,
     } = this.state;
 
     return (
@@ -100,6 +153,7 @@ class App extends Component {
           <ScatterPlot visData={visData} width={defaultChartWidth} height={defaultChartHeight}  />
           <RatingsBarChart visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight}  /> 
         </div>
+        <GenresFilter genres={genresList} onClick={(genre) => this.filterMoviesByGenre(genre)} /> 
         <div className='buttons-container'>
             <button onClick={this.updateData(getFirstX, 5)}>Top Movies</button>
             <button onClick={this.updateData(getRandX, 5)}>Random Movies</button>  

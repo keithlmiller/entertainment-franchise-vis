@@ -12,9 +12,7 @@ export const getMoviesInRange = (range, data, property) => {
     return moviesInRange;
 }
 
-export const getTopByProperty = (data, property) => {
-    return data.sort((a, b) => b[property] - a[property]);
-}
+export const sortByPropertyAsc = (data, property) => data.sort((a, b) => b[property] - a[property]);
 
 export const getRandIndex = (boxOfficeData, numMovies) => Math.floor(Math.random() * Math.floor(boxOfficeData.length - numMovies));
 
