@@ -3,11 +3,12 @@ import * as d3 from 'd3';
 import data from './data/boxoffice.csv';
 import movieDataExtended from './data/movies_details.json';
 import BarChart from './views/visualizations/BarChart';
+import ExtendedBarChart from './views/visualizations/DetailsDataSet/BarChart';
 import RatingsBarChart from './views/visualizations/RatingsBarChart';
 import ScatterPlot from './views/visualizations/ScatterPlot';
 import LineChart from './views/visualizations/LineChart'
 import GenresFilter from './views/filters/GenresFilter/GenresFilter';
-import { groupBy, getFirstX, getRandX, getMoviesInRange, sortByPropertyAsc } from './utils/data-utils';
+import { groupBy, getFirstX, getRandX, getMoviesInRange, sortByPropertyAsc, sortByPropertyDesc } from './utils/data-utils';
 import './App.css';
 // import 'normalize.css';
 
@@ -36,9 +37,26 @@ class App extends Component {
       const firstFive = getFirstX(boxOfficeData, 5);
 
       const movieDataExtendedArray =
-        Object.keys(movieDataExtended).map((key) => movieDataExtended[key]);
-      const firstExtendedFive = getFirstX(movieDataExtendedArray, 5);
+        Object.keys(movieDataExtended).map((key) => {
+          const movie = movieDataExtended[key];
+          const date = new Date(movie.Released);
+          const boxOffice = parseInt(movie.BoxOffice.replace(/[\$\,]/g, ""));
+          return {
+            title: movie.Title,
+            date,
+            boxOffice: boxOffice,
+            genre: movie.Genre.split(", "),
+            year: +movie.Year,
+            metascore: +movie.Metascore,
+          }
+        });
+
+      const moviesWithBoxOffice = movieDataExtendedArray.filter((movie) => !isNaN(movie.boxOffice))
+
+      const moviesDataExtendedSorted = sortByPropertyAsc(moviesWithBoxOffice, 'boxOffice');
+      const firstExtendedFive = getFirstX(moviesDataExtendedSorted, 5);
       const moviesPerYear = this.getMoviesPerYear(boxOfficeData);
+
       const genresList = this.getGenresData(movieDataExtendedArray);
 
       this.setState({
@@ -60,18 +78,11 @@ class App extends Component {
     return moviesPerYear;
   }
 
-  getMoviesPerYearExtended = (data) => {
-    const groupedData = groupBy(data, 'Year');
-    const moviesPerYear = Object.entries(groupedData)
-      .map(year => ({year: year[0], numMovies: year[1].length}));
-    return moviesPerYear;
-  }
-
   updateDateRange = (range) => {
     if (range) {
       const moviesInRange = getMoviesInRange(range, this.state.rawData, 'year');
-      const moviesInRangeExtended = getMoviesInRange(range, this.state.extendedRawData, 'Year');
-      const topRatedInRange = sortByPropertyAsc(moviesInRangeExtended, 'Metascore');
+      const moviesInRangeExtended = getMoviesInRange(range, this.state.extendedRawData, 'year');
+      const topRatedInRange = sortByPropertyAsc(moviesInRangeExtended, 'metascore');
       const topFiveInRange = getFirstX(moviesInRange, 5);
       const firstFiveExtended = getFirstX(topRatedInRange, 5);
 
@@ -98,7 +109,7 @@ class App extends Component {
   // get revenue per genre per year
   // get list of genres
   getGenresData(data) {
-    const genresData = data.map((movie) => movie.Genre.split(', '));
+    const genresData = data.map((movie) => movie.genre);
     const genresFlat = genresData.flat(1);
     const genresList = [...new Set(genresFlat)].sort();
 
@@ -107,7 +118,7 @@ class App extends Component {
 
   // get all movies that have specified genre
   getMoviesOfGenre(genre, movies) {
-    return movies.filter((movie) => movie.Genre.split(', ').includes(genre));
+    return movies.filter((movie) => movie.genre.includes(genre));
   }
 
   // get number of movies of each genre per year
@@ -115,7 +126,7 @@ class App extends Component {
   getMoviesOfGenrePerYear(movies) {
     const genresList = this.getGenresData(movies);
     const moviesOfGenrePerYear = genresList.map((genre) => {
-      return { [genre]: this.getMoviesPerYearExtended(this.getMoviesOfGenre(genre, movies))}
+      return { [genre]: this.getMoviesPerYear(this.getMoviesOfGenre(genre, movies))}
     })
 
     return moviesOfGenrePerYear;
@@ -127,7 +138,7 @@ class App extends Component {
     const { extendedRawData } = this.state;
 
     let moviesOfGenre = this.getMoviesOfGenre(genre, extendedRawData);
-    moviesOfGenre = sortByPropertyAsc(moviesOfGenre, 'Metascore');
+    moviesOfGenre = sortByPropertyAsc(moviesOfGenre, 'metascore');
 
     this.setState({
       ...this.state,
@@ -149,7 +160,8 @@ class App extends Component {
       <div className="App">
         <h1 className='section-title'>Top Grossing Films US Box Office</h1>
         <div className='visualizations-container'>
-          <BarChart visData={visData} width={defaultChartWidth} height={defaultChartHeight} />
+          {/* <BarChart visData={visData} width={defaultChartWidth} height={defaultChartHeight} /> */}
+          <ExtendedBarChart visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight} />
           <ScatterPlot visData={visData} width={defaultChartWidth} height={defaultChartHeight}  />
           <RatingsBarChart visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight}  /> 
         </div>

@@ -14,6 +14,8 @@ export const getMoviesInRange = (range, data, property) => {
 
 export const sortByPropertyAsc = (data, property) => data.sort((a, b) => b[property] - a[property]);
 
+export const sortByPropertyDesc = (data, property) => data.sort((a, b) => a[property] - b[property]);
+
 export const getRandIndex = (boxOfficeData, numMovies) => Math.floor(Math.random() * Math.floor(boxOfficeData.length - numMovies));
 
 export const getFirstX = (boxOfficeData, numMovies) => boxOfficeData.slice(0, numMovies);
