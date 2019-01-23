@@ -77,6 +77,8 @@ class ScatterPlot extends Component {
   handleHoverEnter = (x, y, title, gross) => {
     const formattedGross = d3.format(',')(gross);
     this.showTooltip(title, formattedGross, x, y);
+    // TODO: add hover state to dot
+    // show hovered movie on other charts
   }
 
   handleHoverExit = (x, y) => {
@@ -122,13 +124,12 @@ class ScatterPlot extends Component {
             <circle
               cx={d.x}
               cy={d.y}
-              r={3.5}
+              r={5}
               fill={d.fill}
               onMouseOver={() => this.handleHoverEnter(d.x, d.y, d.title, d.lifetime_gross)}
               onMouseOut={() => this.handleHoverExit(d.x, d.y)}
-            >
-              <title>{d.title}</title>
-            </circle>
+              className='scatter-dot'
+            ></circle>
           ))}
           <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
           <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />

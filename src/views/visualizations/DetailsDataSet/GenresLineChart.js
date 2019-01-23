@@ -1,16 +1,17 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
-import '../../App.css';
+import '../../../App.css';
 const width = 800;
 const margin = { top: 20, right: 45, bottom: 20, left: 45 };
 
-class LineChart extends Component {
+class GenresLineChart extends Component {
   xAxis = d3.axisBottom();
   yAxis = d3.axisLeft();
 
   constructor(props) {
     super(props);
     this.state = {
+        lines: [],
         displayMinYear: null,
         displayMaxYear: null,
         height: 200,
@@ -19,27 +20,62 @@ class LineChart extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { visData } = nextProps;
+    const { visData, genres } = nextProps;
     const { height } = prevState;
 
     if (!visData) return {};
-    const xExtent = d3.extent(visData, d => d.year);
+    // const xExtent = d3.extent(visData, d => d.year);
     const xScale = d3
       .scaleLinear()
-      .domain(xExtent)
+      .domain([1999, 2017])
       .range([margin.left, width - margin.right]);
 
-    const [yMin, yMax] = d3.extent(visData, d => d.numMovies);
+    // const [yMin, yMax] = d3.extent(visData, d => d.numMovies);
     const yScale = d3
       .scaleLinear()
-      .domain([0, yMax])
+      .domain([0, 11])
       .range([height - margin.bottom, margin.top]);
+
+
+    // const lines = visData.map(d => {
+
+    //   d.data.map(genre => {
+
+    //   })
+    //   return {
+    //     value: d.metascore,
+    //     x: xScale(d.title),
+    //     y: height - yScale(parseInt(d.metascore)) - margin.bottom,
+    //     height: yScale(parseInt(d.metascore)),
+    //     fill: '#f4f4f4'
+    //   };
+    // });
+
+    // const colors = d3.scaleOrdinal(d3.schemePaired);
+
+    const colorScale = d3
+      .scaleOrdinal()
+      .domain(genres)
+      // pink, green, purple
+      .range([
+        "#e683b4", 
+        "#53c3ac", 
+        "#8475e8", 
+        "#665191",
+        "#a05195",
+        "#d45087",
+        "#f95d6a",
+        "#ff7c43",
+        "#ffa600",
+      ]);
+
+      
 
     const line = d3.line()
         .x(d => xScale(parseInt(d.year)))
         .y(d => yScale(d.numMovies));
 
-    return { ...prevState, line, xScale, yScale };
+    return { ...prevState, line, xScale, yScale, colorScale };
   }
 
   componentDidMount() {
@@ -75,7 +111,6 @@ class LineChart extends Component {
   }
 
   brushmove = () => {
-    // wip
     const { updateRange } = this.props;
     if (!d3.event.selection) {
       updateRange();
@@ -123,6 +158,7 @@ class LineChart extends Component {
       height,
       collapsed,
       line,
+      colorScale,
       x1, 
       x2,
       displayMinYear,
@@ -138,14 +174,14 @@ class LineChart extends Component {
         <div
           className={`brush-timeline ${fixedBottom ? 'timeline-fixed' : 'timeline-standard'} ${collapsed ? 'timeline-collapsed' : ''}`}>
             <div className='timeline-explanation'>
-                <h3 className='timeline-title'>Movies Released Per Year</h3>
+                <h3 className='timeline-title'>Movies of Each Genre Released Per Year</h3>
                 {!collapsed && <p className='timeline-description'>Click and drag to select a range of time to explore with the graphs above</p>}
             </div>
 
             <button className='toggle-chart-height' onClick={this.handleToggleHeight}>Toggle Height</button>
             
             <svg width={width} height={height}>
-                <path fill='none' stroke='#f4f4f4' stroke-width={1.5} d={line(visData)} />
+                {visData.slice(5).map((genre) => (<path fill='none' stroke={colorScale(genre.genre)} stroke-width={1.5} d={line(genre.data)} />)) }
                 {displayMinYear && <text x={this.getBrushLabelPos(x1, 'left')} y={height/4} className='year-text'>{displayMinYear}</text>}
                 <g ref="brush" />
                 {displayMaxYear && <text x={this.getBrushLabelPos(x2, 'right')} y={height/4} className='year-text'>{displayMaxYear}</text>}
@@ -158,4 +194,4 @@ class LineChart extends Component {
   }
 }
 
-export default LineChart;
+export default GenresLineChart;

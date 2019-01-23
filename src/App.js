@@ -4,11 +4,12 @@ import data from './data/boxoffice.csv';
 import movieDataExtended from './data/movies_details.json';
 import BarChart from './views/visualizations/BarChart';
 import ExtendedBarChart from './views/visualizations/DetailsDataSet/BarChart';
-import RatingsBarChart from './views/visualizations/RatingsBarChart';
+import RatingsBarChart from './views/visualizations/DetailsDataSet/RatingsBarChart';
+import GenresLineChart from './views/visualizations/DetailsDataSet/GenresLineChart';
 import ScatterPlot from './views/visualizations/ScatterPlot';
 import LineChart from './views/visualizations/LineChart'
 import GenresFilter from './views/filters/GenresFilter/GenresFilter';
-import { groupBy, getFirstX, getRandX, getMoviesInRange, sortByPropertyAsc, sortByPropertyDesc } from './utils/data-utils';
+import { groupBy, getFirstX, getRandX, getMoviesInRange, sortByPropertyAsc, filterPropertyNonNumbers } from './utils/data-utils';
 import './App.css';
 // import 'normalize.css';
 
@@ -22,8 +23,10 @@ class App extends Component {
         extendedRawData: [],
         extendedVisData: [],
         timelineData: [],
+        genreTimelineData: [],
         defaultChartWidth: 400,
         defaultChartHeight: 200,
+        genresList: [],
     };
   }
 
@@ -51,13 +54,13 @@ class App extends Component {
           }
         });
 
-      const moviesWithBoxOffice = movieDataExtendedArray.filter((movie) => !isNaN(movie.boxOffice))
+      const moviesWithBoxOffice = filterPropertyNonNumbers(movieDataExtendedArray, 'boxOffice');
 
       const moviesDataExtendedSorted = sortByPropertyAsc(moviesWithBoxOffice, 'boxOffice');
       const firstExtendedFive = getFirstX(moviesDataExtendedSorted, 5);
       const moviesPerYear = this.getMoviesPerYear(boxOfficeData);
-
-      const genresList = this.getGenresData(movieDataExtendedArray);
+      const moviesOfGenrePerYear = this.getMoviesOfGenrePerYear(moviesDataExtendedSorted);
+      const genresList = this.getGenresList(movieDataExtendedArray);
 
       this.setState({
         ...this.state,
@@ -66,6 +69,7 @@ class App extends Component {
         visData: firstFive,
         rawData: boxOfficeData,
         timelineData: moviesPerYear,
+        genreTimelineData: moviesOfGenrePerYear,
         genresList,
       });
     });
@@ -79,9 +83,14 @@ class App extends Component {
   }
 
   updateDateRange = (range) => {
+    const {
+      rawData,
+      extendedRawData,
+    } = this.state;
+
     if (range) {
-      const moviesInRange = getMoviesInRange(range, this.state.rawData, 'year');
-      const moviesInRangeExtended = getMoviesInRange(range, this.state.extendedRawData, 'year');
+      const moviesInRange = getMoviesInRange(range, rawData, 'year');
+      const moviesInRangeExtended = getMoviesInRange(range, sortByPropertyAsc(extendedRawData), 'year');
       const topRatedInRange = sortByPropertyAsc(moviesInRangeExtended, 'metascore');
       const topFiveInRange = getFirstX(moviesInRange, 5);
       const firstFiveExtended = getFirstX(topRatedInRange, 5);
@@ -108,7 +117,7 @@ class App extends Component {
   // get number of movies per genre
   // get revenue per genre per year
   // get list of genres
-  getGenresData(data) {
+  getGenresList(data) {
     const genresData = data.map((movie) => movie.genre);
     const genresFlat = genresData.flat(1);
     const genresList = [...new Set(genresFlat)].sort();
@@ -124,15 +133,13 @@ class App extends Component {
   // get number of movies of each genre per year
   // this will be used to get the line chart data, with a line per genre
   getMoviesOfGenrePerYear(movies) {
-    const genresList = this.getGenresData(movies);
+    const genresList = this.getGenresList(movies);
     const moviesOfGenrePerYear = genresList.map((genre) => {
-      return { [genre]: this.getMoviesPerYear(this.getMoviesOfGenre(genre, movies))}
+      return { 'genre': genre, 'data': this.getMoviesPerYear(this.getMoviesOfGenre(genre, movies))}
     })
 
     return moviesOfGenrePerYear;
   }
-
-
 
   filterMoviesByGenre(genre) {
     const { extendedRawData } = this.state;
@@ -151,6 +158,7 @@ class App extends Component {
       visData,
       extendedVisData,
       timelineData,
+      genreTimelineData,
       defaultChartWidth,
       defaultChartHeight,
       genresList,
@@ -166,11 +174,13 @@ class App extends Component {
           <RatingsBarChart visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight}  /> 
         </div>
         <GenresFilter genres={genresList} onClick={(genre) => this.filterMoviesByGenre(genre)} /> 
+
+        {/* <LineChart visData={timelineData} updateRange={this.updateDateRange} fixedBottom={true} /> */}
         <div className='buttons-container'>
             <button onClick={this.updateData(getFirstX, 5)}>Top Movies</button>
             <button onClick={this.updateData(getRandX, 5)}>Random Movies</button>  
           </div>
-        <LineChart visData={timelineData} updateRange={this.updateDateRange} fixedBottom={true} />
+        <GenresLineChart visData={genreTimelineData} genres={genresList} updateRange={this.updateDateRange} fixedBottom={true} />
       </div>
     );
   }

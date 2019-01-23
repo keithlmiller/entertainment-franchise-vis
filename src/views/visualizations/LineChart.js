@@ -75,7 +75,6 @@ class LineChart extends Component {
   }
 
   brushmove = () => {
-    // wip
     const { updateRange } = this.props;
     if (!d3.event.selection) {
       updateRange();

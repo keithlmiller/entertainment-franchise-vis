@@ -74,6 +74,10 @@
   height: 80px;
 }
 
+.scatter-dot {
+  cursor: pointer;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
