@@ -4,6 +4,8 @@ import data from './data/boxoffice.csv';
 import movieDataExtended from './data/movies_details.json';
 import BarChart from './views/visualizations/BarChart';
 import ExtendedBarChart from './views/visualizations/DetailsDataSet/BarChart';
+import ExtendedBarChartHorizontal from './views/visualizations/DetailsDataSet/BarChartHorizontal';
+import RatingsBarChartHorizontal from './views/visualizations/DetailsDataSet/RatingsBarChartHorizontal';
 import RatingsBarChart from './views/visualizations/DetailsDataSet/RatingsBarChart';
 import GenresLineChart from './views/visualizations/DetailsDataSet/GenresLineChart';
 import ScatterPlot from './views/visualizations/ScatterPlot';
@@ -169,9 +171,11 @@ class App extends Component {
         <h1 className='section-title'>Top Grossing Films US Box Office</h1>
         <div className='visualizations-container'>
           {/* <BarChart visData={visData} width={defaultChartWidth} height={defaultChartHeight} /> */}
-          <ExtendedBarChart visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight} />
+          {/* <ExtendedBarChart visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight} /> */}
+          <ExtendedBarChartHorizontal visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight} />
           <ScatterPlot visData={visData} width={defaultChartWidth} height={defaultChartHeight}  />
-          <RatingsBarChart visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight}  /> 
+          <RatingsBarChart visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight}  />
+          <RatingsBarChartHorizontal visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight}  />
         </div>
         <GenresFilter genres={genresList} onClick={(genre) => this.filterMoviesByGenre(genre)} /> 
 
