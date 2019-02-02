@@ -181,7 +181,7 @@ class GenresLineChart extends Component {
             <button className='toggle-chart-height' onClick={this.handleToggleHeight}>Toggle Height</button>
             
             <svg width={width} height={height}>
-                {visData.slice(5).map((genre) => (<path fill='none' stroke={colorScale(genre.genre)} stroke-width={1.5} d={line(genre.data)} />)) }
+                {visData.map((genre) => (<path fill='none' stroke={colorScale(genre.genre)} stroke-width={1.5} d={line(genre.data)} />)) }
                 {displayMinYear && <text x={this.getBrushLabelPos(x1, 'left')} y={height/4} className='year-text'>{displayMinYear}</text>}
                 <g ref="brush" />
                 {displayMaxYear && <text x={this.getBrushLabelPos(x2, 'right')} y={height/4} className='year-text'>{displayMaxYear}</text>}

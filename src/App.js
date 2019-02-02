@@ -61,7 +61,9 @@ class App extends Component {
       const moviesDataExtendedSorted = sortByPropertyAsc(moviesWithBoxOffice, 'boxOffice');
       const firstExtendedFive = getFirstX(moviesDataExtendedSorted, 5);
       const moviesPerYear = this.getMoviesPerYear(boxOfficeData);
-      const moviesOfGenrePerYear = this.getMoviesOfGenrePerYear(moviesDataExtendedSorted);
+
+      // get genres for genre timeline chart
+      const moviesOfGenrePerYear = getFirstX(this.getMoviesOfGenrePerYear(moviesWithBoxOffice), 5);
       const genresList = this.getGenresList(movieDataExtendedArray);
 
       this.setState({
@@ -137,10 +139,11 @@ class App extends Component {
   getMoviesOfGenrePerYear(movies) {
     const genresList = this.getGenresList(movies);
     const moviesOfGenrePerYear = genresList.map((genre) => {
-      return { 'genre': genre, 'data': this.getMoviesPerYear(this.getMoviesOfGenre(genre, movies))}
+      const moviesOfGenre = this.getMoviesOfGenre(genre, movies);
+      return { 'genre': genre, 'data': this.getMoviesPerYear(moviesOfGenre), 'totalMoviesOfGenre': moviesOfGenre.length }
     })
 
-    return moviesOfGenrePerYear;
+    return sortByPropertyAsc(moviesOfGenrePerYear, 'totalMoviesOfGenre');
   }
 
   filterMoviesByGenre(genre) {
@@ -168,14 +171,14 @@ class App extends Component {
 
     return (
       <div className="App">
-        <h1 className='section-title'>Top Grossing Films US Box Office</h1>
+        <h1 className='section-title'>Exploring Movie Data</h1>
         <div className='visualizations-container'>
           {/* <BarChart visData={visData} width={defaultChartWidth} height={defaultChartHeight} /> */}
           {/* <ExtendedBarChart visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight} /> */}
-          <ExtendedBarChartHorizontal visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight} />
-          <ScatterPlot visData={visData} width={defaultChartWidth} height={defaultChartHeight}  />
-          <RatingsBarChart visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight}  />
-          <RatingsBarChartHorizontal visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight}  />
+          <ExtendedBarChartHorizontal visData={extendedVisData} width={800} height={300} chartTitle={'Films US Box Office'} />
+          <ScatterPlot visData={visData} width={defaultChartWidth} height={defaultChartHeight} chartTitle={'Box Office vs Release Year'} />
+          {/* <RatingsBarChart visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight}  /> */}
+          <RatingsBarChartHorizontal visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight} chartTitle={'Score on MetaCritic'} />
         </div>
         <GenresFilter genres={genresList} onClick={(genre) => this.filterMoviesByGenre(genre)} /> 
 

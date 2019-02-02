@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
-import Tooltip from '../../components/tooltip/tooltip';
+import ChartTitle from '../../components/ChartTitle/ChartTitle';
+import Tooltip from '../../components/Tooltip/Tooltip';
 const margin = { top: 20, right: 5, bottom: 20, left: 45 };
 
 class ScatterPlot extends Component {
@@ -115,10 +116,15 @@ class ScatterPlot extends Component {
       hoverY,
     } = this.state;
 
-    const { width, height } = this.props;
+    const { 
+      width, 
+      height,
+      chartTitle,
+    } = this.props;
 
     return (
       <div className='output-chart'>
+        <ChartTitle title={chartTitle} />
         <svg width={width} height={height}>
           {dots.map(d => (
             <circle

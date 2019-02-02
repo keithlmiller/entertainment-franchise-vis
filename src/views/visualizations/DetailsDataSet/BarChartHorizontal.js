@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
-const margin = { top: 20, right: 5, bottom: 20, left: 65 };
+import ChartTitle from '../../../components/ChartTitle/ChartTitle';
+const margin = { top: 20, right: 5, bottom: 20, left: 150 };
 
 class BarChartHorizontal extends Component {
   state = {
@@ -31,7 +32,7 @@ class BarChartHorizontal extends Component {
     const xScale = d3
       .scaleLinear()
       .domain([0, xMax])
-      .range([margin.left, width - margin.right]);
+      .range([margin.left, width - margin.right - margin.left]);
 
     const bars = visData.map(d => {
       return {
@@ -69,10 +70,15 @@ class BarChartHorizontal extends Component {
       yScale,
     } = this.state;
 
-    const { width, height } = this.props;
+    const { 
+      width, 
+      height, 
+      chartTitle 
+    } = this.props;
 
     return (
       <div className='output-chart'>
+        <ChartTitle title={chartTitle} />
         <svg width={width} height={height}>
           {bars.map(d => (
             <rect x={d.x} y={d.y} width={d.width} height={yScale.bandwidth()} fill={d.fill} />

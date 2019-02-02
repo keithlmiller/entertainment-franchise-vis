@@ -1,5 +1,5 @@
 import React from "react";
-import './tooltip.css';
+import './Tooltip.css';
 
 export default function Tooltip({title, gross, x, y}) {
     const positionStyles = {
