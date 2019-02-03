@@ -32,7 +32,7 @@ class ScatterPlot extends Component {
       .domain(xExtent)
       .range([margin.left, width - margin.right]);
 
-    const [yMin, yMax] = d3.extent(visData, d => parseInt(d.lifetime_gross));
+    const [yMin, yMax] = d3.extent(visData, d => d.boxOffice);
     const yTickFormat = yMax >= 1000000 ? 1000000 : 1000;
     const yTickLabel = yMax >= 1000000 ? 'M' : 'k';
     const yScale = d3
@@ -47,7 +47,7 @@ class ScatterPlot extends Component {
     const dots = visData.map(d => {
       return {
         x: xScale(new Date(d.year)),
-        y: height - yScale(parseInt(d.lifetime_gross)) - margin.bottom,
+        y: height - yScale(d.boxOffice) - margin.bottom,
         fill: '#f4f4f4',
         ...d,
       };

@@ -30,7 +30,6 @@ class BarChartHorizontal extends Component {
       .paddingOuter(.25);
 
 
-    console.log('max range', width - margin.right - margin.left)
     const [xMin, xMax] = d3.extent(visData, d => parseInt(d.boxOffice));
     const xTickFormat = xMax >= 1000000 ? 1000000 : 1000;
     const xTickLabel = xMax >= 1000000 ? 'M' : 'k';
@@ -44,8 +43,6 @@ class BarChartHorizontal extends Component {
       .range([margin.left, width]);
 
     const bars = visData.map(d => {
-      console.log('xScale(d.boxOffice)', xScale(d.boxOffice));
-
       return {
         x: margin.left,
         y: yScale(d.title),

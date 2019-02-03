@@ -35,8 +35,12 @@ class App extends Component {
   componentWillMount() {
     let boxOfficeData = [];
     d3.csv(data,
-      (data) => {
-        boxOfficeData.push(data);
+      (movie) => {
+        boxOfficeData.push({
+          title: movie.title,
+          boxOffice: +movie.lifetime_gross,
+          year: movie.year
+        });
       }
     ).then(() => {
       const firstFive = getFirstX(boxOfficeData, 5);
