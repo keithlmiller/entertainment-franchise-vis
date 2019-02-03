@@ -185,7 +185,7 @@ class App extends Component {
         <div className='visualizations-container'>
           {/* <BarChart visData={visData} width={defaultChartWidth} height={defaultChartHeight} /> */}
           {/* <ExtendedBarChart visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight} /> */}
-          <ExtendedBarChartHorizontal visData={extendedVisData} width={800} height={300} chartTitle={'Films US Box Office'} />
+          <ExtendedBarChartHorizontal visData={extendedVisData} width={800} height={300} chartTitle={'US Domestic Box Office'} />
           <ScatterPlot visData={visData} width={defaultChartWidth} height={defaultChartHeight} chartTitle={'Box Office vs Release Year'} />
           {/* <RatingsBarChart visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight}  /> */}
           <RatingsBarChartHorizontal visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight} chartTitle={'Score on MetaCritic'} />

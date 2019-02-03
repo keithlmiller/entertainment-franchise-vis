@@ -10,7 +10,7 @@ export default function Tooltip({title, gross, x, y}) {
     return (
         <div className='tooltip' style={positionStyles}>
             <div className='tootip-title'>{title}</div>
-            <div>Gross: {gross}</div>
+            <div>Gross: ${gross}</div>
         </div>
     )
 }

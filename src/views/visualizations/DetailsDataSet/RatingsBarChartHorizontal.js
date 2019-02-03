@@ -28,6 +28,11 @@ class RatingsBarChartHorizontal extends Component {
     const xScale = d3
       .scaleLinear()
       .domain([0, 100])
+      .range([margin.left, width - margin.right - margin.left]);
+
+    const xAxisScale = d3
+      .scaleLinear()
+      .domain([0, 100])
       .range([margin.left, width - margin.right]);
 
     const bars = visData.map(d => {
@@ -40,16 +45,16 @@ class RatingsBarChartHorizontal extends Component {
       };
     });
 
-    return { bars, xScale, yScale };
+    return { bars, xScale, xAxisScale, yScale };
   }
 
   componentDidUpdate() {
     const {
-      xScale,
+      xAxisScale,
       yScale,
     } = this.state;
     this.xAxis
-      .scale(xScale)
+      .scale(xAxisScale)
       .tickFormat(d => `${d}%`);
     d3.select(this.refs.xAxis).call(this.xAxis);
     this.yAxis
@@ -80,7 +85,7 @@ class RatingsBarChartHorizontal extends Component {
             </React.Fragment>
           ))}
           {!bars.length && <text x={width/2} y={height/2} className='no-data-message'>No Ratings Data Available</text>}
-          <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
+          <g ref="xAxis" transform={`translate(0, ${height - margin.bottom - margin.top})`} />
           <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
         </svg>
       </div>
