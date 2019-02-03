@@ -63,8 +63,8 @@ class App extends Component {
       const moviesPerYear = this.getMoviesPerYear(boxOfficeData);
 
       // get genres for genre timeline chart
-      const moviesOfGenrePerYear = getFirstX(this.getMoviesOfGenrePerYear(moviesWithBoxOffice), 5);
-      const genresList = this.getGenresList(movieDataExtendedArray);
+      const moviesOfGenrePerYear = getFirstX(this.getMoviesOfGenrePerYear(moviesWithBoxOffice), 10);
+      const genresList = moviesOfGenrePerYear.map((genre) => genre.genre);
 
       this.setState({
         ...this.state,
@@ -148,6 +148,16 @@ class App extends Component {
 
   filterMoviesByGenre(genre) {
     const { extendedRawData } = this.state;
+
+    if (genre === 'all') {
+      const moviesWithBoxOffice = filterPropertyNonNumbers(extendedRawData, 'boxOffice');
+      const moviesDataExtendedSorted = sortByPropertyAsc(moviesWithBoxOffice, 'boxOffice');
+      const firstExtendedFive = getFirstX(moviesDataExtendedSorted, 5);
+      return this.setState({
+        ...this.state,
+        extendedVisData: firstExtendedFive,
+      });
+    }
 
     let moviesOfGenre = this.getMoviesOfGenre(genre, extendedRawData);
     moviesOfGenre = sortByPropertyAsc(moviesOfGenre, 'metascore');

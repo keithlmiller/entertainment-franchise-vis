@@ -7,6 +7,7 @@ export default function GenresFilter({genres, onClick}) {
 
     return (
         <div className='genres-filter'>
+            <FilterButton title='All' onClick={() => onClick('all')} />
             {genreButtons}
         </div>
     )
