@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
 import ChartTitle from '../../../components/ChartTitle/ChartTitle';
-const margin = { top: 20, right: 5, bottom: 20, left: 150 };
+const margin = { top: 20, right: 20, bottom: 20, left: 150 };
 
 class BarChartHorizontal extends Component {
   state = {
@@ -30,17 +30,18 @@ class BarChartHorizontal extends Component {
       .paddingOuter(.25);
 
 
-    const [xMin, xMax] = d3.extent(visData, d => parseInt(d.boxOffice));
+    const [xMin, xMax] = d3.extent(visData, d => d.boxOffice);
     const xTickFormat = xMax >= 1000000 ? 1000000 : 1000;
     const xTickLabel = xMax >= 1000000 ? 'M' : 'k';
     const xScale = d3
       .scaleLinear()
-      .domain([0, xMax])
-      .range([margin.left, chartWidth]);
+      .domain([0, 1000000000])
+      .range([0, chartWidth]);
+
     const xAxisScale = d3
       .scaleLinear()
-      .domain([0, xMax])
-      .range([margin.left, width]);
+      .domain([0, 1000000000])
+      .range([margin.left, width - 60]);
 
     const bars = visData.map(d => {
       return {
@@ -52,18 +53,18 @@ class BarChartHorizontal extends Component {
       };
     });
 
-    return { bars, xScale, xAxisScale, yScale, xTickFormat, xTickLabel };
+    return { bars, xScale, yScale, xTickFormat, xTickLabel };
   }
 
   componentDidUpdate() {
     const {
       yScale,
-      xAxisScale,
+      xScale,
       xTickFormat,
       xTickLabel,
     } = this.state;
     this.xAxis
-      .scale(xAxisScale)
+      .scale(xScale)
       .tickFormat(
         d => `$${parseInt((d) / xTickFormat)}${xTickLabel}`
       );
@@ -94,7 +95,7 @@ class BarChartHorizontal extends Component {
               <text x={d.width - d.width / 20} y={d.y + yScale.bandwidth()} className='bar-value'>${d3.format(',')(d.value)}</text>
             </React.Fragment>
           ))}
-          <g ref="xAxis" transform={`translate(0, ${height - margin.bottom - margin.top})`} />
+          <g ref="xAxis" transform={`translate(${margin.left}, ${height - margin.bottom - margin.top})`} />
           <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
         </svg>
       </div>
