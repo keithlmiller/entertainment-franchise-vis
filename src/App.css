@@ -21,6 +21,7 @@ body {
 .visualizations-container {
   display: flex;
   flex-flow: row wrap;
+  padding: 0 30px;
   justify-content: space-around;
   font-size: calc(10px + 2vmin);
   color: #f4f4f4;

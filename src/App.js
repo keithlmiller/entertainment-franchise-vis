@@ -9,6 +9,7 @@ import RatingsBarChartHorizontal from './views/visualizations/DetailsDataSet/Rat
 import RatingsBarChart from './views/visualizations/DetailsDataSet/RatingsBarChart';
 import GenresLineChart from './views/visualizations/DetailsDataSet/GenresLineChart';
 import ScatterPlot from './views/visualizations/ScatterPlot';
+import ExtendedScatterPlot from './views/visualizations/DetailsDataSet/ScatterPlot';
 import LineChart from './views/visualizations/LineChart'
 import GenresFilter from './views/filters/GenresFilter/GenresFilter';
 import { groupBy, getFirstX, getRandX, getMoviesInRange, sortByPropertyAsc, filterPropertyNonNumbers } from './utils/data-utils';
@@ -29,6 +30,7 @@ class App extends Component {
         defaultChartWidth: 400,
         defaultChartHeight: 200,
         genresList: [],
+        sortProperty: 'boxOffice',
     };
   }
 
@@ -94,12 +96,13 @@ class App extends Component {
     const {
       rawData,
       extendedRawData,
+      sortProperty,
     } = this.state;
 
     if (range) {
       const moviesInRange = getMoviesInRange(range, rawData, 'year');
       const moviesInRangeExtended = getMoviesInRange(range, sortByPropertyAsc(extendedRawData), 'year');
-      const topRatedInRange = sortByPropertyAsc(moviesInRangeExtended, 'metascore');
+      const topRatedInRange = sortByPropertyAsc(moviesInRangeExtended, sortProperty);
       const topFiveInRange = getFirstX(moviesInRange, 5);
       const firstFiveExtended = getFirstX(topRatedInRange, 5);
 
@@ -151,7 +154,7 @@ class App extends Component {
   }
 
   filterMoviesByGenre(genre) {
-    const { extendedRawData } = this.state;
+    const { extendedRawData, sortProperty } = this.state;
 
     if (genre === 'all') {
       const moviesWithBoxOffice = filterPropertyNonNumbers(extendedRawData, 'boxOffice');
@@ -164,11 +167,21 @@ class App extends Component {
     }
 
     let moviesOfGenre = this.getMoviesOfGenre(genre, extendedRawData);
-    moviesOfGenre = sortByPropertyAsc(moviesOfGenre, 'metascore');
+    moviesOfGenre = sortByPropertyAsc(moviesOfGenre, sortProperty);
 
     this.setState({
       ...this.state,
       extendedVisData: getFirstX(moviesOfGenre, 5)
+    });
+  }
+
+  setSortProperty = (sortProperty) => {
+    const { extendedRawData } = this.state;
+    
+    this.setState({
+      ...this.state,
+      sortProperty,
+      extendedVisData: getFirstX(sortByPropertyAsc(extendedRawData, sortProperty), 5),
     });
   }
 
@@ -190,17 +203,20 @@ class App extends Component {
           {/* <BarChart visData={visData} width={defaultChartWidth} height={defaultChartHeight} /> */}
           {/* <ExtendedBarChart visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight} /> */}
           <ExtendedBarChartHorizontal visData={extendedVisData} width={800} height={300} chartTitle={'US Domestic Box Office'} />
-          <ScatterPlot visData={visData} width={defaultChartWidth} height={defaultChartHeight} chartTitle={'Box Office vs Release Year'} />
+          {/* <ScatterPlot visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight} chartTitle={'Box Office vs Release Year'} /> */}
+          <ExtendedScatterPlot visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight} chartTitle={'Box Office vs MetaScore'} />
           {/* <RatingsBarChart visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight}  /> */}
           <RatingsBarChartHorizontal visData={extendedVisData} width={defaultChartWidth} height={defaultChartHeight} chartTitle={'Score on MetaCritic'} />
         </div>
-        <GenresFilter genres={genresList} onClick={(genre) => this.filterMoviesByGenre(genre)} /> 
+        <div className='buttons-container'>
+          <p>Sort By:</p>
+          <button onClick={() => this.setSortProperty('boxOffice')}>Box Office Revenue</button>
+          <button onClick={() => this.setSortProperty('metascore')}>MetaCritic Score</button>
+        </div>
+        <GenresFilter genres={genresList} onClick={(genre) => this.filterMoviesByGenre(genre)} />
 
         {/* <LineChart visData={timelineData} updateRange={this.updateDateRange} fixedBottom={true} /> */}
-        <div className='buttons-container'>
-            <button onClick={this.updateData(getFirstX, 5)}>Top Movies</button>
-            <button onClick={this.updateData(getRandX, 5)}>Random Movies</button>  
-          </div>
+
         <GenresLineChart visData={genreTimelineData} genres={genresList} updateRange={this.updateDateRange} fixedBottom={true} />
       </div>
     );

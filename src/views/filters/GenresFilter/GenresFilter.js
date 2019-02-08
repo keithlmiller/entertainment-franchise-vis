@@ -1,5 +1,6 @@
 import React from "react";
 import FilterButton from '../../../components/FilterButton/FilterButton';
+import ChartTitle from '../../../components/ChartTitle/ChartTitle';
 import './GenresFilter.css';
 
 export default function GenresFilter({genres, onClick}) {
@@ -7,8 +8,11 @@ export default function GenresFilter({genres, onClick}) {
 
     return (
         <div className='genres-filter'>
-            <FilterButton title='All' onClick={() => onClick('all')} />
-            {genreButtons}
+            <ChartTitle title='Filter by Genre' />
+            <div className='genres-filter-list'>
+                <FilterButton title='All' onClick={() => onClick('all')} />
+                {genreButtons}
+            </div>
         </div>
     )
 }

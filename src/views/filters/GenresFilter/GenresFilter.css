@@ -3,9 +3,12 @@
     padding: 20px 50px;
     background: #fff; 
     color: #000;
+}
+
+.genres-filter-list {
     display: flex;
     flex-wrap: wrap;
-    align-content: flex-start;
+    justify-content: center;
 }
 
 .genres-filter .filter-button {

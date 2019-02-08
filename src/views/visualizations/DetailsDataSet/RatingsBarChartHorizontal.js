@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import * as d3 from "d3";
 import ChartTitle from '../../../components/ChartTitle/ChartTitle';
 import '../../../App.css';
-const margin = { top: 20, right: 5, bottom: 20, left: 150 };
+const margin = { top: 20, right: 15, bottom: 20, left: 150 };
 
 class RatingsBarChartHorizontal extends Component {
   state = {
