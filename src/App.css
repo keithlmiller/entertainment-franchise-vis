@@ -1,3 +1,7 @@
+body {
+  background-color: #282c34;
+}
+
 .App {
   min-height: 100vh;
   text-align: center;
@@ -17,12 +21,18 @@
 .visualizations-container {
   display: flex;
   flex-flow: row wrap;
+  padding: 0 30px;
   justify-content: space-around;
   font-size: calc(10px + 2vmin);
   color: #f4f4f4;
 }
 
 .output-chart {
+  position: relative;
+  margin-bottom: 40px;
+}
+
+.chart-container {
   position: relative;
 }
 
@@ -72,6 +82,10 @@
 
 .timeline-fixed.timeline-collapsed {
   height: 80px;
+}
+
+.scatter-dot {
+  cursor: pointer;
 }
 
 @keyframes App-logo-spin {

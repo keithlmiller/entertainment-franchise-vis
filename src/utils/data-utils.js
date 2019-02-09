@@ -12,9 +12,11 @@ export const getMoviesInRange = (range, data, property) => {
     return moviesInRange;
 }
 
-export const getTopByProperty = (data, property) => {
-    return data.sort((a, b) => b[property] - a[property]);
-}
+export const filterPropertyNonNumbers = (array, property) => array.filter((d) => !isNaN(d[property]))
+
+export const sortByPropertyAsc = (data, property) => data.sort((a, b) => b[property] - a[property]);
+
+export const sortByPropertyDesc = (data, property) => data.sort((a, b) => a[property] - b[property]);
 
 export const getRandIndex = (boxOfficeData, numMovies) => Math.floor(Math.random() * Math.floor(boxOfficeData.length - numMovies));
 

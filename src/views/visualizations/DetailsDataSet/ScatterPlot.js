@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
-import ChartTitle from '../../components/ChartTitle/ChartTitle';
-import Tooltip from '../../components/Tooltip/Tooltip';
-const margin = { top: 20, right: 5, bottom: 20, left: 45 };
+import ChartTitle from '../../../components/ChartTitle/ChartTitle';
+import Tooltip from '../../../components/Tooltip/Tooltip';
+const margin = { top: 20, right: 15, bottom: 20, left: 45 };
 
-class ScatterPlot extends Component {
+class ExtendedScatterPlot extends Component {
   initialState = {
     dots: [],
     yTickFormat: 1000000,
@@ -27,10 +27,10 @@ class ScatterPlot extends Component {
 
     if (!visData) return {};
 
-    const xExtent = d3.extent(visData, d => new Date(d.year));
+    // const xExtent = d3.extent(visData, d => d.metascore);
     const xScale = d3
-      .scaleTime()
-      .domain(xExtent)
+      .scaleLinear()
+      .domain([0, 100])
       .range([margin.left, width - margin.right]);
 
     const [yMin, yMax] = d3.extent(visData, d => d.boxOffice);
@@ -38,16 +38,16 @@ class ScatterPlot extends Component {
     const yTickLabel = yMax >= 1000000 ? 'M' : 'k';
     const yScale = d3
       .scaleLinear()
-      .domain([0, yMax - 1])
+      .domain([0, 1000000000])
       .range([0, height - margin.bottom - margin.top]);
     const yAxisScale = d3
       .scaleLinear()
-      .domain([0, yMax])
+      .domain([0, 1000000000])
       .range([height - margin.bottom, margin.top]);
 
     const dots = visData.map(d => {
       return {
-        x: xScale(new Date(d.year)),
+        x: xScale(d.metascore),
         y: height - yScale(d.boxOffice) - margin.bottom,
         fill: '#f4f4f4',
         ...d,
@@ -66,7 +66,7 @@ class ScatterPlot extends Component {
     } = this.state;
     this.xAxis
       .scale(xScale)
-      .tickFormat(d3.timeFormat('%Y'));
+      .tickFormat(d => `${d}%`);
     d3.select(this.refs.xAxis).call(this.xAxis);
     this.yAxis
       .scale(yAxisScale)
@@ -93,7 +93,6 @@ class ScatterPlot extends Component {
       isTooltipOpen: true,
       tooltipTitle: title,
       tooltipValue: value,
-      tooltipYear: year,
       hoverX: x,
       hoverY: y,
     });
@@ -105,7 +104,6 @@ class ScatterPlot extends Component {
       isTooltipOpen: false,
       tooltipTitle: this.initialState.tooltipTitle,
       tooltipValue: this.initialState.tooltipValue,
-      tooltipYear: this.initialState.tooltipYear,
     });
   }
 
@@ -129,28 +127,30 @@ class ScatterPlot extends Component {
     return (
       <div className='output-chart'>
         <ChartTitle title={chartTitle} />
-        <svg width={width} height={height}>
-          {dots.map(d => (
-            <circle
-              cx={d.x}
-              cy={d.y}
-              r={5}
-              fill={d.fill}
-              onMouseOver={() => this.handleHoverEnter(d.x, d.y, d.title, d.boxOffice, d.year)}
-              onMouseOut={() => this.handleHoverExit(d.x, d.y)}
-              className='scatter-dot'
-            ></circle>
-          ))}
-          <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
-          <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
-        </svg>
-        {isTooltipOpen && <Tooltip title={tooltipTitle} gross={tooltipValue} year={tooltipYear} x={hoverX} y={hoverY}  />}
+        <div className='chart-container'>
+          <svg width={width} height={height}>
+            {dots.map(d => (
+              <circle
+                cx={d.x}
+                cy={d.y}
+                r={5}
+                fill={d.fill}
+                onMouseOver={() => this.handleHoverEnter(d.x, d.y, d.title, d.boxOffice, d.metascore)}
+                onMouseOut={() => this.handleHoverExit(d.x, d.y)}
+                className='scatter-dot'
+              ></circle>
+            ))}
+            <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
+            <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
+          </svg>
+          {isTooltipOpen && <Tooltip title={tooltipTitle} gross={tooltipValue} year={tooltipYear} x={hoverX} y={hoverY}  />}
+        </div>
       </div>
     );
   }
 }
 
-export default ScatterPlot;
+export default ExtendedScatterPlot;
 
 
 

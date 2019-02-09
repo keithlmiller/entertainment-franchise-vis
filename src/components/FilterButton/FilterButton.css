@@ -1,0 +1,15 @@
+.filter-button {
+    background: #cc3838;
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 12px;
+    padding: 5px 15px;
+}
+
+.filter-button:hover {
+    background: #a52929;
+    cursor: pointer;
+}
