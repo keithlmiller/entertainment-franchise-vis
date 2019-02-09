@@ -92,7 +92,7 @@ class BarChartHorizontal extends Component {
           {bars.map(d => (
             <React.Fragment>
               <rect x={d.x} y={d.y} width={d.width} height={yScale.bandwidth()} fill={d.fill} />
-              <text x={d.width - d.width / 20} y={d.y + yScale.bandwidth()} className='bar-value'>${d3.format(',')(d.value)}</text>
+              <text x={d.x + d.width - 75} y={d.y + yScale.bandwidth()} className='bar-value'>${d3.format(',')(d.value)}</text>
             </React.Fragment>
           ))}
           <g ref="xAxis" transform={`translate(${margin.left}, ${height - margin.bottom - margin.top})`} />

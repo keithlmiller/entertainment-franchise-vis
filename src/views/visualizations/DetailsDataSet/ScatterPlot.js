@@ -127,22 +127,24 @@ class ExtendedScatterPlot extends Component {
     return (
       <div className='output-chart'>
         <ChartTitle title={chartTitle} />
-        <svg width={width} height={height}>
-          {dots.map(d => (
-            <circle
-              cx={d.x}
-              cy={d.y}
-              r={5}
-              fill={d.fill}
-              onMouseOver={() => this.handleHoverEnter(d.x, d.y, d.title, d.boxOffice, d.metascore)}
-              onMouseOut={() => this.handleHoverExit(d.x, d.y)}
-              className='scatter-dot'
-            ></circle>
-          ))}
-          <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
-          <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
-        </svg>
-        {isTooltipOpen && <Tooltip title={tooltipTitle} gross={tooltipValue} year={tooltipYear} x={hoverX} y={hoverY}  />}
+        <div className='chart-container'>
+          <svg width={width} height={height}>
+            {dots.map(d => (
+              <circle
+                cx={d.x}
+                cy={d.y}
+                r={5}
+                fill={d.fill}
+                onMouseOver={() => this.handleHoverEnter(d.x, d.y, d.title, d.boxOffice, d.metascore)}
+                onMouseOut={() => this.handleHoverExit(d.x, d.y)}
+                className='scatter-dot'
+              ></circle>
+            ))}
+            <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
+            <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
+          </svg>
+          {isTooltipOpen && <Tooltip title={tooltipTitle} gross={tooltipValue} year={tooltipYear} x={hoverX} y={hoverY}  />}
+        </div>
       </div>
     );
   }

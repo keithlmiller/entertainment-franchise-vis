@@ -3,9 +3,12 @@ import './Tooltip.css';
 
 export default function Tooltip({title, gross, year, x, y}) {
     const positionStyles = {
-        top: y + 3,
-        left: x + 3,
+        top: y - 5,
+        left: x + 10,
     }
+
+    console.log('positionStyles.top', positionStyles.top);
+    console.log('positionStyles.left', positionStyles.left);
 
     return (
         <div className='tooltip' style={positionStyles}>
