@@ -7,9 +7,6 @@ export default function Tooltip({title, gross, year, x, y}) {
         left: x + 10,
     }
 
-    console.log('positionStyles.top', positionStyles.top);
-    console.log('positionStyles.left', positionStyles.left);
-
     return (
         <div className='tooltip' style={positionStyles}>
             <div className='tootip-title'>{title}</div>

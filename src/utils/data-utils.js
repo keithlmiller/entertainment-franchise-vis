@@ -6,6 +6,9 @@ export const groupBy = (array, key) => {
 };
 
 export const getMoviesInRange = (range, data, property) => {
+    if (!range.length) {
+        return data;
+    }
     const [min, max] = range;
     const moviesInRange = data.filter((movie) => (movie[property] > min && movie[property] < max));
 

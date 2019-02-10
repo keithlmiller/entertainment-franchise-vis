@@ -79,7 +79,8 @@ class GenresLineChart extends Component {
   }
 
   componentDidMount() {
-    const { height } = this.state;
+    const { height, xScale } = this.state;
+    const initialBrush = [xScale(2007), xScale(2017) ]
 
     this.brush = d3
       .brushX()
@@ -90,7 +91,7 @@ class GenresLineChart extends Component {
       .on("end", this.brushmove);
     d3.select(this.refs.brush)
       .call(this.brush)
-      .call(this.brush.move, [margin.left, 100]);
+      .call(this.brush.move, initialBrush);
 
     this.xAxis.scale(this.state.xScale);
     d3.select(this.refs.xAxis).call(this.xAxis);
