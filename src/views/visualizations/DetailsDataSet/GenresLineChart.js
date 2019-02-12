@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
-import '../../../App.css';
+import '../../../App.scss';
 const width = 800;
 const margin = { top: 20, right: 45, bottom: 20, left: 45 };
 

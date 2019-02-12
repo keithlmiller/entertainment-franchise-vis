@@ -13,7 +13,7 @@ import {
   sortByPropertyAsc, 
   filterPropertyNonNumbers 
 } from './utils/data-utils';
-import './App.css';
+import './App.scss';
 // import 'normalize.css';
 
 class App extends Component {

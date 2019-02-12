@@ -1,5 +1,5 @@
 import React from "react";
-import './ChartTitle.css';
+import './ChartTitle.scss';
 
 export default function ChartTitle({title, subtitle}) {
     return (

@@ -1,7 +1,7 @@
 import React from "react";
 import FilterButton from '../../../components/FilterButton/FilterButton';
 import ChartTitle from '../../../components/ChartTitle/ChartTitle';
-import './GenresFilter.css';
+import './GenresFilter.scss';
 
 export default function GenresFilter({genres, onClick}) {
     const genreButtons = genres.map((genre) => <FilterButton title={genre} onClick={() => onClick(genre)} />);

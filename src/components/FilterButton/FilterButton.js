@@ -1,5 +1,5 @@
 import React from "react";
-import './FilterButton.css';
+import './FilterButton.scss';
 
 export default function FilterButton({title, onClick}) {
     return (
