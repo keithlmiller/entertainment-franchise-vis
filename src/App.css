@@ -88,6 +88,31 @@ body {
   cursor: pointer;
 }
 
+.toggle-chart-height {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+  background: #f3f3f3;
+  border: none;
+  color: black;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 34px;
+  width: 30px;
+  height: 30px;
+  border-radius: 15px;
+}
+
+.toggle-chart-height.collapse-chart {
+  transform: rotate(180deg);
+}
+
+.toggle-chart-height:hover {
+  background: #dadada;
+  cursor: pointer;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);

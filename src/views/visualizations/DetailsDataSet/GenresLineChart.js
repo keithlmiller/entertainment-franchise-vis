@@ -174,12 +174,12 @@ class GenresLineChart extends Component {
     return (
         <div
           className={`brush-timeline ${fixedBottom ? 'timeline-fixed' : 'timeline-standard'} ${collapsed ? 'timeline-collapsed' : ''}`}>
+            <button className={`toggle-chart-height ${!this.state.collapsed ? 'collapse-chart' : ''}`} onClick={this.handleToggleHeight}>^</button>
+            
             <div className='timeline-explanation'>
                 <h3 className='timeline-title'>Movies of Each Genre Released Per Year</h3>
                 {!collapsed && <p className='timeline-description'>Click and drag to select a range of time to explore with the graphs above</p>}
             </div>
-
-            <button className='toggle-chart-height' onClick={this.handleToggleHeight}>Toggle Height</button>
             
             <svg width={width} height={height}>
                 {visData.map((genre) => (<path fill='none' stroke={colorScale(genre.genre)} stroke-width={1.5} d={line(genre.data)} />)) }
