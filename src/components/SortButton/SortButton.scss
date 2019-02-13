@@ -1,4 +1,4 @@
-.filter-button {
+.sort-button {
     background: #cc3838;
     border: none;
     color: white;
@@ -7,14 +7,10 @@
     display: inline-block;
     font-size: 12px;
     padding: 5px 15px;
+    margin: 5px;
 
     &:hover {
         background: #a52929;
         cursor: pointer;
     }
 }
-
-// .filter-button:hover {
-//     background: #a52929;
-//     cursor: pointer;
-// }

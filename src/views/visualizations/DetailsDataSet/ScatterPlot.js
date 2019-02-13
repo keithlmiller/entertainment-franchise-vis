@@ -13,6 +13,7 @@ class ExtendedScatterPlot extends Component {
     tooltipTitle: '',
     tooltipValue: '',
     tooltipYear: '',
+    tooltipScore: 0,
     hoverX: 0,
     hoverY: 0,
   }
@@ -76,23 +77,24 @@ class ExtendedScatterPlot extends Component {
     d3.select(this.refs.yAxis).call(this.yAxis);
   }
 
-  handleHoverEnter = (x, y, title, gross, year) => {
+  handleHoverEnter = (x, y, title, gross, metascore) => {
     const formattedGross = d3.format(',')(gross);
-    this.showTooltip(title, formattedGross, year, x, y);
+    this.showTooltip(title, formattedGross, metascore, x, y);
     // TODO: add hover state to dot
     // show hovered movie on other charts
   }
 
-  handleHoverExit = (x, y) => {
+  handleHoverExit = () => {
     this.closeTooltip();
   }
 
-  showTooltip = (title, value, year, x, y) => {
+  showTooltip = (title, value, metascore, x, y) => {
     this.setState({
       ...this.state,
       isTooltipOpen: true,
       tooltipTitle: title,
       tooltipValue: value,
+      tooltipScore: metascore,
       hoverX: x,
       hoverY: y,
     });
@@ -114,6 +116,7 @@ class ExtendedScatterPlot extends Component {
       tooltipTitle,
       tooltipValue,
       tooltipYear,
+      tooltipScore,
       hoverX,
       hoverY,
     } = this.state;
@@ -125,7 +128,7 @@ class ExtendedScatterPlot extends Component {
     } = this.props;
 
     return (
-      <div className='output-chart'>
+      <div className='chart-container primary-chart'>
         <ChartTitle title={chartTitle} />
         <div className='chart-container'>
           <svg width={width} height={height}>
@@ -135,14 +138,14 @@ class ExtendedScatterPlot extends Component {
                 cy={d.y}
                 r={5}
                 onMouseOver={() => this.handleHoverEnter(d.x, d.y, d.title, d.boxOffice, d.metascore)}
-                onMouseOut={() => this.handleHoverExit(d.x, d.y)}
+                onMouseOut={() => this.handleHoverExit()}
                 className='scatter-dot chart-standard-fg'
               ></circle>
             ))}
             <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
             <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
           </svg>
-          {isTooltipOpen && <Tooltip title={tooltipTitle} gross={tooltipValue} year={tooltipYear} x={hoverX} y={hoverY}  />}
+          {isTooltipOpen && <Tooltip title={tooltipTitle} gross={tooltipValue} year={tooltipYear} score={tooltipScore} x={hoverX} y={hoverY}  />}
         </div>
       </div>
     );

@@ -76,7 +76,7 @@ class BarChart extends Component {
     const { width, height } = this.props;
 
     return (
-      <div className='output-chart'>
+      <div className='chart-container primary-chart'>
         <svg width={width} height={height}>
           {bars.map(d => (
             <rect x={d.x} y={d.y} width={xScale.bandwidth()} height={d.height} fill={d.fill} />

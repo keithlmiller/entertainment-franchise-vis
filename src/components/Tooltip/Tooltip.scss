@@ -1,12 +1,14 @@
 .tooltip {
     position: absolute;
-    background: rgba(255, 255, 255, 0.9);
+    background: #fff;
     color: #000;
     font-size: 12px;
-    padding: 2px 5px;
+    padding: 5px 8px;
     text-align: left;
+    box-shadow: 1px 1px 5px -1px rgba(68,68,68,0.5);
+
+    .tootip-title {
+        font-weight: bold;
+    }
 }
 
-.tootip-title {
-    font-weight: bold;
-}

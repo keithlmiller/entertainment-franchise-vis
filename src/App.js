@@ -6,6 +6,7 @@ import RatingsBarChartHorizontal from './views/visualizations/DetailsDataSet/Rat
 import GenresLineChart from './views/visualizations/DetailsDataSet/GenresLineChart';
 import ExtendedScatterPlot from './views/visualizations/DetailsDataSet/ScatterPlot';
 import GenresFilter from './views/filters/GenresFilter/GenresFilter';
+import SortButton from './components/SortButton/SortButton';
 import { 
   groupBy, 
   getFirstX, 
@@ -203,21 +204,24 @@ class App extends Component {
     return (
       <div className="App">
         <h1 className='section-title'>Exploring Movie Data</h1>
-        {!!visData.length && 
-          <div>
-            <div className='visualizations-container'>
+        {!!visData.length ?
+          <div className='content-container'>
+            <div className='primary-visualizations'>
               <ExtendedBarChartHorizontal visData={visData} width={800} height={300} chartTitle={'US Domestic Box Office'} />
               <ExtendedScatterPlot visData={visData} width={defaultChartWidth} height={defaultChartHeight} chartTitle={'Box Office vs MetaScore'} />
               <RatingsBarChartHorizontal visData={visData} width={defaultChartWidth} height={defaultChartHeight} chartTitle={'Score on MetaCritic'} />
             </div>
-            <div className='buttons-container'>
+            <div className='sort-options'>
               <p>Sort By:</p>
-              <button onClick={() => this.updateSortProperty('boxOffice')}>Box Office Revenue</button>
-              <button onClick={() => this.updateSortProperty('metascore')}>MetaCritic Score</button>
+              <div className='buttons-container'>
+                <SortButton title='Box Office Revenue' onClick={() => this.updateSortProperty('boxOffice')} />
+                <SortButton title='MetaCritic Score' onClick={() => this.updateSortProperty('metascore')} />
+              </div>
             </div>
             <GenresFilter genres={genresList} onClick={(genre) => this.updateGenreFilter(genre)} />
             <GenresLineChart visData={genreTimelineData} genres={genresList} updateRange={this.updateDateRange} fixedBottom={true} />
           </div>
+          : <div>Visualization Loading</div>
         }
       </div>
     );

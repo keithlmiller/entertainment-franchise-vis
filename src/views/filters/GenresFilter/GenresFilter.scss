@@ -3,14 +3,14 @@
     padding: 20px 50px;
     background: #fff; 
     color: #000;
-}
 
-.genres-filter-list {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-}
+    .genres-filter-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
 
-.genres-filter .filter-button {
-    margin: 5px;
+    .filter-button {
+        margin: 5px;
+    }
 }

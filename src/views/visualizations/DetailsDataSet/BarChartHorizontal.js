@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
-import { chartFillPrimary } from '../../../constants/chart-colors.js';
 import ChartTitle from '../../../components/ChartTitle/ChartTitle';
 const margin = { top: 20, right: 20, bottom: 20, left: 150 };
 
@@ -49,7 +48,6 @@ class BarChartHorizontal extends Component {
         x: margin.left,
         y: yScale(d.title),
         width: xScale(d.boxOffice),
-        fill: chartFillPrimary,
         value: d.boxOffice,
       };
     });
@@ -87,7 +85,7 @@ class BarChartHorizontal extends Component {
     } = this.props;
 
     return (
-      <div className='output-chart'>
+      <div className='chart-container primary-chart'>
         <ChartTitle title={chartTitle} />
         <svg width={width} height={height}>
           {bars.map(d => (

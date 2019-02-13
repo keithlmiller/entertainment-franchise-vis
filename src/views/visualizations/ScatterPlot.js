@@ -127,7 +127,7 @@ class ScatterPlot extends Component {
     } = this.props;
 
     return (
-      <div className='output-chart'>
+      <div className='chart-container primary-chart'>
         <ChartTitle title={chartTitle} />
         <svg width={width} height={height}>
           {dots.map(d => (

@@ -70,7 +70,7 @@ class RatingsBarChart extends Component {
     const { width, height } = this.props;
 
     return (
-      <div className='output-chart'>
+      <div className='chart-container primary-chart'>
         <svg width={width} height={height}>
           {bars.map(d => (
             <React.Fragment>
