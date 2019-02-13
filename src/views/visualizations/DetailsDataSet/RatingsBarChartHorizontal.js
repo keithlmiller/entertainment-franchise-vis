@@ -80,7 +80,7 @@ class RatingsBarChartHorizontal extends Component {
         <svg width={width} height={height}>
           {bars.map(d => (
             <React.Fragment>
-              <rect x={d.x} y={d.y} width={d.width} height={yScale.bandwidth()} fill={d.fill} />
+              <rect x={d.x} y={d.y} width={d.width} height={yScale.bandwidth()} className='chart-standard-fg' />
               <text x={d.x + d.width - 60} y={d.y + yScale.bandwidth()} className='bar-value'>{d.value}</text>
             </React.Fragment>
           ))}

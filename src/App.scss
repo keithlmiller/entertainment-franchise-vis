@@ -1,12 +1,17 @@
+$dark-primary: #282c34;
+$light-primary: #f4f4f4;
+$bg-color: $light-primary;
+$fg-color: $dark-primary;
+
 body {
-  background-color: #282c34;
+  background-color: $bg-color;
 }
 
 .App {
   min-height: 100vh;
   text-align: center;
-  color: #f4f4f4;
-  background-color: #282c34;
+  color: $fg-color;
+  background-color: $bg-color;
 }
 
 .App-logo {
@@ -24,7 +29,7 @@ body {
   padding: 0 30px;
   justify-content: space-around;
   font-size: calc(10px + 2vmin);
-  color: #f4f4f4;
+  color: $fg-color;
 }
 
 .output-chart {
@@ -36,30 +41,35 @@ body {
   position: relative;
 }
 
+.chart-standard-fg {
+  fill: $fg-color;
+}
+
 .section-title {
   font-size: 24px;
   padding-top: 30px;
 }
 
 .year-text {
-  fill: #f4f4f4;
+  fill: $fg-color;
   font-size: 14px;
 }
 
 .bar-value {
-  fill: #282c34;
+  fill: $bg-color;
   font-size: 16px;
   font-weight: bold;
   text-anchor: middle;
 }
 
 .no-data-message {
-  fill: #f4f4f4;
+  fill: $fg-color;
   text-anchor: middle;
 }
 
 .brush-timeline {
   display: flex;
+  color: $bg-color;
 }
 
 .timeline-explanation {
@@ -92,7 +102,7 @@ body {
   position: absolute;
   top: 20px;
   right: 20px;
-  background: #f3f3f3;
+  background: $light-primary;
   border: none;
   color: black;
   text-align: center;

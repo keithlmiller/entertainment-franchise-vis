@@ -134,10 +134,9 @@ class ExtendedScatterPlot extends Component {
                 cx={d.x}
                 cy={d.y}
                 r={5}
-                fill={d.fill}
                 onMouseOver={() => this.handleHoverEnter(d.x, d.y, d.title, d.boxOffice, d.metascore)}
                 onMouseOut={() => this.handleHoverExit(d.x, d.y)}
-                className='scatter-dot'
+                className='scatter-dot chart-standard-fg'
               ></circle>
             ))}
             <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
