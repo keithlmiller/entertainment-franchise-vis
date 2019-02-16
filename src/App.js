@@ -35,6 +35,7 @@ class App extends Component {
         dateRange: [],
         moviesPerChart: 5,
         hoveredMovie: '',
+        selectedMovie: '',
     };
   }
 
@@ -145,6 +146,20 @@ class App extends Component {
     });
   }
 
+  updateSelectedMovie = (movie) => {
+    if (movie) {
+      return this.setState({
+        ...this.state,
+        selectedMovie: movie,
+      });
+    }
+
+    this.setState({
+      ...this.state,
+      selectedMovie: '',
+    });
+  }
+
   updateHoveredMovie = (movie) => {
     if (movie) {
       return this.setState({
@@ -218,6 +233,7 @@ class App extends Component {
       hoveredMovie,
       sortProperty,
       genreFilter,
+      selectedMovie,
     } = this.state;
 
 
@@ -230,9 +246,11 @@ class App extends Component {
               <ExtendedBarChartHorizontal 
                 visData={visData} 
                 width={800} height={300} 
-                hoveredMovie={hoveredMovie} 
+                hoveredMovie={hoveredMovie}
+                selectedMovie={selectedMovie}
                 sortClass={sortProperty}
-                onDataHover={this.updateHoveredMovie} 
+                onDataHover={this.updateHoveredMovie}
+                onDataClick={this.updateSelectedMovie}
               />
               <ExtendedScatterPlot 
                 visData={visData} 

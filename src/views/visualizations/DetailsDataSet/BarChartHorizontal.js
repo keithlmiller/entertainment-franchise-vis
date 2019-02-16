@@ -119,20 +119,31 @@ class BarChartHorizontal extends Component {
       onDataHover,
       hoveredMovie,
       sortClass,
+      onDataClick,
+      selectedMovie,
     } = this.props;
 
     return (
       <div className='chart-container primary-chart'>
         {chartTitle && <ChartTitle title={chartTitle} />}
         <svg width={width} height={height}>
+          <defs>
+            <clipPath id='chart-clip-path'>
+              <rect x={margin.left} y='0' width={width} height={height} />
+            </clipPath>
+          </defs>
+
           <g ref="xAxisLines" className='background-lines' transform={`translate(${margin.left}, 0)`} />
           {bars.map(d => (
             <React.Fragment>
               <rect
-                className={`chart-standard-fg ${hoveredMovie === d.title ? 'hovered-movie' : '' } ${sortClass}`}
+                // TODO: create function to calculate selected and hovered class
+                className={`chart-standard-fg ${hoveredMovie === d.title ? 'hovered-movie' : '' } ${selectedMovie === d.title ? 'selected-movie' : '' } ${sortClass}`}
                 x={d.x} y={d.y} width={d.width} height={yScale.bandwidth()} 
                 onMouseOver={() => onDataHover(d.title)}
                 onMouseOut={() => onDataHover()}
+                onClick={() => onDataClick(d.title)}
+                clip-path='url(#chart-clip-path)'
               />
               <text x={d.x + d.width - 75} y={d.y + yScale.bandwidth()} className='bar-value'>${d3.format(',')(d.value)}</text>
             </React.Fragment>

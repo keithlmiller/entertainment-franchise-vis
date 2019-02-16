@@ -57,6 +57,22 @@ body {
       }
     }
 
+    &.selected-movie {
+      // fill: orange;
+      // stroke: #fcca6f;
+      stroke-width: 6;
+
+      &.boxOffice {
+        fill: $dollar-color;
+        stroke: $dollar-color-light;
+      }
+
+      &.metascore {
+        fill: $reviews-color;
+        stroke: $reviews-color-light;
+      }
+    }
+
     &:hover {
       cursor: pointer;
     }
