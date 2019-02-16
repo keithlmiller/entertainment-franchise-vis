@@ -49,6 +49,7 @@ class BarChartHorizontal extends Component {
         y: yScale(d.title),
         width: xScale(d.boxOffice),
         value: d.boxOffice,
+        title: d.title,
       };
     });
 
@@ -81,8 +82,12 @@ class BarChartHorizontal extends Component {
     const { 
       width, 
       height, 
-      chartTitle 
+      chartTitle,
+      onDataHover,
+      hoveredMovie,
     } = this.props;
+
+    console.log('hoveredMovie prop', hoveredMovie);
 
     return (
       <div className='chart-container primary-chart'>
@@ -90,7 +95,13 @@ class BarChartHorizontal extends Component {
         <svg width={width} height={height}>
           {bars.map(d => (
             <React.Fragment>
-              <rect x={d.x} y={d.y} width={d.width} height={yScale.bandwidth()} className='chart-standard-fg' />
+              <rect
+                className={`chart-standard-fg ${hoveredMovie === d.title ? 'hovered-movie' : '' }`}
+                x={d.x} y={d.y} width={d.width} height={yScale.bandwidth()} 
+                onMouseOver={() => onDataHover(d.title)}
+                onMouseOut={() => onDataHover()}
+                // fill={hoveredMovie === d.title ? 'red' : null}
+              />
               <text x={d.x + d.width - 75} y={d.y + yScale.bandwidth()} className='bar-value'>${d3.format(',')(d.value)}</text>
             </React.Fragment>
           ))}

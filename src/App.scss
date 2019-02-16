@@ -44,6 +44,14 @@ body {
 
   .chart-standard-fg {
     fill: $fg-color;
+
+    &.hovered-movie {
+      fill: orange;
+    }
+
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   .bar-value {
@@ -51,6 +59,7 @@ body {
     font-size: 16px;
     font-weight: bold;
     text-anchor: middle;
+    pointer-events: none;
   }
 
   &.primary-chart {

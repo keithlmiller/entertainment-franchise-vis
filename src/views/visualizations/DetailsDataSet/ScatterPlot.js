@@ -78,14 +78,18 @@ class ExtendedScatterPlot extends Component {
   }
 
   handleHoverEnter = (x, y, title, gross, metascore) => {
+    const { onDataHover } = this.props;
     const formattedGross = d3.format(',')(gross);
+    onDataHover(title);
     this.showTooltip(title, formattedGross, metascore, x, y);
     // TODO: add hover state to dot
     // show hovered movie on other charts
   }
 
   handleHoverExit = () => {
+    const { onDataHover } = this.props;
     this.closeTooltip();
+    onDataHover();
   }
 
   showTooltip = (title, value, metascore, x, y) => {
@@ -125,6 +129,7 @@ class ExtendedScatterPlot extends Component {
       width, 
       height,
       chartTitle,
+      hoveredMovie,
     } = this.props;
 
     return (
@@ -134,12 +139,12 @@ class ExtendedScatterPlot extends Component {
           <svg width={width} height={height}>
             {dots.map(d => (
               <circle
+                className={`scatter-dot chart-standard-fg ${hoveredMovie === d.title ? 'hovered-movie' : '' }`} 
                 cx={d.x}
                 cy={d.y}
                 r={5}
                 onMouseOver={() => this.handleHoverEnter(d.x, d.y, d.title, d.boxOffice, d.metascore)}
                 onMouseOut={() => this.handleHoverExit()}
-                className='scatter-dot chart-standard-fg'
               ></circle>
             ))}
             <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />

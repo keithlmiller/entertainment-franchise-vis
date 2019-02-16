@@ -33,6 +33,7 @@ class App extends Component {
         genreFilter: 'all',
         dateRange: [],
         moviesPerChart: 5,
+        hoveredMovie: '',
     };
   }
 
@@ -143,6 +144,21 @@ class App extends Component {
     });
   }
 
+  updateHoveredMovie = (movie) => {
+    console.log('updateHoveredMovie movie', movie)
+    if (movie) {
+      return this.setState({
+        ...this.state,
+        hoveredMovie: movie,
+      });
+    }
+
+    this.setState({
+      ...this.state,
+      hoveredMovie: '',
+    });
+  }
+
   updateDateRange = (range) => {
     if (range) {
       this.setState({
@@ -199,7 +215,9 @@ class App extends Component {
       defaultChartWidth,
       defaultChartHeight,
       genresList,
+      hoveredMovie,
     } = this.state;
+
 
     return (
       <div className="App">
@@ -207,9 +225,9 @@ class App extends Component {
         {!!visData.length ?
           <div className='content-container'>
             <div className='primary-visualizations'>
-              <ExtendedBarChartHorizontal visData={visData} width={800} height={300} chartTitle={'US Domestic Box Office'} />
-              <ExtendedScatterPlot visData={visData} width={defaultChartWidth} height={defaultChartHeight} chartTitle={'Box Office vs MetaScore'} />
-              <RatingsBarChartHorizontal visData={visData} width={defaultChartWidth} height={defaultChartHeight} chartTitle={'Score on MetaCritic'} />
+              <ExtendedBarChartHorizontal visData={visData} width={800} height={300} hoveredMovie={hoveredMovie} chartTitle={'US Domestic Box Office'} onDataHover={this.updateHoveredMovie} />
+              <ExtendedScatterPlot visData={visData} width={defaultChartWidth} height={defaultChartHeight} hoveredMovie={hoveredMovie} chartTitle={'Box Office vs MetaScore'} onDataHover={this.updateHoveredMovie} />
+              <RatingsBarChartHorizontal visData={visData} width={defaultChartWidth} height={defaultChartHeight} hoveredMovie={hoveredMovie} chartTitle={'Score on MetaCritic'} onDataHover={this.updateHoveredMovie} />
             </div>
             <div className='sort-options'>
               <p>Sort By:</p>

@@ -41,7 +41,7 @@ class RatingsBarChartHorizontal extends Component {
         x: margin.left,
         y: yScale(d.title),
         width: xScale(d.metascore),
-        fill: '#f4f4f4'
+        title: d.title,
       };
     });
 
@@ -71,8 +71,12 @@ class RatingsBarChartHorizontal extends Component {
     const { 
       width, 
       height, 
-      chartTitle 
+      chartTitle,
+      onDataHover,
+      hoveredMovie,
     } = this.props;
+
+    console.log('ratings hoveredMovie', hoveredMovie);
 
     return (
       <div className='chart-container primary-chart'>
@@ -80,7 +84,12 @@ class RatingsBarChartHorizontal extends Component {
         <svg width={width} height={height}>
           {bars.map(d => (
             <React.Fragment>
-              <rect x={d.x} y={d.y} width={d.width} height={yScale.bandwidth()} className='chart-standard-fg' />
+              <rect
+                className={`chart-standard-fg ${hoveredMovie === d.title ? 'hovered-movie' : '' }`} 
+                x={d.x} y={d.y} width={d.width} height={yScale.bandwidth()}
+                onMouseOver={() => onDataHover(d.title)}
+                onMouseOut={() => onDataHover()}
+              />
               <text x={d.x + d.width - 60} y={d.y + yScale.bandwidth()} className='bar-value'>{d.value}</text>
             </React.Fragment>
           ))}
