@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '../../../App.scss';
 const width = 800;
 const margin = { top: 20, right: 45, bottom: 20, left: 45 };
@@ -174,7 +175,9 @@ class GenresLineChart extends Component {
     return (
         <div
           className={`brush-timeline ${fixedBottom ? 'timeline-fixed' : 'timeline-standard'} ${collapsed ? 'timeline-collapsed' : ''}`}>
-            <button className={`toggle-chart-height ${!this.state.collapsed ? 'collapse-chart' : ''}`} onClick={this.handleToggleHeight}>^</button>
+            <button className={`toggle-chart-height ${!this.state.collapsed ? 'collapse-chart' : ''}`} onClick={this.handleToggleHeight}>
+              <FontAwesomeIcon icon='angle-down' />
+            </button>
             
             <div className='timeline-explanation'>
                 <h3 className='timeline-title'>Movies of Each Genre Released Per Year</h3>

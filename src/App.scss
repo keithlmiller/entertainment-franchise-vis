@@ -58,8 +58,6 @@ body {
   }
 }
 
-
-
 .no-data-message {
   fill: $fg-color;
   text-anchor: middle;
@@ -107,16 +105,17 @@ body {
 }
 
 .toggle-chart-height {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   position: absolute;
   top: 20px;
   right: 20px;
   background: $light-primary;
   border: none;
   color: black;
-  text-align: center;
   text-decoration: none;
-  display: inline-block;
-  font-size: 34px;
+  font-size: 20px;
   width: 30px;
   height: 30px;
   border-radius: 15px;
