@@ -232,8 +232,8 @@ class App extends Component {
             <div className='sort-options'>
               <p>Sort By:</p>
               <div className='buttons-container'>
-                <SortButton title='Box Office Revenue' onClick={() => this.updateSortProperty('boxOffice')} />
-                <SortButton title='MetaCritic Score' onClick={() => this.updateSortProperty('metascore')} />
+                <SortButton title='Box Office Revenue' icon='dollar-sign' onClick={() => this.updateSortProperty('boxOffice')} />
+                <SortButton title='MetaCritic Score' icon='star-half-alt' onClick={() => this.updateSortProperty('metascore')} />
               </div>
             </div>
             <GenresFilter genres={genresList} onClick={(genre) => this.updateGenreFilter(genre)} />
