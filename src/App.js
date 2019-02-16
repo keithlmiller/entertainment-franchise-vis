@@ -145,7 +145,6 @@ class App extends Component {
   }
 
   updateHoveredMovie = (movie) => {
-    console.log('updateHoveredMovie movie', movie)
     if (movie) {
       return this.setState({
         ...this.state,

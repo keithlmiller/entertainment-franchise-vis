@@ -76,8 +76,6 @@ class RatingsBarChartHorizontal extends Component {
       hoveredMovie,
     } = this.props;
 
-    console.log('ratings hoveredMovie', hoveredMovie);
-
     return (
       <div className='chart-container primary-chart'>
         <ChartTitle title={chartTitle} />

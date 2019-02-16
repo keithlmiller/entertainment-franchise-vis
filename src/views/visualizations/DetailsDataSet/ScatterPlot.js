@@ -28,7 +28,6 @@ class ExtendedScatterPlot extends Component {
 
     if (!visData) return {};
 
-    // const xExtent = d3.extent(visData, d => d.metascore);
     const xScale = d3
       .scaleLinear()
       .domain([0, 100])

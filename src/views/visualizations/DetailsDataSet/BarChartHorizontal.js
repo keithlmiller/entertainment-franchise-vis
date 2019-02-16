@@ -87,8 +87,6 @@ class BarChartHorizontal extends Component {
       hoveredMovie,
     } = this.props;
 
-    console.log('hoveredMovie prop', hoveredMovie);
-
     return (
       <div className='chart-container primary-chart'>
         <ChartTitle title={chartTitle} />
@@ -100,7 +98,6 @@ class BarChartHorizontal extends Component {
                 x={d.x} y={d.y} width={d.width} height={yScale.bandwidth()} 
                 onMouseOver={() => onDataHover(d.title)}
                 onMouseOut={() => onDataHover()}
-                // fill={hoveredMovie === d.title ? 'red' : null}
               />
               <text x={d.x + d.width - 75} y={d.y + yScale.bandwidth()} className='bar-value'>${d3.format(',')(d.value)}</text>
             </React.Fragment>
