@@ -5,10 +5,10 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faAngleDown } from '@fortawesome/free-solid-svg-icons'
+import { faAngleDown, faDollarSign, faStarHalfAlt } from '@fortawesome/free-solid-svg-icons'
 
 //font-awesome libary
-library.add(faAngleDown)
+library.add(faAngleDown, faDollarSign, faStarHalfAlt)
 
 ReactDOM.render(<App />, document.getElementById('root'));
 
