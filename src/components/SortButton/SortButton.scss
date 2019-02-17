@@ -1,4 +1,4 @@
-$color-transition: color .3s;
+$transition: all .3s;
 $base-color: #888;
 $dollar-color: #4da000;
 $reviews-color: #efbb00;
@@ -14,12 +14,7 @@ $reviews-color: #efbb00;
     font-size: 12px;
     padding: 8px;
     margin: 5px;
-    transition: $color-transition;
-
-    .btn-icon, .btn-title {
-        color: $base-color;
-        transition: $color-transition;
-    }
+    transition: $transition;
 
     .btn-title {
         font-weight: 600;
@@ -34,35 +29,33 @@ $reviews-color: #efbb00;
 
     &.active {
         &.revenue {
-            color: $dollar-color;
+            background: $dollar-color;
+            border-color: $dollar-color;
 
             .btn-icon, .btn-title {
-                color: $dollar-color;
+                color: #fff;
             }
         }
 
         &.reviews {
-            color: $reviews-color;
+            background: $reviews-color;
+            border-color: $reviews-color;
 
             .btn-icon, .btn-title {
-                color: $reviews-color;
+                color: #fff;
             }
         }
     }
 
     &:hover {
-        // background: #a52929;
         &.revenue {
-            .btn-icon, .btn-title {
-                color: $dollar-color;
-            }
+            color: $dollar-color;
         }
 
         &.reviews {
-            .btn-icon, .btn-title {
-                color: $reviews-color;
-            }
+            color: $reviews-color;
         }
+        
         cursor: pointer;
     }
 }

@@ -7,6 +7,7 @@ import GenresLineChart from './views/visualizations/DetailsDataSet/GenresLineCha
 import ExtendedScatterPlot from './views/visualizations/DetailsDataSet/ScatterPlot';
 import GenresFilter from './views/filters/GenresFilter/GenresFilter';
 import SortButton from './components/SortButton/SortButton';
+import SectionTitle from './components/SectionTitle/SectionTitle';
 import { 
   groupBy, 
   getFirstX, 
@@ -216,12 +217,13 @@ class App extends Component {
       genresList,
       hoveredMovie,
       sortProperty,
+      genreFilter,
     } = this.state;
 
 
     return (
       <div className="App">
-        <h1 className='section-title'>Exploring Movie Data</h1>
+        <h1 className='article-title'>Exploring Movie Data</h1>
         {!!visData.length ?
           <div className='content-container'>
             <div className='primary-visualizations'>
@@ -230,13 +232,13 @@ class App extends Component {
               <RatingsBarChartHorizontal visData={visData} width={defaultChartWidth} height={defaultChartHeight} hoveredMovie={hoveredMovie} chartTitle={'Score on MetaCritic'} onDataHover={this.updateHoveredMovie} />
             </div>
             <div className='sort-options'>
-              <p>Sort By:</p>
+              <SectionTitle title='Sort By:' />
               <div className='buttons-container'>
                 <SortButton title='Box Office' icon='dollar-sign' sortClass='revenue' onClick={() => this.updateSortProperty('boxOffice')} active={sortProperty === 'boxOffice'} />
                 <SortButton title='MetaCritic' icon='star-half-alt' sortClass='reviews' onClick={() => this.updateSortProperty('metascore')} active={sortProperty === 'metascore'} />
               </div>
             </div>
-            <GenresFilter genres={genresList} onClick={(genre) => this.updateGenreFilter(genre)} />
+            <GenresFilter genres={genresList} activeGenre={genreFilter} onClick={(genre) => this.updateGenreFilter(genre)} />
             <GenresLineChart visData={genreTimelineData} genres={genresList} updateRange={this.updateDateRange} fixedBottom={true} />
           </div>
           : <div>Visualization Loading</div>

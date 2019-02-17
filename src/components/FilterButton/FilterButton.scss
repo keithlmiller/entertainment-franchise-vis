@@ -1,20 +1,25 @@
 .filter-button {
-    background: #cc3838;
-    border: none;
-    color: white;
+    background: #fff;
+    border: 1px solid;
+    border-radius: 5px;
+    color: #888;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 12px;
+    font-weight: bold;
     padding: 5px 15px;
+    transition: all .3s;
 
     &:hover {
-        background: #a52929;
+        background: #fff;
+        color: orange;
         cursor: pointer;
     }
-}
 
-// .filter-button:hover {
-//     background: #a52929;
-//     cursor: pointer;
-// }
+    &.active {
+        background: orange;
+        color: white;
+        border-color: orange;
+    }
+}
