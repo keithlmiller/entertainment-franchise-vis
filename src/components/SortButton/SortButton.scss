@@ -1,13 +1,25 @@
+$color-transition: color .3s;
+$base-color: #888;
+$dollar-color: #4da000;
+$reviews-color: #efbb00;
+
 .sort-button {
-    background: #cc3838;
-    border: none;
-    color: white;
+    background: #fff;
+    border: 2px solid;
+    border-radius: 5px;
+    color: $base-color;
     text-align: center;
     text-decoration: none;
     display: inline-block;
     font-size: 12px;
     padding: 8px;
     margin: 5px;
+    transition: $color-transition;
+
+    .btn-icon, .btn-title {
+        color: $base-color;
+        transition: $color-transition;
+    }
 
     .btn-title {
         font-weight: 600;
@@ -20,8 +32,37 @@
         padding: 5px;
     }
 
+    &.active {
+        &.revenue {
+            color: $dollar-color;
+
+            .btn-icon, .btn-title {
+                color: $dollar-color;
+            }
+        }
+
+        &.reviews {
+            color: $reviews-color;
+
+            .btn-icon, .btn-title {
+                color: $reviews-color;
+            }
+        }
+    }
+
     &:hover {
-        background: #a52929;
+        // background: #a52929;
+        &.revenue {
+            .btn-icon, .btn-title {
+                color: $dollar-color;
+            }
+        }
+
+        &.reviews {
+            .btn-icon, .btn-title {
+                color: $reviews-color;
+            }
+        }
         cursor: pointer;
     }
 }

@@ -215,6 +215,7 @@ class App extends Component {
       defaultChartHeight,
       genresList,
       hoveredMovie,
+      sortProperty,
     } = this.state;
 
 
@@ -231,8 +232,8 @@ class App extends Component {
             <div className='sort-options'>
               <p>Sort By:</p>
               <div className='buttons-container'>
-                <SortButton title='Box Office Revenue' icon='dollar-sign' onClick={() => this.updateSortProperty('boxOffice')} />
-                <SortButton title='MetaCritic Score' icon='star-half-alt' onClick={() => this.updateSortProperty('metascore')} />
+                <SortButton title='Box Office' icon='dollar-sign' sortClass='revenue' onClick={() => this.updateSortProperty('boxOffice')} active={sortProperty === 'boxOffice'} />
+                <SortButton title='MetaCritic' icon='star-half-alt' sortClass='reviews' onClick={() => this.updateSortProperty('metascore')} active={sortProperty === 'metascore'} />
               </div>
             </div>
             <GenresFilter genres={genresList} onClick={(genre) => this.updateGenreFilter(genre)} />
