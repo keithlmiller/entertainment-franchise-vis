@@ -1,7 +1,6 @@
+@import '../../constants/styles/colors.scss';
 $transition: all .3s;
 $base-color: #888;
-$dollar-color: #4da000;
-$reviews-color: #efbb00;
 
 .sort-button {
     background: #fff;
@@ -28,7 +27,7 @@ $reviews-color: #efbb00;
     }
 
     &.active {
-        &.revenue {
+        &.boxOffice {
             background: $dollar-color;
             border-color: $dollar-color;
 
@@ -37,7 +36,7 @@ $reviews-color: #efbb00;
             }
         }
 
-        &.reviews {
+        &.metascore {
             background: $reviews-color;
             border-color: $reviews-color;
 
@@ -48,11 +47,11 @@ $reviews-color: #efbb00;
     }
 
     &:hover {
-        &.revenue {
+        &.boxOffice {
             color: $dollar-color;
         }
 
-        &.reviews {
+        &.metascore {
             color: $reviews-color;
         }
         

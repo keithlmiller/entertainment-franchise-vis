@@ -85,6 +85,7 @@ class BarChartHorizontal extends Component {
       chartTitle,
       onDataHover,
       hoveredMovie,
+      sortClass,
     } = this.props;
 
     return (
@@ -94,7 +95,7 @@ class BarChartHorizontal extends Component {
           {bars.map(d => (
             <React.Fragment>
               <rect
-                className={`chart-standard-fg ${hoveredMovie === d.title ? 'hovered-movie' : '' }`}
+                className={`chart-standard-fg ${hoveredMovie === d.title ? 'hovered-movie' : '' } ${sortClass}`}
                 x={d.x} y={d.y} width={d.width} height={yScale.bandwidth()} 
                 onMouseOver={() => onDataHover(d.title)}
                 onMouseOut={() => onDataHover()}

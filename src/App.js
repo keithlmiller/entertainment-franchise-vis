@@ -227,18 +227,39 @@ class App extends Component {
         {!!visData.length ?
           <div className='content-container'>
             <div className='primary-visualizations'>
-              <ExtendedBarChartHorizontal visData={visData} width={800} height={300} hoveredMovie={hoveredMovie} chartTitle={'US Domestic Box Office'} onDataHover={this.updateHoveredMovie} />
-              <ExtendedScatterPlot visData={visData} width={defaultChartWidth} height={defaultChartHeight} hoveredMovie={hoveredMovie} chartTitle={'Box Office vs MetaScore'} onDataHover={this.updateHoveredMovie} />
-              <RatingsBarChartHorizontal visData={visData} width={defaultChartWidth} height={defaultChartHeight} hoveredMovie={hoveredMovie} chartTitle={'Score on MetaCritic'} onDataHover={this.updateHoveredMovie} />
+              <ExtendedBarChartHorizontal 
+                visData={visData} 
+                width={800} height={300} 
+                hoveredMovie={hoveredMovie} 
+                sortClass={sortProperty}
+                chartTitle={'US Domestic Box Office'}
+                onDataHover={this.updateHoveredMovie} 
+              />
+              <ExtendedScatterPlot 
+                visData={visData} 
+                width={defaultChartWidth} height={defaultChartHeight} 
+                hoveredMovie={hoveredMovie} 
+                sortClass={sortProperty}
+                chartTitle={'Box Office vs MetaScore'} 
+                onDataHover={this.updateHoveredMovie} 
+              />
+              <RatingsBarChartHorizontal 
+                visData={visData} 
+                width={defaultChartWidth} height={defaultChartHeight} 
+                hoveredMovie={hoveredMovie} 
+                sortClass={sortProperty}
+                chartTitle={'Score on MetaCritic'} 
+                onDataHover={this.updateHoveredMovie} 
+              />
             </div>
             <div className='sort-options'>
               <SectionTitle title='Sort By:' />
               <div className='buttons-container'>
-                <SortButton title='Box Office' icon='dollar-sign' sortClass='revenue' onClick={() => this.updateSortProperty('boxOffice')} active={sortProperty === 'boxOffice'} />
-                <SortButton title='MetaCritic' icon='star-half-alt' sortClass='reviews' onClick={() => this.updateSortProperty('metascore')} active={sortProperty === 'metascore'} />
+                <SortButton title='Box Office' icon='dollar-sign' sortClass='boxOffice' onClick={() => this.updateSortProperty('boxOffice')} active={sortProperty === 'boxOffice'} />
+                <SortButton title='MetaCritic' icon='star-half-alt' sortClass='metascore' onClick={() => this.updateSortProperty('metascore')} active={sortProperty === 'metascore'} />
               </div>
             </div>
-            <GenresFilter genres={genresList} activeGenre={genreFilter} onClick={(genre) => this.updateGenreFilter(genre)} />
+            <GenresFilter genres={genresList} activeGenre={genreFilter} sortClass={sortProperty} onClick={(genre) => this.updateGenreFilter(genre)} />
             <GenresLineChart visData={genreTimelineData} genres={genresList} updateRange={this.updateDateRange} fixedBottom={true} />
           </div>
           : <div>Visualization Loading</div>

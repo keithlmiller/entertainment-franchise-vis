@@ -1,3 +1,5 @@
+@import '../../constants/styles/colors.scss';
+
 .filter-button {
     background: #fff;
     border: 1px solid;
@@ -13,13 +15,28 @@
 
     &:hover {
         background: #fff;
-        color: orange;
         cursor: pointer;
+
+        &.boxOffice {
+            color: $dollar-color;
+        }
+
+        &.metascore {
+            color: $reviews-color;
+        }
     }
 
     &.active {
-        background: orange;
-        color: white;
-        border-color: orange;
+        color: #fff;
+
+        &.boxOffice {
+            border-color: $dollar-color;
+            background: $dollar-color;
+        }
+
+        &.metascore {
+            border-color: $reviews-color;
+            background: $reviews-color;
+        }
     }
 }

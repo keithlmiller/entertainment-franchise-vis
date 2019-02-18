@@ -81,8 +81,6 @@ class ExtendedScatterPlot extends Component {
     const formattedGross = d3.format(',')(gross);
     onDataHover(title);
     this.showTooltip(title, formattedGross, metascore, x, y);
-    // TODO: add hover state to dot
-    // show hovered movie on other charts
   }
 
   handleHoverExit = () => {
@@ -107,8 +105,6 @@ class ExtendedScatterPlot extends Component {
     this.setState({
       ...this.state,
       isTooltipOpen: false,
-      tooltipTitle: this.initialState.tooltipTitle,
-      tooltipValue: this.initialState.tooltipValue,
     });
   }
 
@@ -129,6 +125,7 @@ class ExtendedScatterPlot extends Component {
       height,
       chartTitle,
       hoveredMovie,
+      sortClass,
     } = this.props;
 
     return (
@@ -138,7 +135,7 @@ class ExtendedScatterPlot extends Component {
           <svg width={width} height={height}>
             {dots.map(d => (
               <circle
-                className={`scatter-dot chart-standard-fg ${hoveredMovie === d.title ? 'hovered-movie' : '' }`} 
+                className={`scatter-dot chart-standard-fg ${hoveredMovie === d.title ? 'hovered-movie' : '' } ${sortClass}`} 
                 cx={d.x}
                 cy={d.y}
                 r={5}
@@ -149,7 +146,15 @@ class ExtendedScatterPlot extends Component {
             <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
             <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
           </svg>
-          {isTooltipOpen && <Tooltip title={tooltipTitle} gross={tooltipValue} year={tooltipYear} score={tooltipScore} x={hoverX} y={hoverY}  />}
+          {isTooltipOpen && 
+            <Tooltip 
+              title={tooltipTitle}
+              sortClass={sortClass} 
+              gross={tooltipValue} 
+              year={tooltipYear} 
+              score={tooltipScore} 
+              x={hoverX} y={hoverY}  
+            />}
         </div>
       </div>
     );
