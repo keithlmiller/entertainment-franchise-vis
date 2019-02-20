@@ -10,6 +10,7 @@ class BarChartHorizontal extends Component {
     yTickLabel: 'M',
   };
 
+  xAxisLines = d3.axisBottom();
   xAxis = d3.axisBottom();
   yAxis = d3.axisLeft();
 
@@ -38,11 +39,6 @@ class BarChartHorizontal extends Component {
       .domain([0, 1000000000])
       .range([0, chartWidth]);
 
-    const xAxisScale = d3
-      .scaleLinear()
-      .domain([0, 1000000000])
-      .range([margin.left, width - 60]);
-
     const bars = visData.map(d => {
       return {
         x: margin.left,
@@ -63,12 +59,41 @@ class BarChartHorizontal extends Component {
       xTickFormat,
       xTickLabel,
     } = this.state;
+
+    const {
+      height,
+    } = this.props;
+
+    this.xAxisLines
+      .scale(xScale)
+      .tickSize(height - margin.bottom - margin.top);
+
     this.xAxis
       .scale(xScale)
       .tickFormat(
         d => `$${parseInt((d) / xTickFormat)}${xTickLabel}`
       );
-    d3.select(this.refs.xAxis).call(this.xAxis).call(g => g.select(".domain").remove());
+
+    const xAxisLines = d3.select(this.refs.xAxisLines);
+    xAxisLines
+      .call(this.xAxisLines)
+      .call(g => g.select('.domain').remove())
+      .selectAll('text').remove()
+
+    xAxisLines
+      .selectAll('line')
+      .attr('stroke', '#b3b3b3')
+      .attr('stroke-dasharray', '2,2')
+
+    d3.select(this.refs.xAxis)
+      .call(this.xAxis)
+      .call(g => g.select('.domain').remove())
+      .selectAll('.tick:first-of-type text').remove()
+  
+    d3.select(this.refs.xAxisLines)
+      .call(this.xAxisLines)
+      .call(g => g.select('.domain').remove())
+      .selectAll('text').remove();
     this.yAxis.scale(yScale);
     d3.select(this.refs.yAxis).call(this.yAxis);
   }
@@ -92,6 +117,7 @@ class BarChartHorizontal extends Component {
       <div className='chart-container primary-chart'>
         <ChartTitle title={chartTitle} />
         <svg width={width} height={height}>
+          <g ref="xAxisLines" className='background-lines' transform={`translate(${margin.left}, 0)`} />
           {bars.map(d => (
             <React.Fragment>
               <rect

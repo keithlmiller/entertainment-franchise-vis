@@ -64,16 +64,22 @@ class ExtendedScatterPlot extends Component {
       yTickFormat,
       yTickLabel,
     } = this.state;
+
     this.xAxis
       .scale(xScale)
       .tickFormat(d => `${d}%`);
-    d3.select(this.refs.xAxis).call(this.xAxis);
+    d3.select(this.refs.xAxis)
+      .call(this.xAxis)
+      .selectAll('.tick:first-of-type text').remove()
+
     this.yAxis
       .scale(yAxisScale)
       .tickFormat(
         d => `$${parseInt((d) / yTickFormat)}${yTickLabel}`
       );
-    d3.select(this.refs.yAxis).call(this.yAxis);
+    d3.select(this.refs.yAxis)
+      .call(this.yAxis)
+      .selectAll('.tick:first-of-type text').remove();
   }
 
   handleHoverEnter = (x, y, title, gross, metascore) => {

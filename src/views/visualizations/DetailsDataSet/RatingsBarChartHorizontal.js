@@ -9,6 +9,7 @@ class RatingsBarChartHorizontal extends Component {
     bars: [],
   };
 
+  xAxisLines = d3.axisBottom();
   xAxis = d3.axisBottom();
   yAxis = d3.axisLeft();
 
@@ -53,10 +54,35 @@ class RatingsBarChartHorizontal extends Component {
       xScale,
       yScale,
     } = this.state;
+
+    const {
+      height,
+    } = this.props;
+
+    this.xAxisLines
+      .scale(xScale)
+      .tickSize(height - margin.bottom - margin.top);
     this.xAxis
       .scale(xScale)
       .tickFormat(d => `${d}%`);
-    d3.select(this.refs.xAxis).call(this.xAxis);
+    
+    const xAxisLines = d3.select(this.refs.xAxisLines);
+
+    xAxisLines
+      .call(this.xAxisLines)
+      .call(g => g.select('.domain').remove())
+      .selectAll('text').remove()
+
+    xAxisLines
+      .selectAll('line')
+      .attr('stroke', '#b3b3b3')
+      .attr('stroke-dasharray', '2,2')
+    
+    d3.select(this.refs.xAxis)
+      .call(this.xAxis)
+      .call(g => g.select('.domain').remove())
+      .selectAll('.tick:first-of-type text').remove()
+
     this.yAxis
       .scale(yScale)
     d3.select(this.refs.yAxis).call(this.yAxis);
@@ -81,6 +107,7 @@ class RatingsBarChartHorizontal extends Component {
       <div className='chart-container primary-chart'>
         <ChartTitle title={chartTitle} />
         <svg width={width} height={height}>
+          <g ref="xAxisLines" className='background-lines' transform={`translate(${margin.left}, 0)`} />
           {bars.map(d => (
             <React.Fragment>
               <rect
