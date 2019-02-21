@@ -40,6 +40,10 @@ body {
 .chart-container {
   position: relative;
 
+  .chart-title {
+    margin: 20px;
+  }
+
   .chart-standard-fg {
     fill: $fg-color;
 
@@ -55,6 +59,20 @@ body {
 
     &:hover {
       cursor: pointer;
+    }
+  }
+
+  .tick {
+    fill: #8d8d8d;
+  }
+
+  .axis-label {
+    font-size: 12px;
+    fill: #707070;
+
+    &.y-axis-label {
+      transform: rotate(-90deg);
+      transform-origin: left center;
     }
   }
 

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import * as d3 from "d3";
 import ChartTitle from '../../../components/ChartTitle/ChartTitle';
 import Tooltip from '../../../components/Tooltip/Tooltip';
-const margin = { top: 20, right: 15, bottom: 20, left: 45 };
+const margin = { top: 10, right: 15, bottom: 40, left: 55 };
 
 class ExtendedScatterPlot extends Component {
   initialState = {
@@ -68,9 +68,14 @@ class ExtendedScatterPlot extends Component {
     this.xAxis
       .scale(xScale)
       .tickFormat(d => `${d}%`);
-    d3.select(this.refs.xAxis)
+    
+    const xAxis = d3.select(this.refs.xAxis);
+    xAxis
       .call(this.xAxis)
-      .selectAll('.tick:first-of-type text').remove()
+      .selectAll('.tick:first-of-type').remove()
+
+    xAxis
+      .call(g => g.select('.domain').remove())
 
     this.yAxis
       .scale(yAxisScale)
@@ -151,6 +156,8 @@ class ExtendedScatterPlot extends Component {
             ))}
             <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
             <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
+            <text x={width / 2} y={height - 2} className='axis-label'>Critical Response</text>
+            <text x={-40} y={height / 2 + 10} className='axis-label y-axis-label'>Box Office Revenue</text>
           </svg>
           {isTooltipOpen && 
             <Tooltip 

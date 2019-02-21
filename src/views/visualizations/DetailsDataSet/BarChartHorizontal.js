@@ -85,17 +85,25 @@ class BarChartHorizontal extends Component {
       .attr('stroke', '#b3b3b3')
       .attr('stroke-dasharray', '2,2')
 
-    d3.select(this.refs.xAxis)
+    
+    const xAxis = d3.select(this.refs.xAxis);
+    xAxis
       .call(this.xAxis)
       .call(g => g.select('.domain').remove())
-      .selectAll('.tick:first-of-type text').remove()
+      .selectAll('.tick:first-of-type').remove()
+    
+    xAxis
+      .selectAll('line')
+      .attr('stroke', '#8d8d8d');
   
     d3.select(this.refs.xAxisLines)
       .call(this.xAxisLines)
       .call(g => g.select('.domain').remove())
       .selectAll('text').remove();
+
     this.yAxis.scale(yScale);
-    d3.select(this.refs.yAxis).call(this.yAxis);
+    d3.select(this.refs.yAxis)
+      .call(this.yAxis)
   }
 
   render() {
@@ -115,7 +123,7 @@ class BarChartHorizontal extends Component {
 
     return (
       <div className='chart-container primary-chart'>
-        <ChartTitle title={chartTitle} />
+        {chartTitle && <ChartTitle title={chartTitle} />}
         <svg width={width} height={height}>
           <g ref="xAxisLines" className='background-lines' transform={`translate(${margin.left}, 0)`} />
           {bars.map(d => (

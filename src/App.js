@@ -223,7 +223,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <h1 className='article-title'>Exploring Movie Data</h1>
+        <h1 className='article-title'>Box Office Revenue vs MetaCritic Score</h1>
         {!!visData.length ?
           <div className='content-container'>
             <div className='primary-visualizations'>
@@ -232,7 +232,6 @@ class App extends Component {
                 width={800} height={300} 
                 hoveredMovie={hoveredMovie} 
                 sortClass={sortProperty}
-                chartTitle={'US Domestic Box Office'}
                 onDataHover={this.updateHoveredMovie} 
               />
               <ExtendedScatterPlot 
