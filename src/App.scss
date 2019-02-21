@@ -1,6 +1,5 @@
 @import './constants/styles/colors.scss';
 
-
 body {
   background-color: $bg-color;
 }
@@ -35,8 +34,6 @@ body {
   color: $fg-color;
 }
 
-
-
 .chart-container {
   position: relative;
 
@@ -58,8 +55,6 @@ body {
     }
 
     &.selected-movie {
-      // fill: orange;
-      // stroke: #fcca6f;
       stroke-width: 6;
 
       &.boxOffice {
@@ -101,7 +96,13 @@ body {
   }
 
   &.primary-chart {
-    margin-bottom: 40px;
+    margin-bottom: 20px;
+  }
+
+  .selected-movie-details {
+    width: 300px;
+    height: 300px;
+    background: #fff;
   }
 }
 

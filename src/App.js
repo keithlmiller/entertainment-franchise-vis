@@ -46,6 +46,7 @@ class App extends Component {
         const date = new Date(movie.Released);
         const boxOffice = parseInt(movie.BoxOffice.replace(/[\$\,]/g, ""));
 
+
         return {
           title: movie.Title,
           date,
@@ -53,6 +54,12 @@ class App extends Component {
           genre: movie.Genre.split(", "),
           year: +movie.Year,
           metascore: +movie.Metascore,
+          rated: movie.Rated,
+          ratings: movie.Ratings,
+          poster: movie.Poster,
+          plot: movie.Plot,
+          director: movie.Director,
+          runtime: movie.Runtime
         }
       });
 
@@ -268,6 +275,9 @@ class App extends Component {
                 chartTitle={'Score on MetaCritic'} 
                 onDataHover={this.updateHoveredMovie} 
               />
+              <div className='selected-movie-details'>
+                <SectionTitle title='Selected Movie' />
+              </div>
             </div>
             <div className='sort-options'>
               <SectionTitle title='Sort By:' />
