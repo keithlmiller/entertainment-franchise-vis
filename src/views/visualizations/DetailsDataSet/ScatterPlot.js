@@ -67,7 +67,7 @@ class ExtendedScatterPlot extends Component {
 
     this.xAxis
       .scale(xScale)
-      .tickFormat(d => `${d}%`);
+      .tickFormat(d => `${d}`);
     
     const xAxis = d3.select(this.refs.xAxis);
     xAxis
@@ -136,7 +136,9 @@ class ExtendedScatterPlot extends Component {
       height,
       chartTitle,
       hoveredMovie,
+      selectedMovie,
       sortClass,
+      onDataClick,
     } = this.props;
 
     return (
@@ -146,12 +148,13 @@ class ExtendedScatterPlot extends Component {
           <svg width={width} height={height}>
             {dots.map(d => (
               <circle
-                className={`scatter-dot chart-standard-fg ${hoveredMovie === d.title ? 'hovered-movie' : '' } ${sortClass}`} 
+                className={`scatter-dot chart-standard-fg ${hoveredMovie === d.title ? 'hovered-movie' : '' } ${selectedMovie === d.title ? 'selected-movie' : ''} ${sortClass}`}
                 cx={d.x}
                 cy={d.y}
                 r={5}
                 onMouseOver={() => this.handleHoverEnter(d.x, d.y, d.title, d.boxOffice, d.metascore)}
                 onMouseOut={() => this.handleHoverExit()}
+                onClick={() => onDataClick(d.title)}
               ></circle>
             ))}
             <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />

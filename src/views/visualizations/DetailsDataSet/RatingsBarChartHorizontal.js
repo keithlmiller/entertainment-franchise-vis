@@ -64,7 +64,7 @@ class RatingsBarChartHorizontal extends Component {
       .tickSize(height - margin.bottom - margin.top);
     this.xAxis
       .scale(xScale)
-      .tickFormat(d => `${d}%`);
+      .tickFormat(d => `${d}`);
     
     const xAxisLines = d3.select(this.refs.xAxisLines);
 
@@ -104,7 +104,9 @@ class RatingsBarChartHorizontal extends Component {
       height, 
       chartTitle,
       onDataHover,
+      onDataClick,
       hoveredMovie,
+      selectedMovie,
       sortClass,
     } = this.props;
 
@@ -112,14 +114,22 @@ class RatingsBarChartHorizontal extends Component {
       <div className='chart-container primary-chart'>
         <ChartTitle title={chartTitle} />
         <svg width={width} height={height}>
+          <defs>
+            <clipPath id='chart-clip-path'>
+              <rect x={margin.left} y='0' width={width} height={height} />
+            </clipPath>
+          </defs>
+
           <g ref="xAxisLines" className='background-lines' transform={`translate(${margin.left}, 0)`} />
           {bars.map(d => (
             <React.Fragment>
               <rect
-                className={`chart-standard-fg ${hoveredMovie === d.title ? 'hovered-movie' : '' } ${sortClass}`} 
+                className={`chart-standard-fg ${hoveredMovie === d.title ? 'hovered-movie' : ''} ${selectedMovie === d.title ? 'selected-movie' : ''} ${sortClass}`}
                 x={d.x} y={d.y} width={d.width} height={yScale.bandwidth()}
                 onMouseOver={() => onDataHover(d.title)}
                 onMouseOut={() => onDataHover()}
+                onClick={() => onDataClick(d.title)}
+                clip-path='url(#chart-clip-path)'
               />
               <text x={d.x + d.width - 60} y={d.y + yScale.bandwidth()} className='bar-value'>{d.value}</text>
             </React.Fragment>

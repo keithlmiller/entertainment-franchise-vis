@@ -98,11 +98,28 @@ body {
   &.primary-chart {
     margin-bottom: 20px;
   }
+}
+
+.selected-movie-section {
+  width: 300px;
+  height: 300px;
+  background: #fff;
+  overflow-y: scroll;
+  padding: 20px;
+
+  .movie-details-header {
+    display: flex;
+    align-items: flex-start;
+
+    .movie-poster {
+      width: 50px;
+    }
+  }
 
   .selected-movie-details {
-    width: 300px;
-    height: 300px;
-    background: #fff;
+    color: #444;
+    text-align: left;
+    font-size: 14px;
   }
 }
 

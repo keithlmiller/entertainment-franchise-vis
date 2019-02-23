@@ -241,8 +241,13 @@ class App extends Component {
       sortProperty,
       genreFilter,
       selectedMovie,
+      rawData,
     } = this.state;
 
+    let selectedMovieDetails = {};
+    if (selectedMovie.length) {
+      selectedMovieDetails = rawData.find(movie => (movie.title === selectedMovie));
+    }
 
     return (
       <div className="App">
@@ -263,20 +268,54 @@ class App extends Component {
                 visData={visData} 
                 width={defaultChartWidth} height={defaultChartHeight} 
                 hoveredMovie={hoveredMovie} 
+                selectedMovie={selectedMovie}
                 sortClass={sortProperty}
                 chartTitle={'Box Office vs MetaScore'} 
                 onDataHover={this.updateHoveredMovie} 
+                onDataClick={this.updateSelectedMovie}
               />
               <RatingsBarChartHorizontal 
                 visData={visData} 
                 width={defaultChartWidth} height={defaultChartHeight} 
                 hoveredMovie={hoveredMovie} 
+                selectedMovie={selectedMovie}
                 sortClass={sortProperty}
                 chartTitle={'Score on MetaCritic'} 
                 onDataHover={this.updateHoveredMovie} 
+                onDataClick={this.updateSelectedMovie}
               />
-              <div className='selected-movie-details'>
-                <SectionTitle title='Selected Movie' />
+
+              {/* TODO: split this section to a new component */}
+              <div className='selected-movie-section'>
+                <SectionTitle title='Selected Movie:' />{!!selectedMovie.length && <span>{selectedMovieDetails.title}</span>}
+
+                {!!selectedMovie.length ?
+                  <div className='selected-movie-details'>
+                    <div className='movie-details-header'>
+                      <img src={selectedMovieDetails.poster} className='movie-poster' alt='poster' width='50px' />
+                      <div className='general-details'>
+                        <ul>
+                          <li>Director: {selectedMovieDetails.director}</li>
+                          <li>Rated: {selectedMovieDetails.rated}</li>
+                          <li>Runtime: {selectedMovieDetails.runtime}</li>
+                        </ul>
+                      </div>
+                    </div>
+
+                    <ul>
+                      {/* <li>{new Date(selectedMovieDetails.date)}</li> */}
+                      <li>Box Office: ${d3.format(',')(selectedMovieDetails.boxOffice)}</li>
+                      <li>Metascore: {selectedMovieDetails.metascore}</li>
+                      <li>Genres: {selectedMovieDetails.genre}</li>
+                      {/* <li>{selectedMovieDetails.ratings}</li> */}
+                    </ul>
+
+                    <SectionTitle title='Synopsis' />
+                    <p>
+                      {selectedMovieDetails.plot}
+                    </p>
+                  </div> : <p>Click a movie to see details here</p>
+                }
               </div>
             </div>
             <div className='sort-options'>
