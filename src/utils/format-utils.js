@@ -4,6 +4,7 @@ export const truncate = (string, length = 10) => {
     return string.substring(0, length);
 }
 
+export const commadList = (array) => (array.map((li, i) => `${li}${(i + 1) !== array.length ? ', ' : ''}`));
 
 // from Mike Bostok https://bl.ocks.org/mbostock/7555321
 export const wrap = (text, width) => {

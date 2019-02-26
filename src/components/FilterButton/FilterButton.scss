@@ -27,14 +27,16 @@
     }
 
     &.active {
-        color: #fff;
+        cursor: default;
 
         &.boxOffice {
+            color: #fff;
             border-color: $dollar-color;
             background: $dollar-color;
         }
 
         &.metascore {
+            color: #fff;
             border-color: $reviews-color;
             background: $reviews-color;
         }

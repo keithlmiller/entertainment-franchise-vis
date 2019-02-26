@@ -15,6 +15,9 @@ import {
   sortByPropertyAsc, 
   filterPropertyNonNumbers 
 } from './utils/data-utils';
+import {
+  commadList,
+} from './utils/format-utils';
 import './App.scss';
 // import 'normalize.css';
 
@@ -143,16 +146,6 @@ class App extends Component {
     return this.getMoviesOfGenre(genre, data);
   }
 
-  setSortProperty = (sortProperty) => {
-    const { allDataFiltered } = this.state;
-    
-    this.setState({
-      ...this.state,
-      sortProperty,
-      visData: getFirstX(sortByPropertyAsc(allDataFiltered, sortProperty), 5),
-    });
-  }
-
   updateSelectedMovie = (movie) => {
     if (movie) {
       return this.setState({
@@ -185,6 +178,7 @@ class App extends Component {
     if (range) {
       this.setState({
         ...this.state,
+        selectedMovie: '',
         dateRange: range,
       });
     }
@@ -193,13 +187,15 @@ class App extends Component {
   updateGenreFilter(genre) {
     this.setState({
       ...this.state,
+      selectedMovie: '',
       genreFilter: genre,
     });
   }
 
-  updateSortProperty = (sortProperty) => {    
+  updateSortProperty = (sortProperty) => {
     this.setState({
       ...this.state,
+      selectedMovie: '',
       sortProperty,
     });
   }
@@ -246,8 +242,12 @@ class App extends Component {
 
     let selectedMovieDetails = {};
     if (selectedMovie.length) {
+      // would use selector if I decide to add Redux
       selectedMovieDetails = rawData.find(movie => (movie.title === selectedMovie));
     }
+
+    console.log('selectedMovieDetails', selectedMovieDetails);
+
 
     return (
       <div className="App">
@@ -309,7 +309,7 @@ class App extends Component {
                       {/* <li>{new Date(selectedMovieDetails.date)}</li> */}
                       <li><label>Box Office:</label> ${d3.format(',')(selectedMovieDetails.boxOffice)}</li>
                       <li><label>Metascore:</label> {selectedMovieDetails.metascore}</li>
-                      <li><label>Genres:</label> {selectedMovieDetails.genre}</li>
+                      <li><label>Genres:</label> {commadList(selectedMovieDetails.genre)}</li>
                       {/* <li>{selectedMovieDetails.ratings}</li> */}
                     </ul>
 
