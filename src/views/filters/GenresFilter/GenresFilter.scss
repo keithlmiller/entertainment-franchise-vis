@@ -1,0 +1,14 @@
+.genres-filter {
+    margin: 20px 0 200px;
+    padding: 20px 50px;
+
+    .genres-filter-list {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .filter-button {
+        margin: 5px;
+    }
+}
