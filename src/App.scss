@@ -44,6 +44,11 @@ body {
   .chart-standard-fg {
     fill: $fg-color;
 
+    &:hover {
+      cursor: pointer;
+    }
+
+    // this is separate because the hovered movie persists across charts
     &.hovered-movie {
       &.boxOffice {
         fill: $dollar-color;
@@ -55,6 +60,7 @@ body {
     }
 
     &.selected-movie {
+      cursor: default;
       stroke-width: 6;
 
       &.boxOffice {
@@ -66,10 +72,6 @@ body {
         fill: $reviews-color;
         stroke: $reviews-color-light;
       }
-    }
-
-    &:hover {
-      cursor: pointer;
     }
   }
 

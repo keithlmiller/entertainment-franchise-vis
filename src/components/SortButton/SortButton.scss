@@ -26,7 +26,21 @@ $base-color: #888;
         padding: 5px;
     }
 
+    &:hover {
+        cursor: pointer;
+
+        &.boxOffice {
+            color: $dollar-color;
+        }
+
+        &.metascore {
+            color: $reviews-color;
+        }
+    }
+
     &.active {
+        cursor: default;
+
         &.boxOffice {
             background: $dollar-color;
             border-color: $dollar-color;
@@ -44,17 +58,5 @@ $base-color: #888;
                 color: #fff;
             }
         }
-    }
-
-    &:hover {
-        &.boxOffice {
-            color: $dollar-color;
-        }
-
-        &.metascore {
-            color: $reviews-color;
-        }
-        
-        cursor: pointer;
     }
 }
