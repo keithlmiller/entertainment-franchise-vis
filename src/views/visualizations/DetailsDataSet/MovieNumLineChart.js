@@ -3,9 +3,9 @@ import * as d3 from "d3";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '../../../App.scss';
 const width = 800;
-const margin = { top: 20, right: 45, bottom: 20, left: 45 };
+const margin = { top: 20, right: 45, bottom: 20, left: 100 };
 
-class GenresLineChart extends Component {
+class MovieNumLineChart extends Component {
   xAxis = d3.axisBottom();
   yAxis = d3.axisLeft();
 
@@ -21,47 +21,38 @@ class GenresLineChart extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { visData, genres } = nextProps;
+    const { visData } = nextProps;
     const { height } = prevState;
 
     if (!visData) return {};
+
+    const rangeNames = visData.map(range => range.rangeName);
     // const xExtent = d3.extent(visData, d => d.year);
     const xScale = d3
       .scaleLinear()
       .domain([1999, 2017])
       .range([margin.left, width - margin.right]);
 
-    // const [yMin, yMax] = d3.extent(visData, d => d.numMovies);
     const yScale = d3
       .scaleLinear()
-      .domain([0, 11])
+      .domain([0, 10])
       .range([height - margin.bottom, margin.top]);
-
-    // const colors = d3.scaleOrdinal(d3.schemePaired);
 
     const colorScale = d3
       .scaleOrdinal()
-      .domain(genres)
+      .domain(rangeNames)
       // pink, green, purple
       .range([
         "#e683b4", 
         "#53c3ac", 
-        "#8475e8", 
-        "#665191",
-        "#a05195",
-        "#d45087",
-        "#f95d6a",
-        "#ff7c43",
-        "#ffa600",
+        "#8475e8",
       ]);
-
       
-
     const line = d3.line()
         .x(d => xScale(parseInt(d.year)))
         .y(d => yScale(d.numMovies));
 
-    return { ...prevState, line, xScale, yScale, colorScale };
+    return { ...prevState, line, xScale, yScale, colorScale};
   }
 
   componentDidMount() {
@@ -165,12 +156,18 @@ class GenresLineChart extends Component {
             </button>
             
             <div className='timeline-explanation'>
-                <h3 className='timeline-title'>Movies of Each Genre Released Per Year</h3>
+                <h3 className='timeline-title'>Blockbusters Per Year Per Date Range</h3>
                 {!collapsed && <p className='timeline-description'>Click and drag to select a range of time to explore with the graphs above</p>}
             </div>
             
             <svg width={width} height={height}>
-                {visData.map((genre) => (<path fill='none' stroke={colorScale(genre.genre)} stroke-width={1.5} d={line(genre.data)} />)) }
+                {visData.map((range) => (<path fill='none' stroke={colorScale(range.rangeName)} stroke-width={1.5} d={line(range.data)} />)) }
+                {visData.map((range, i) => (
+                  <g width={100} height={50}>
+                    <rect fill={colorScale(range.rangeName)} width={20} height={20} x={0} y={(i+1)*50} />
+                    <text x={25} y={(i+1)*50 + 15} fill='black' className='timeline-legend'>{range.rangeName}</text>
+                  </g>
+                )) }
                 {displayMinYear && <text x={this.getBrushLabelPos(x1, 'left')} y={height/4} className='year-text'>{displayMinYear}</text>}
                 <g ref="brush" />
                 {displayMaxYear && <text x={this.getBrushLabelPos(x2, 'right')} y={height/4} className='year-text'>{displayMaxYear}</text>}
@@ -183,4 +180,4 @@ class GenresLineChart extends Component {
   }
 }
 
-export default GenresLineChart;
+export default MovieNumLineChart;

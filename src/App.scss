@@ -114,7 +114,8 @@ body {
 
 .brush-timeline {
   display: flex;
-  color: $bg-color;
+  color: $fg-color;
+  background: #fff;
 
   .timeline-explanation {
     width: 20%;
@@ -124,8 +125,13 @@ body {
   }
 
   .year-text {
-    fill: $bg-color;
+    fill: $fg-color;
     font-size: 14px;
+  }
+
+  .timeline-legend {
+    fill: $fg-color;
+    font-size: 12px;
   }
 }
 
@@ -137,7 +143,6 @@ body {
   bottom: 0;
   width: 100%;
   height: 200px;
-  background: #000;
 
   &.timeline-collapsed {
     height: 80px;
@@ -157,7 +162,8 @@ body {
   right: 20px;
   background: $light-primary;
   border: none;
-  color: black;
+  background: $fg-color;
+  color: $bg-color;
   text-decoration: none;
   font-size: 20px;
   width: 30px;
@@ -169,7 +175,6 @@ body {
   }
 
   &:hover {
-    background: #dadada;
     cursor: pointer;
   }
 }

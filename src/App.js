@@ -5,6 +5,7 @@ import ExtendedBarChartHorizontal from './views/visualizations/DetailsDataSet/Ba
 import RatingsBarChartHorizontal from './views/visualizations/DetailsDataSet/RatingsBarChartHorizontal';
 import GenresLineChart from './views/visualizations/DetailsDataSet/GenresLineChart';
 import ExtendedScatterPlot from './views/visualizations/DetailsDataSet/ScatterPlot';
+import MovieNumLineChart from './views/visualizations/DetailsDataSet/MovieNumLineChart';
 import GenresFilter from './views/filters/GenresFilter/GenresFilter';
 import SelectedMovie from './views/SelectedMovie/SelectedMovie';
 import SortButton from './components/SortButton/SortButton';
@@ -16,9 +17,6 @@ import {
   sortByPropertyAsc, 
   filterPropertyNonNumbers 
 } from './utils/data-utils';
-import {
-  commadList,
-} from './utils/format-utils';
 import './App.scss';
 // import 'normalize.css';
 
@@ -75,11 +73,17 @@ class App extends Component {
 
     const dateRange = d3.extent(movieDataArray, d => d.year);
 
+    const revenueRanges = [[100, 300], [300, 500], [500, 1000]]
+    const timelineData = revenueRanges.map(range => {
+      return { rangeName: `${range}`, data: this.getMoviesOfRevenuePerYear(moviesWithBoxOffice, range) };
+    });
+
     this.setState({
       ...this.state,
       dateRange,
       rawData: moviesWithBoxOffice,
       visData: this.getNewVisData(moviesWithBoxOffice),
+      timelineData,
       genreTimelineData: moviesOfGenrePerYear,
       genresList,
     });
@@ -137,6 +141,13 @@ class App extends Component {
     })
 
     return sortByPropertyAsc(moviesOfGenrePerYear, 'totalMoviesOfGenre');
+  }
+
+  getMoviesOfRevenuePerYear(movies, revenueRangeInMillions) {
+    const [min, max] = revenueRangeInMillions;
+    const moviesOfRevenue = movies.filter(movie => (movie.boxOffice >= min*1000000 && movie.boxOffice <= max*1000000));
+
+    return this.getMoviesPerYear(moviesOfRevenue);
   }
 
   filterMoviesByGenre(data, genre) {
@@ -230,6 +241,7 @@ class App extends Component {
   render() {
     const { 
       visData,
+      timelineData,
       genreTimelineData,
       defaultChartWidth,
       defaultChartHeight,
@@ -246,9 +258,6 @@ class App extends Component {
       // would use selector if I decide to add Redux
       selectedMovieDetails = rawData.find(movie => (movie.title === selectedMovie));
     }
-
-    console.log('selectedMovieDetails', selectedMovieDetails);
-
 
     return (
       <div className="App">
@@ -300,7 +309,8 @@ class App extends Component {
               </div>
             </div>
             <GenresFilter genres={genresList} activeGenre={genreFilter} sortClass={sortProperty} onClick={(genre) => this.updateGenreFilter(genre)} />
-            <GenresLineChart visData={genreTimelineData} genres={genresList} updateRange={this.updateDateRange} fixedBottom={true} />
+            <MovieNumLineChart visData={timelineData} updateRange={this.updateDateRange} fixedBottom={true} />
+            {/* <GenresLineChart visData={genreTimelineData} genres={genresList} updateRange={this.updateDateRange} fixedBottom={true} /> */}
           </div>
           : <div>Visualization Loading</div>
         }
