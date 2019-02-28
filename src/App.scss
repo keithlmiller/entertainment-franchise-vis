@@ -129,7 +129,7 @@ body {
     font-size: 14px;
   }
 
-  .timeline-legend {
+  .timeline-legend-text {
     fill: $fg-color;
     font-size: 12px;
   }
@@ -146,6 +146,10 @@ body {
 
   &.timeline-collapsed {
     height: 80px;
+
+    .timeline-legend {
+      display: none;
+    }
   }
 }
 

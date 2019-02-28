@@ -92,7 +92,7 @@ class MovieNumLineChart extends Component {
 
     this.yAxisLines
       .scale(yScale)
-      .tickSize(width - margin.left);
+      .tickSize(width - margin.left - margin.right);
 
     const yAxisLines = d3.select(this.refs.yAxisLines);
 
@@ -181,13 +181,13 @@ class MovieNumLineChart extends Component {
 
             
             <svg width={width} height={height}>
-                <g ref="yAxisLines" className='background-lines' transform={`translate(${width}, 0)`} />
+                <g ref="yAxisLines" className='background-lines' transform={`translate(${width - margin.right}, 0)`} />
 
                 {visData.map((range) => (<path fill='none' stroke={colorScale(range.rangeName)} stroke-width={1.5} d={line(range.data)} />)) }
                 {visData.map((range, i) => (
-                  <g width={100} height={50}>
+                  <g className='timeline-legend' width={100} height={50}>
                     <rect fill={colorScale(range.rangeName)} width={20} height={20} x={0} y={(i+1)*50} />
-                    <text x={25} y={(i+1)*50 + 15} fill='black' className='timeline-legend'>{range.rangeName}</text>
+                    <text x={25} y={(i+1)*50 + 15} fill='black' className='timeline-legend-text'>{range.rangeName}</text>
                   </g>
                 )) }
                 {displayMinYear && <text x={this.getBrushLabelPos(x1, 'left')} y={height/4} className='year-text'>{displayMinYear}</text>}
