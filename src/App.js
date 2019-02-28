@@ -3,7 +3,6 @@ import * as d3 from 'd3';
 import movieData from './data/movies_details.json';
 import ExtendedBarChartHorizontal from './views/visualizations/DetailsDataSet/BarChartHorizontal';
 import RatingsBarChartHorizontal from './views/visualizations/DetailsDataSet/RatingsBarChartHorizontal';
-import GenresLineChart from './views/visualizations/DetailsDataSet/GenresLineChart';
 import ExtendedScatterPlot from './views/visualizations/DetailsDataSet/ScatterPlot';
 import MovieNumLineChart from './views/visualizations/DetailsDataSet/MovieNumLineChart';
 import GenresFilter from './views/filters/GenresFilter/GenresFilter';
@@ -15,7 +14,8 @@ import {
   getFirstX, 
   getMoviesInRange, 
   sortByPropertyAsc, 
-  filterPropertyNonNumbers 
+  filterPropertyNonNumbers,
+  fillRange,
 } from './utils/data-utils';
 import './App.scss';
 // import 'normalize.css';
@@ -71,11 +71,12 @@ class App extends Component {
     const moviesOfGenrePerYear = getFirstX(this.getMoviesOfGenrePerYear(moviesWithBoxOffice), 10);
     const genresList = moviesOfGenrePerYear.map((genre) => genre.genre);
 
-    const dateRange = d3.extent(movieDataArray, d => d.year);
+    const dateRange = d3.extent(moviesWithBoxOffice, d => d.year);
+    const allYears = fillRange(dateRange);
 
     const revenueRanges = [[100, 300], [300, 500], [500, 1000]]
     const timelineData = revenueRanges.map(range => {
-      return { rangeName: `${range}`, data: this.getMoviesOfRevenuePerYear(moviesWithBoxOffice, range) };
+      return { rangeName: `${range[0]}M-${range[1]}M`, data: this.getMoviesOfRevenuePerYear(moviesWithBoxOffice, range, allYears) };
     });
 
     this.setState({
@@ -110,10 +111,17 @@ class App extends Component {
     
   }
 
-  getMoviesPerYear = (data) => {
+  getMoviesPerYear = (data, { allYears } = {}) => {
     const groupedData = groupBy(data, 'year');
-    const moviesPerYear = Object.entries(groupedData)
+    let moviesPerYear = Object.entries(groupedData)
       .map(year => ({year: year[0], numMovies: year[1].length}));
+    if (allYears) {
+      moviesPerYear = allYears.map(year => {
+        const yearHasMovie = moviesPerYear.find(movieYear => movieYear.year == year)
+        return yearHasMovie ? yearHasMovie : {year, numMovies: 0}
+
+      })
+    }
     return moviesPerYear;
   }
 
@@ -143,11 +151,11 @@ class App extends Component {
     return sortByPropertyAsc(moviesOfGenrePerYear, 'totalMoviesOfGenre');
   }
 
-  getMoviesOfRevenuePerYear(movies, revenueRangeInMillions) {
+  getMoviesOfRevenuePerYear(movies, revenueRangeInMillions, allYears) {
     const [min, max] = revenueRangeInMillions;
     const moviesOfRevenue = movies.filter(movie => (movie.boxOffice >= min*1000000 && movie.boxOffice <= max*1000000));
 
-    return this.getMoviesPerYear(moviesOfRevenue);
+    return this.getMoviesPerYear(moviesOfRevenue, { allYears });
   }
 
   filterMoviesByGenre(data, genre) {
@@ -242,7 +250,6 @@ class App extends Component {
     const { 
       visData,
       timelineData,
-      genreTimelineData,
       defaultChartWidth,
       defaultChartHeight,
       genresList,
@@ -310,7 +317,6 @@ class App extends Component {
             </div>
             <GenresFilter genres={genresList} activeGenre={genreFilter} sortClass={sortProperty} onClick={(genre) => this.updateGenreFilter(genre)} />
             <MovieNumLineChart visData={timelineData} updateRange={this.updateDateRange} fixedBottom={true} />
-            {/* <GenresLineChart visData={genreTimelineData} genres={genresList} updateRange={this.updateDateRange} fixedBottom={true} /> */}
           </div>
           : <div>Visualization Loading</div>
         }

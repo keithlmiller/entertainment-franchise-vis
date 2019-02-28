@@ -3,11 +3,12 @@ import * as d3 from "d3";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '../../../App.scss';
 const width = 800;
-const margin = { top: 20, right: 45, bottom: 20, left: 100 };
+const margin = { top: 20, right: 45, bottom: 20, left: 120 };
 
 class MovieNumLineChart extends Component {
   xAxis = d3.axisBottom();
   yAxis = d3.axisLeft();
+  yAxisLines = d3.axisLeft();
 
   constructor(props) {
     super(props);
@@ -79,13 +80,31 @@ class MovieNumLineChart extends Component {
       xScale,
       yScale,
     } = this.state;
+
     this.xAxis
       .scale(xScale)
       .tickFormat(d3.format("d"));
     d3.select(this.refs.xAxis).call(this.xAxis);
+
     this.yAxis
       .scale(yScale);
     d3.select(this.refs.yAxis).call(this.yAxis);
+
+    this.yAxisLines
+      .scale(yScale)
+      .tickSize(width - margin.left);
+
+    const yAxisLines = d3.select(this.refs.yAxisLines);
+
+    yAxisLines
+      .call(this.yAxisLines)
+      .call(g => g.select('.domain').remove())
+      .selectAll('text').remove()
+
+    yAxisLines
+      .selectAll('line')
+      .attr('stroke', '#b3b3b3')
+      .attr('stroke-dasharray', '2,2')
   }
 
   brushmove = () => {
@@ -159,8 +178,11 @@ class MovieNumLineChart extends Component {
                 <h3 className='timeline-title'>Blockbusters Per Year Per Date Range</h3>
                 {!collapsed && <p className='timeline-description'>Click and drag to select a range of time to explore with the graphs above</p>}
             </div>
+
             
             <svg width={width} height={height}>
+                <g ref="yAxisLines" className='background-lines' transform={`translate(${width}, 0)`} />
+
                 {visData.map((range) => (<path fill='none' stroke={colorScale(range.rangeName)} stroke-width={1.5} d={line(range.data)} />)) }
                 {visData.map((range, i) => (
                   <g width={100} height={50}>
