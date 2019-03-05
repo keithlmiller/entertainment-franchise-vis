@@ -257,6 +257,7 @@ class App extends Component {
       sortProperty,
       genreFilter,
       selectedMovie,
+      dateRange,
       rawData,
     } = this.state;
 
@@ -307,15 +308,26 @@ class App extends Component {
                 selectedMovieDetails={selectedMovieDetails}
                 sortProperty={sortProperty}
               />
-            </div>
-            <div className='sort-options'>
-              <SectionTitle title='Sort By:' />
-              <div className='buttons-container'>
-                <SortButton title='Box Office' icon='dollar-sign' sortClass='boxOffice' onClick={() => this.updateSortProperty('boxOffice')} active={sortProperty === 'boxOffice'} />
-                <SortButton title='MetaCritic' icon='star-half-alt' sortClass='metascore' onClick={() => this.updateSortProperty('metascore')} active={sortProperty === 'metascore'} />
+
+              <div className='display-options'>
+                <div className='active-filters'>
+                  <div className='active-date-range'>Showing blockbusters between <span className={`active-filter ${sortProperty}`}>{dateRange[0]}</span> and <span className={`active-filter ${sortProperty}`}>{dateRange[1]}</span></div>
+                  <div className='active-genre'>of genre <span className={`active-filter ${sortProperty}`}>{genreFilter}</span></div>
+                  <div className='active-genre'>sorted by <span className={`active-filter ${sortProperty}`}>{sortProperty === 'boxOffice' ? 'Revenue' : 'MetaScore'}</span></div>
+                </div>
+                <div className='sort-options'>
+                  <SectionTitle title='Sort By:' />
+                  <div className='buttons-container'>
+                    <SortButton title='Box Office' icon='dollar-sign' sortClass='boxOffice' onClick={() => this.updateSortProperty('boxOffice')} active={sortProperty === 'boxOffice'} />
+                    <SortButton title='MetaCritic' icon='star-half-alt' sortClass='metascore' onClick={() => this.updateSortProperty('metascore')} active={sortProperty === 'metascore'} />
+                  </div>
+                </div>
+                <GenresFilter genres={genresList} activeGenre={genreFilter} sortClass={sortProperty} onClick={(genre) => this.updateGenreFilter(genre)} />
               </div>
             </div>
-            <GenresFilter genres={genresList} activeGenre={genreFilter} sortClass={sortProperty} onClick={(genre) => this.updateGenreFilter(genre)} />
+
+
+
             <MovieNumLineChart visData={timelineData} updateRange={this.updateDateRange} fixedBottom={true} />
           </div>
           : <div>Visualization Loading</div>

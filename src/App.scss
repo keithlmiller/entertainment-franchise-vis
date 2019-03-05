@@ -43,6 +43,8 @@ body {
 
   .chart-standard-fg {
     fill: $fg-color;
+    stroke-width: 0;
+    transition: stroke-width .3s;
 
     &:hover {
       cursor: pointer;
@@ -173,13 +175,39 @@ body {
   width: 30px;
   height: 30px;
   border-radius: 15px;
+  transform: rotate(180deg);
 
   &.collapse-chart {
-    transform: rotate(180deg);
+    transform: rotate(0deg);
   }
 
   &:hover {
     cursor: pointer;
+  }
+}
+
+.display-options {
+  display: flex;
+  justify-content: space-around;
+  padding: 50px;
+}
+
+.active-filters {
+  text-align: right;
+  font-size: 16px;
+
+  .active-filter {
+    font-weight: bold;
+    font-size: 21px;
+    text-transform: capitalize;
+
+    &.boxOffice {
+      color: $dollar-color;
+    }
+
+    &.metascore {
+      color: $reviews-color;
+    }
   }
 }
 

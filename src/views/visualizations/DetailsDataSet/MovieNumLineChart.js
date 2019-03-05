@@ -114,7 +114,7 @@ class MovieNumLineChart extends Component {
       return;
     }
     const [x1, x2] = d3.event.selection;
-    const range = [this.state.xScale.invert(x1), this.state.xScale.invert(x2)];
+    const range = [Math.round(this.state.xScale.invert(x1)), Math.round(this.state.xScale.invert(x2))];
     const [minYear, maxYear] = range;
     const displayMinYear = Math.floor(minYear);
     const displayMaxYear = Math.floor(maxYear);
@@ -175,8 +175,8 @@ class MovieNumLineChart extends Component {
             </button>
             
             <div className='timeline-explanation'>
-                <h3 className='timeline-title'>Blockbusters Per Year Per Date Range</h3>
-                {!collapsed && <p className='timeline-description'>Click and drag to select a range of time to explore with the graphs above</p>}
+                <h3 className='timeline-title'>Revenue Ranges Over Time</h3>
+                {!collapsed && <p className='timeline-description'>Click and drag to select a range of time to adjust the global date range</p>}
             </div>
 
             
