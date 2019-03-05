@@ -64,6 +64,13 @@ class BarChartHorizontal extends Component {
       height,
     } = this.props;
 
+    d3.select(this.refs.bars)
+      .selectAll('rect')
+      .data(this.state.bars)
+      .transition()
+      .attr('x', d => d.x)
+      .attr('width', d => d.width)
+
     this.xAxisLines
       .scale(xScale)
       .tickSize(height - margin.bottom - margin.top);
@@ -134,20 +141,22 @@ class BarChartHorizontal extends Component {
           </defs>
 
           <g ref="xAxisLines" className='background-lines' transform={`translate(${margin.left}, 0)`} />
+          <g ref='bars'>
           {bars.map(d => (
             <React.Fragment>
               <rect
-                // TODO: create function to calculate selected and hovered class
-                className={`chart-standard-fg ${hoveredMovie === d.title ? 'hovered-movie' : '' } ${selectedMovie === d.title ? 'selected-movie' : '' } ${sortClass}`}
-                x={d.x} y={d.y} width={d.width} height={yScale.bandwidth()} 
-                onMouseOver={() => onDataHover(d.title)}
-                onMouseOut={() => onDataHover()}
-                onClick={() => onDataClick(d.title)}
-                clip-path='url(#chart-clip-path)'
-              />
+                  // TODO: create function to calculate selected and hovered class
+                  className={`chart-standard-fg ${hoveredMovie === d.title ? 'hovered-movie' : '' } ${selectedMovie === d.title ? 'selected-movie' : '' } ${sortClass}`}
+                  y={d.y} height={yScale.bandwidth()} 
+                  onMouseOver={() => onDataHover(d.title)}
+                  onMouseOut={() => onDataHover()}
+                  onClick={() => onDataClick(d.title)}
+                  clip-path='url(#chart-clip-path)'
+                />
               <text x={d.x + d.width - 75} y={d.y + yScale.bandwidth()} className='bar-value'>${d3.format(',')(d.value)}</text>
             </React.Fragment>
           ))}
+          </g>
           <g ref="xAxis" transform={`translate(${margin.left}, ${height - margin.bottom - margin.top})`} />
           <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
         </svg>
