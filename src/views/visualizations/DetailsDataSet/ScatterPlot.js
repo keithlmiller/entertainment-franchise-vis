@@ -65,6 +65,14 @@ class ExtendedScatterPlot extends Component {
       yTickLabel,
     } = this.state;
 
+    // animate cx and cy values
+    d3.select(this.refs.dots)
+      .selectAll('circle')
+      .data(this.state.dots)
+      .transition()
+      .attr('cx', d => d.x)
+      .attr('cy', d => d.y)
+
     this.xAxis
       .scale(xScale)
       .tickFormat(d => `${d}`);
@@ -146,17 +154,19 @@ class ExtendedScatterPlot extends Component {
         <ChartTitle title={chartTitle} />
         <div className='chart-container'>
           <svg width={width} height={height}>
-            {dots.map(d => (
-              <circle
-                className={`scatter-dot chart-standard-fg ${hoveredMovie === d.title ? 'hovered-movie' : '' } ${selectedMovie === d.title ? 'selected-movie' : ''} ${sortClass}`}
-                cx={d.x}
-                cy={d.y}
-                r={5}
-                onMouseOver={() => this.handleHoverEnter(d.x, d.y, d.title, d.boxOffice, d.metascore)}
-                onMouseOut={() => this.handleHoverExit()}
-                onClick={() => onDataClick(d.title)}
-              ></circle>
-            ))}
+            <g ref='dots'>
+              {dots.map(d => (
+                <circle
+                  className={`scatter-dot chart-standard-fg ${hoveredMovie === d.title ? 'hovered-movie' : '' } ${selectedMovie === d.title ? 'selected-movie' : ''} ${sortClass}`}
+                  // cx={d.x}
+                  // cy={d.y}
+                  r={5}
+                  onMouseOver={() => this.handleHoverEnter(d.x, d.y, d.title, d.boxOffice, d.metascore)}
+                  onMouseOut={() => this.handleHoverExit()}
+                  onClick={() => onDataClick(d.title)}
+                ></circle>
+              ))}
+            </g>
             <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
             <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
             <text x={width / 2} y={height - 2} className='axis-label'>Critical Response</text>
