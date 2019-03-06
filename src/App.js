@@ -5,12 +5,13 @@ import ExtendedBarChartHorizontal from './views/visualizations/DetailsDataSet/Ba
 import RatingsBarChartHorizontal from './views/visualizations/DetailsDataSet/RatingsBarChartHorizontal';
 import ExtendedScatterPlot from './views/visualizations/DetailsDataSet/ScatterPlot';
 import MovieNumLineChart from './views/visualizations/DetailsDataSet/MovieNumLineChart';
+import RevenueLineChart from './views/visualizations/DetailsDataSet/RevenueLineChart';
 import GenresFilter from './views/filters/GenresFilter/GenresFilter';
 import SelectedMovie from './views/SelectedMovie/SelectedMovie';
 import SortButton from './components/SortButton/SortButton';
 import SectionTitle from './components/SectionTitle/SectionTitle';
 import {
-  groupBy, 
+  groupBy,
   getFirstX, 
   getMoviesInRange, 
   sortByPropertyAsc, 
@@ -29,6 +30,7 @@ class App extends Component {
         visData: [],
         timelineData: [],
         genreTimelineData: [],
+        revenueTimelineData: [],
         defaultChartWidth: 400,
         defaultChartHeight: 200,
         genresList: [],
@@ -79,12 +81,15 @@ class App extends Component {
       return { rangeName: `${range[0]}M-${range[1]}M`, data: this.getMoviesOfRevenuePerYear(moviesWithBoxOffice, range, allYears) };
     });
 
+    const revenueTimelineData = this.getTotalRevenuePerYear(moviesWithBoxOffice);
+
     this.setState({
       ...this.state,
       dateRange,
       rawData: moviesWithBoxOffice,
       visData: this.getNewVisData(moviesWithBoxOffice),
       timelineData,
+      revenueTimelineData,
       genreTimelineData: moviesOfGenrePerYear,
       genresList,
     });
@@ -113,6 +118,7 @@ class App extends Component {
 
   getMoviesPerYear = (data, { allYears } = {}) => {
     const groupedData = groupBy(data, 'year');
+
     let moviesPerYear = Object.entries(groupedData)
       .map(year => ({year: year[0], numMovies: year[1].length}));
     if (allYears) {
@@ -156,6 +162,22 @@ class App extends Component {
     const moviesOfRevenue = movies.filter(movie => (movie.boxOffice >= min*1000000 && movie.boxOffice <= max*1000000));
 
     return this.getMoviesPerYear(moviesOfRevenue, { allYears });
+  }
+
+  getTotalRevenuePerYear(movies) {
+    const groupedData = groupBy(movies, 'year');
+
+    return Object.entries(groupedData)
+      .map(year => {
+        const totalRevenue = year[1].reduce((a, v) => (a + v.boxOffice), 0);
+        const avgRevenue = year[1].length ? totalRevenue / year[1].length : 0;
+
+        return ({
+          year: year[0],
+          totalRevenue,
+          avgRevenue,
+        })
+      });
   }
 
   filterMoviesByGenre(data, genre) {
@@ -250,6 +272,7 @@ class App extends Component {
     const { 
       visData,
       timelineData,
+      revenueTimelineData,
       defaultChartWidth,
       defaultChartHeight,
       genresList,
@@ -327,8 +350,11 @@ class App extends Component {
             </div>
 
 
-
-            <MovieNumLineChart visData={timelineData} updateRange={this.updateDateRange} fixedBottom={true} />
+            <RevenueLineChart
+              visData={revenueTimelineData}
+              updateRange={this.updateDateRange}
+              fixedBottom={true}
+            />
           </div>
           : <div>Visualization Loading</div>
         }

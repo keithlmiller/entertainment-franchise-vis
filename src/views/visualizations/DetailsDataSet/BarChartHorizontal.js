@@ -31,9 +31,7 @@ class BarChartHorizontal extends Component {
       .paddingOuter(.25);
 
 
-    const [xMin, xMax] = d3.extent(visData, d => d.boxOffice);
-    const xTickFormat = xMax >= 1000000 ? 1000000 : 1000;
-    const xTickLabel = xMax >= 1000000 ? 'M' : 'k';
+    // const [xMin, xMax] = d3.extent(visData, d => d.boxOffice);
     const xScale = d3
       .scaleLinear()
       .domain([0, 1000000000])
@@ -49,7 +47,7 @@ class BarChartHorizontal extends Component {
       };
     });
 
-    return { bars, xScale, yScale, xTickFormat, xTickLabel };
+    return { bars, xScale, yScale };
   }
 
   componentDidUpdate() {
@@ -57,8 +55,6 @@ class BarChartHorizontal extends Component {
       bars,
       yScale,
       xScale,
-      xTickFormat,
-      xTickLabel,
     } = this.state;
 
     const {
@@ -80,7 +76,7 @@ class BarChartHorizontal extends Component {
     this.xAxis
       .scale(xScale)
       .tickFormat(
-        d => `$${parseInt((d) / xTickFormat)}${xTickLabel}`
+        d => `$${parseInt((d) / 1000000)}M`
       );
 
     const xAxisLines = d3.select(this.refs.xAxisLines);
