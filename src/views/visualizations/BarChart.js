@@ -25,7 +25,7 @@ class BarChart extends Component {
       .paddingInner(0.75)
       .paddingOuter(.4);
 
-    const [yMin, yMax] = d3.extent(visData, d => d.boxOffice);
+    const [yMin, yMax] = d3.extent(visData, d => parseInt(d.boxOffice));
     const yTickFormat = yMax >= 1000000 ? 1000000 : 1000;
     const yTickLabel = yMax >= 1000000 ? 'M' : 'k';
     const yScale = d3
@@ -40,7 +40,7 @@ class BarChart extends Component {
     const bars = visData.map(d => {
       return {
         x: xScale(d.title),
-        y: height - yScale(d.boxOffice) - margin.bottom,
+        y: height - yScale(parseInt(d.boxOffice)) - margin.bottom,
         height: yScale(d.boxOffice),
         fill: '#f4f4f4'
       };

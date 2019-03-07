@@ -1,13 +1,14 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import '../../../App.scss';
+import '../../App.scss';
 const width = 800;
-const margin = { top: 20, right: 45, bottom: 20, left: 45 };
+const margin = { top: 20, right: 45, bottom: 20, left: 120 };
 
-class GenresLineChart extends Component {
+class RevenueLineChart extends Component {
   xAxis = d3.axisBottom();
   yAxis = d3.axisLeft();
+  yAxisLines = d3.axisLeft();
 
   constructor(props) {
     super(props);
@@ -21,47 +22,26 @@ class GenresLineChart extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { visData, genres } = nextProps;
+    const { visData } = nextProps;
     const { height } = prevState;
 
     if (!visData) return {};
-    // const xExtent = d3.extent(visData, d => d.year);
+
     const xScale = d3
       .scaleLinear()
       .domain([1999, 2017])
       .range([margin.left, width - margin.right]);
 
-    // const [yMin, yMax] = d3.extent(visData, d => d.numMovies);
     const yScale = d3
       .scaleLinear()
-      .domain([0, 11])
+      .domain([0, 500000000])
       .range([height - margin.bottom, margin.top]);
-
-    // const colors = d3.scaleOrdinal(d3.schemePaired);
-
-    const colorScale = d3
-      .scaleOrdinal()
-      .domain(genres)
-      // pink, green, purple
-      .range([
-        "#e683b4", 
-        "#53c3ac", 
-        "#8475e8", 
-        "#665191",
-        "#a05195",
-        "#d45087",
-        "#f95d6a",
-        "#ff7c43",
-        "#ffa600",
-      ]);
-
-      
 
     const line = d3.line()
         .x(d => xScale(parseInt(d.year)))
-        .y(d => yScale(d.numMovies));
+        .y(d => yScale(d.avgRevenue));
 
-    return { ...prevState, line, xScale, yScale, colorScale };
+    return { ...prevState, line, xScale, yScale };
   }
 
   componentDidMount() {
@@ -88,13 +68,34 @@ class GenresLineChart extends Component {
       xScale,
       yScale,
     } = this.state;
+
     this.xAxis
       .scale(xScale)
       .tickFormat(d3.format("d"));
     d3.select(this.refs.xAxis).call(this.xAxis);
+
     this.yAxis
-      .scale(yScale);
+      .scale(yScale)
+      .tickFormat(
+        d => `$${parseInt((d) / 1000000)}M`
+      );
     d3.select(this.refs.yAxis).call(this.yAxis);
+
+    this.yAxisLines
+      .scale(yScale)
+      .tickSize(width - margin.left - margin.right);
+
+    const yAxisLines = d3.select(this.refs.yAxisLines);
+
+    yAxisLines
+      .call(this.yAxisLines)
+      .call(g => g.select('.domain').remove())
+      .selectAll('text').remove()
+
+    yAxisLines
+      .selectAll('line')
+      .attr('stroke', '#b3b3b3')
+      .attr('stroke-dasharray', '2,2')
   }
 
   brushmove = () => {
@@ -104,7 +105,7 @@ class GenresLineChart extends Component {
       return;
     }
     const [x1, x2] = d3.event.selection;
-    const range = [this.state.xScale.invert(x1), this.state.xScale.invert(x2)];
+    const range = [Math.round(this.state.xScale.invert(x1)), Math.round(this.state.xScale.invert(x2))];
     const [minYear, maxYear] = range;
     const displayMinYear = Math.floor(minYear);
     const displayMaxYear = Math.floor(maxYear);
@@ -145,8 +146,7 @@ class GenresLineChart extends Component {
       height,
       collapsed,
       line,
-      colorScale,
-      x1, 
+      x1,
       x2,
       displayMinYear,
       displayMaxYear,
@@ -160,22 +160,25 @@ class GenresLineChart extends Component {
     return (
         <div
           className={`brush-timeline ${fixedBottom ? 'timeline-fixed' : 'timeline-standard'} ${collapsed ? 'timeline-collapsed' : ''}`}>
-            <button className={`toggle-chart-height ${!this.state.collapsed ? 'collapse-chart' : ''}`} onClick={this.handleToggleHeight}>
+            <button className={`toggle-chart-height ${!collapsed ? 'collapse-chart' : ''}`} onClick={this.handleToggleHeight}>
               <FontAwesomeIcon icon='angle-down' />
             </button>
             
             <div className='timeline-explanation'>
-                <h3 className='timeline-title'>Movies of Each Genre Released Per Year</h3>
-                {!collapsed && <p className='timeline-description'>Click and drag to select a range of time to explore with the graphs above</p>}
+                <h3 className='timeline-title'>Average Revenue of Top Ten Movies</h3>
+                {!collapsed && <p className='timeline-description'>Click and drag to select a range of time to adjust the global date range</p>}
             </div>
+
             
             <svg width={width} height={height}>
-                {visData.map((genre) => (<path fill='none' stroke={colorScale(genre.genre)} stroke-width={1.5} d={line(genre.data)} />)) }
+                {!collapsed && <g ref="yAxisLines" className='background-lines' transform={`translate(${width - margin.right}, 0)`} />}
+
+                <path fill='none' stroke='#4da000' stroke-width={1.5} d={line(visData)} />))
                 {displayMinYear && <text x={this.getBrushLabelPos(x1, 'left')} y={height/4} className='year-text'>{displayMinYear}</text>}
                 <g ref="brush" />
                 {displayMaxYear && <text x={this.getBrushLabelPos(x2, 'right')} y={height/4} className='year-text'>{displayMaxYear}</text>}
                 <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
-                <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
+                {!collapsed && <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />}
             </svg>
         </div>
       
@@ -183,4 +186,4 @@ class GenresLineChart extends Component {
   }
 }
 
-export default GenresLineChart;
+export default RevenueLineChart;

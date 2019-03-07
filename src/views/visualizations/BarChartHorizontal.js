@@ -1,12 +1,13 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
-import ChartTitle from '../../../components/ChartTitle/ChartTitle';
-import '../../../App.scss';
-const margin = { top: 20, right: 15, bottom: 20, left: 150 };
+import ChartTitle from '../../components/ChartTitle/ChartTitle'
+const margin = { top: 20, right: 20, bottom: 20, left: 150 };
 
-class RatingsBarChartHorizontal extends Component {
+class BarChartHorizontal extends Component {
   state = {
     bars: [],
+    yTickFormat: 1000000,
+    yTickLabel: 'M',
   };
 
   xAxisLines = d3.axisBottom();
@@ -16,43 +17,44 @@ class RatingsBarChartHorizontal extends Component {
   static getDerivedStateFromProps(nextProps, prevState) {
     const { visData, width, height } = nextProps;
 
+    const chartWidth = width - margin.left - margin.right;
+    const chartHeight = height - margin.top - margin.bottom;
+
     if (!visData) return {};
 
     const titles = visData.map(d => d.title);
     const yScale = d3
       .scaleBand()
       .domain(titles)
-      .range([0, height - margin.bottom - margin.top])
+      .range([0, chartHeight])
       .paddingInner(.35)
       .paddingOuter(.25);
 
+
+    // const [xMin, xMax] = d3.extent(visData, d => d.boxOffice);
     const xScale = d3
       .scaleLinear()
-      .domain([0, 100])
-      .range([0, width - margin.right - margin.left]);
-
-    const xAxisScale = d3
-      .scaleLinear()
-      .domain([0, 100])
-      .range([margin.left, width - margin.right]);
+      .domain([0, 1000000000])
+      .range([0, chartWidth]);
 
     const bars = visData.map(d => {
       return {
-        value: d.metascore,
         x: margin.left,
         y: yScale(d.title),
-        width: xScale(d.metascore),
+        width: xScale(d.boxOffice),
+        value: d.boxOffice,
         title: d.title,
       };
     });
 
-    return { bars, xScale, xAxisScale, yScale };
+    return { bars, xScale, yScale };
   }
 
   componentDidUpdate() {
     const {
-      xScale,
+      bars,
       yScale,
+      xScale,
     } = this.state;
 
     const {
@@ -62,7 +64,7 @@ class RatingsBarChartHorizontal extends Component {
     // animate x and width values
     d3.select(this.refs.bars)
       .selectAll('rect')
-      .data(this.state.bars)
+      .data(bars)
       .transition()
       .attr('x', d => d.x)
       .attr('width', d => d.width)
@@ -70,12 +72,14 @@ class RatingsBarChartHorizontal extends Component {
     this.xAxisLines
       .scale(xScale)
       .tickSize(height - margin.bottom - margin.top);
+
     this.xAxis
       .scale(xScale)
-      .tickFormat(d => `${d}`);
-    
-    const xAxisLines = d3.select(this.refs.xAxisLines);
+      .tickFormat(
+        d => `$${parseInt((d) / 1000000)}M`
+      );
 
+    const xAxisLines = d3.select(this.refs.xAxisLines);
     xAxisLines
       .call(this.xAxisLines)
       .call(g => g.select('.domain').remove())
@@ -85,6 +89,7 @@ class RatingsBarChartHorizontal extends Component {
       .selectAll('line')
       .attr('stroke', '#b3b3b3')
       .attr('stroke-dasharray', '2,2')
+
     
     const xAxis = d3.select(this.refs.xAxis);
     xAxis
@@ -95,10 +100,15 @@ class RatingsBarChartHorizontal extends Component {
     xAxis
       .selectAll('line')
       .attr('stroke', '#8d8d8d');
+  
+    d3.select(this.refs.xAxisLines)
+      .call(this.xAxisLines)
+      .call(g => g.select('.domain').remove())
+      .selectAll('text').remove();
 
-    this.yAxis
-      .scale(yScale)
-    d3.select(this.refs.yAxis).call(this.yAxis);
+    this.yAxis.scale(yScale);
+    d3.select(this.refs.yAxis)
+      .call(this.yAxis)
   }
 
   render() {
@@ -112,15 +122,15 @@ class RatingsBarChartHorizontal extends Component {
       height, 
       chartTitle,
       onDataHover,
-      onDataClick,
       hoveredMovie,
-      selectedMovie,
       sortClass,
+      onDataClick,
+      selectedMovie,
     } = this.props;
 
     return (
       <div className='chart-container primary-chart'>
-        <ChartTitle title={chartTitle} />
+        {chartTitle && <ChartTitle title={chartTitle} />}
         <svg width={width} height={height}>
           <defs>
             <clipPath id='chart-clip-path'>
@@ -133,18 +143,18 @@ class RatingsBarChartHorizontal extends Component {
             {bars.map(d => (
               <React.Fragment>
                 <rect
-                  className={`chart-standard-fg ${hoveredMovie === d.title ? 'hovered-movie' : ''} ${selectedMovie === d.title ? 'selected-movie' : ''} ${sortClass}`}
-                  y={d.y} height={yScale.bandwidth()}
-                  onMouseOver={() => onDataHover(d.title)}
-                  onMouseOut={() => onDataHover()}
-                  onClick={() => onDataClick(d.title)}
-                  clip-path='url(#chart-clip-path)'
-                />
-                <text x={d.x + d.width - 60} y={d.y + yScale.bandwidth()} className='bar-value'>{d.value}</text>
+                    // TODO: create function to calculate selected and hovered class
+                    className={`chart-standard-fg ${hoveredMovie === d.title ? 'hovered-movie' : '' } ${selectedMovie === d.title ? 'selected-movie' : '' } ${sortClass}`}
+                    y={d.y} height={yScale.bandwidth()}
+                    onMouseOver={() => onDataHover(d.title)}
+                    onMouseOut={() => onDataHover()}
+                    onClick={() => onDataClick(d.title)}
+                    clip-path='url(#chart-clip-path)'
+                  />
+                <text x={d.x + d.width - 75} y={d.y + yScale.bandwidth()} className='bar-value'>${d3.format(',')(d.value)}</text>
               </React.Fragment>
             ))}
           </g>
-          {!bars.length && <text x={width/2} y={height/2} className='no-data-message'>No Ratings Data Available</text>}
           <g ref="xAxis" transform={`translate(${margin.left}, ${height - margin.bottom - margin.top})`} />
           <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
         </svg>
@@ -153,4 +163,4 @@ class RatingsBarChartHorizontal extends Component {
   }
 }
 
-export default RatingsBarChartHorizontal;
+export default BarChartHorizontal;

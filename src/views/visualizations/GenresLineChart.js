@@ -1,16 +1,18 @@
 import React, { Component } from "react";
 import * as d3 from "d3";
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '../../App.scss';
 const width = 800;
 const margin = { top: 20, right: 45, bottom: 20, left: 45 };
 
-class LineChart extends Component {
+class GenresLineChart extends Component {
   xAxis = d3.axisBottom();
   yAxis = d3.axisLeft();
 
   constructor(props) {
     super(props);
     this.state = {
+        lines: [],
         displayMinYear: null,
         displayMaxYear: null,
         height: 200,
@@ -19,31 +21,49 @@ class LineChart extends Component {
   }
 
   static getDerivedStateFromProps(nextProps, prevState) {
-    const { visData } = nextProps;
+    const { visData, genres } = nextProps;
     const { height } = prevState;
 
     if (!visData) return {};
-    const xExtent = d3.extent(visData, d => d.year);
     const xScale = d3
       .scaleLinear()
-      .domain(xExtent)
+      .domain([1999, 2017])
       .range([margin.left, width - margin.right]);
 
-    const [yMin, yMax] = d3.extent(visData, d => d.numMovies);
     const yScale = d3
       .scaleLinear()
-      .domain([0, yMax])
+      .domain([0, 11])
       .range([height - margin.bottom, margin.top]);
+
+
+    const colorScale = d3
+      .scaleOrdinal()
+      .domain(genres)
+      // pink, green, purple
+      .range([
+        "#e683b4", 
+        "#53c3ac", 
+        "#8475e8", 
+        "#665191",
+        "#a05195",
+        "#d45087",
+        "#f95d6a",
+        "#ff7c43",
+        "#ffa600",
+      ]);
+
+      
 
     const line = d3.line()
         .x(d => xScale(parseInt(d.year)))
         .y(d => yScale(d.numMovies));
 
-    return { ...prevState, line, xScale, yScale };
+    return { ...prevState, line, xScale, yScale, colorScale };
   }
 
   componentDidMount() {
-    const { height } = this.state;
+    const { height, xScale } = this.state;
+    const initialBrush = [xScale(2007), xScale(2017) ]
 
     this.brush = d3
       .brushX()
@@ -54,7 +74,7 @@ class LineChart extends Component {
       .on("end", this.brushmove);
     d3.select(this.refs.brush)
       .call(this.brush)
-      .call(this.brush.move, [margin.left, 100]);
+      .call(this.brush.move, initialBrush);
 
     this.xAxis.scale(this.state.xScale);
     d3.select(this.refs.xAxis).call(this.xAxis);
@@ -122,6 +142,7 @@ class LineChart extends Component {
       height,
       collapsed,
       line,
+      colorScale,
       x1, 
       x2,
       displayMinYear,
@@ -136,15 +157,17 @@ class LineChart extends Component {
     return (
         <div
           className={`brush-timeline ${fixedBottom ? 'timeline-fixed' : 'timeline-standard'} ${collapsed ? 'timeline-collapsed' : ''}`}>
+            <button className={`toggle-chart-height ${!this.state.collapsed ? 'collapse-chart' : ''}`} onClick={this.handleToggleHeight}>
+              <FontAwesomeIcon icon='angle-down' />
+            </button>
+            
             <div className='timeline-explanation'>
-                <h3 className='timeline-title'>Movies Released Per Year</h3>
+                <h3 className='timeline-title'>Movies of Each Genre Released Per Year</h3>
                 {!collapsed && <p className='timeline-description'>Click and drag to select a range of time to explore with the graphs above</p>}
             </div>
-
-            <button className='toggle-chart-height' onClick={this.handleToggleHeight}>Toggle Height</button>
             
             <svg width={width} height={height}>
-                <path fill='none' stroke='#f4f4f4' stroke-width={1.5} d={line(visData)} />
+                {visData.map((genre) => (<path fill='none' stroke={colorScale(genre.genre)} stroke-width={1.5} d={line(genre.data)} />)) }
                 {displayMinYear && <text x={this.getBrushLabelPos(x1, 'left')} y={height/4} className='year-text'>{displayMinYear}</text>}
                 <g ref="brush" />
                 {displayMaxYear && <text x={this.getBrushLabelPos(x2, 'right')} y={height/4} className='year-text'>{displayMaxYear}</text>}
@@ -157,4 +180,4 @@ class LineChart extends Component {
   }
 }
 
-export default LineChart;
+export default GenresLineChart;

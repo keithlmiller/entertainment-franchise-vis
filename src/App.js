@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import movieData from './data/movies_details.json';
-import ExtendedBarChartHorizontal from './views/visualizations/DetailsDataSet/BarChartHorizontal';
-import RatingsBarChartHorizontal from './views/visualizations/DetailsDataSet/RatingsBarChartHorizontal';
-import ExtendedScatterPlot from './views/visualizations/DetailsDataSet/ScatterPlot';
-import MovieNumLineChart from './views/visualizations/DetailsDataSet/MovieNumLineChart';
-import RevenueLineChart from './views/visualizations/DetailsDataSet/RevenueLineChart';
+import ExtendedBarChartHorizontal from './views/visualizations/BarChartHorizontal';
+import RatingsBarChartHorizontal from './views/visualizations/RatingsBarChartHorizontal';
+import ExtendedScatterPlot from './views/visualizations/ScatterPlot';
+import RevenueLineChart from './views/visualizations/RevenueLineChart';
 import GenresFilter from './views/filters/GenresFilter/GenresFilter';
 import SelectedMovie from './views/SelectedMovie/SelectedMovie';
 import SortButton from './components/SortButton/SortButton';
@@ -22,12 +21,12 @@ import './App.scss';
 // import 'normalize.css';
 
 class App extends Component {
-
   constructor(props) {
     super(props);
     this.state = {
         rawData: [], // original data, only modified on first read 
         visData: [],
+        fullVisData: [],
         timelineData: [],
         genreTimelineData: [],
         revenueTimelineData: [],
@@ -37,7 +36,7 @@ class App extends Component {
         sortProperty: 'boxOffice',
         genreFilter: 'all',
         dateRange: [],
-        moviesPerChart: 5,
+        moviesPerChart: 7,
         hoveredMovie: '',
         selectedMovie: '',
     };
@@ -49,7 +48,6 @@ class App extends Component {
         const movie = movieData[key];
         const date = new Date(movie.Released);
         const boxOffice = parseInt(movie.BoxOffice.replace(/[\$\,]/g, ""));
-
 
         return {
           title: movie.Title,
@@ -82,12 +80,14 @@ class App extends Component {
     });
 
     const revenueTimelineData = this.getTotalRevenuePerYear(moviesWithBoxOffice);
+    const { visData, fullVisData } = this.getNewVisData(moviesWithBoxOffice);
 
     this.setState({
       ...this.state,
       dateRange,
       rawData: moviesWithBoxOffice,
-      visData: this.getNewVisData(moviesWithBoxOffice),
+      visData,
+      fullVisData,
       timelineData,
       revenueTimelineData,
       genreTimelineData: moviesOfGenrePerYear,
@@ -243,9 +243,11 @@ class App extends Component {
   }
 
   updateVisData = (data) => {
+    const { visData, fullVisData } = this.getNewVisData(data);
     this.setState({
       ...this.state,
-      visData: this.getNewVisData(data),
+      visData,
+      fullVisData,
     });
   }
 
@@ -264,8 +266,9 @@ class App extends Component {
     const moviesOfGenre = this.filterMoviesByGenre(sortedData, genreFilter);
     const moviesInDateRange = getMoviesInRange(dateRange, moviesOfGenre, 'year');
     const visData = getFirstX(moviesInDateRange, moviesPerChart);
+    const fullVisData = moviesInDateRange;
 
-    return visData;
+    return { visData, fullVisData };
   }
 
   render() {
