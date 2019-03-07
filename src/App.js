@@ -292,7 +292,7 @@ class App extends Component {
 
     return (
       <div className="App">
-        <h1 className='article-title'>Box Office Revenue vs MetaCritic Score</h1>
+        <h1 className='article-title'>Box Office Revenue vs MetaScore</h1>
         {!!visData.length ?
           <div className='content-container'>
             <div className='primary-visualizations'>
@@ -333,11 +333,6 @@ class App extends Component {
               />
 
               <div className='display-options'>
-                <div className='active-filters'>
-                  <div className='active-date-range'>Showing blockbusters between <span className={`active-filter ${sortProperty}`}>{dateRange[0]}</span> and <span className={`active-filter ${sortProperty}`}>{dateRange[1]}</span></div>
-                  <div className='active-genre'>of genre <span className={`active-filter ${sortProperty}`}>{genreFilter}</span></div>
-                  <div className='active-genre'>sorted by <span className={`active-filter ${sortProperty}`}>{sortProperty === 'boxOffice' ? 'Revenue' : 'MetaScore'}</span></div>
-                </div>
                 <div className='sort-options'>
                   <SectionTitle title='Sort By:' />
                   <div className='buttons-container'>
@@ -345,7 +340,14 @@ class App extends Component {
                     <SortButton title='MetaCritic' icon='star-half-alt' sortClass='metascore' onClick={() => this.updateSortProperty('metascore')} active={sortProperty === 'metascore'} />
                   </div>
                 </div>
+
                 <GenresFilter genres={genresList} activeGenre={genreFilter} sortClass={sortProperty} onClick={(genre) => this.updateGenreFilter(genre)} />
+
+                <div className='active-filters'>
+                  <div className='active-date-range'>Showing blockbusters between <span className={`active-filter ${sortProperty}`}>{dateRange[0]}</span> and <span className={`active-filter ${sortProperty}`}>{dateRange[1]}</span></div>
+                  <div className='active-genre'>of genre <span className={`active-filter ${sortProperty}`}>{genreFilter}</span></div>
+                  <div className='active-genre'>sorted by <span className={`active-filter ${sortProperty}`}>{sortProperty === 'boxOffice' ? 'Revenue' : 'MetaScore'}</span></div>
+                </div>
               </div>
             </div>
 

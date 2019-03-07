@@ -161,7 +161,7 @@ class RevenueLineChart extends Component {
     return (
         <div
           className={`brush-timeline ${fixedBottom ? 'timeline-fixed' : 'timeline-standard'} ${collapsed ? 'timeline-collapsed' : ''}`}>
-            <button className={`toggle-chart-height ${!this.state.collapsed ? 'collapse-chart' : ''}`} onClick={this.handleToggleHeight}>
+            <button className={`toggle-chart-height ${!collapsed ? 'collapse-chart' : ''}`} onClick={this.handleToggleHeight}>
               <FontAwesomeIcon icon='angle-down' />
             </button>
             
@@ -172,14 +172,14 @@ class RevenueLineChart extends Component {
 
             
             <svg width={width} height={height}>
-                <g ref="yAxisLines" className='background-lines' transform={`translate(${width - margin.right}, 0)`} />
+                {!collapsed && <g ref="yAxisLines" className='background-lines' transform={`translate(${width - margin.right}, 0)`} />}
 
                 <path fill='none' stroke='#4da000' stroke-width={1.5} d={line(visData)} />))
                 {displayMinYear && <text x={this.getBrushLabelPos(x1, 'left')} y={height/4} className='year-text'>{displayMinYear}</text>}
                 <g ref="brush" />
                 {displayMaxYear && <text x={this.getBrushLabelPos(x2, 'right')} y={height/4} className='year-text'>{displayMaxYear}</text>}
                 <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
-                <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
+                {!collapsed && <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />}
             </svg>
         </div>
       
