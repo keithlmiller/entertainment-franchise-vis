@@ -1,14 +1,18 @@
 import React, { Component } from 'react';
 import * as d3 from 'd3';
 import movieData from './data/movies_details.json';
-import ExtendedBarChartHorizontal from './views/visualizations/BarChartHorizontal';
+
+// import chart components
+import BarChartHorizontal from './views/visualizations/BarChartHorizontal';
 import RatingsBarChartHorizontal from './views/visualizations/RatingsBarChartHorizontal';
-import ExtendedScatterPlot from './views/visualizations/ScatterPlot';
+import ScatterPlot from './views/visualizations/ScatterPlot';
 import RevenueLineChart from './views/visualizations/RevenueLineChart';
-import GenresFilter from './views/filters/GenresFilter/GenresFilter';
+
+// import other app section components
+import DataOptions from './views/DataOptions/DataOptions';
 import SelectedMovie from './views/SelectedMovie/SelectedMovie';
-import SortButton from './components/SortButton/SortButton';
-import SectionTitle from './components/SectionTitle/SectionTitle';
+
+// import utils
 import {
   groupBy,
   getFirstX, 
@@ -230,7 +234,7 @@ class App extends Component {
     }
   }
 
-  updateGenreFilter(genre) {
+  updateGenreFilter = (genre) => {
     this.setState({
       ...this.state,
       selectedMovie: '',
@@ -303,7 +307,7 @@ class App extends Component {
         {!!visData.length ?
           <div className='content-container'>
             <div className='primary-visualizations'>
-              <ExtendedBarChartHorizontal 
+              <BarChartHorizontal
                 visData={visData} 
                 width={800} height={300} 
                 hoveredMovie={hoveredMovie}
@@ -322,7 +326,7 @@ class App extends Component {
                 onDataHover={this.updateHoveredMovie}
                 onDataClick={this.updateSelectedMovie}
               />
-              <ExtendedScatterPlot 
+              <ScatterPlot
                 visData={visData} 
                 width={defaultChartWidth} height={defaultChartHeight} 
                 hoveredMovie={hoveredMovie} 
@@ -339,25 +343,15 @@ class App extends Component {
                 sortProperty={sortProperty}
               />
 
-              <div className='display-options'>
-                <div className='sort-options'>
-                  <SectionTitle title='Sort By:' />
-                  <div className='buttons-container'>
-                    <SortButton title='Box Office' icon='dollar-sign' sortClass='boxOffice' onClick={() => this.updateSortProperty('boxOffice')} active={sortProperty === 'boxOffice'} />
-                    <SortButton title='MetaCritic' icon='star-half-alt' sortClass='metascore' onClick={() => this.updateSortProperty('metascore')} active={sortProperty === 'metascore'} />
-                  </div>
-                </div>
-
-                <GenresFilter genres={genresList} activeGenre={genreFilter} sortClass={sortProperty} onClick={(genre) => this.updateGenreFilter(genre)} />
-
-                <div className='active-filters'>
-                  <div className='active-date-range'>Showing blockbusters between <span className={`active-filter ${sortProperty}`}>{dateRange[0]}</span> and <span className={`active-filter ${sortProperty}`}>{dateRange[1]}</span></div>
-                  <div className='active-genre'>of genre <span className={`active-filter ${sortProperty}`}>{genreFilter}</span></div>
-                  <div className='active-genre'>sorted by <span className={`active-filter ${sortProperty}`}>{sortProperty === 'boxOffice' ? 'Revenue' : 'MetaScore'}</span></div>
-                </div>
-              </div>
+              <DataOptions
+                genresList={genresList}
+                genreFilter={genreFilter}
+                dateRange={dateRange}
+                sortProperty={sortProperty}
+                updateGenre={this.updateGenreFilter}
+                updateSortProperty={this.updateSortProperty}
+              />
             </div>
-
 
             <RevenueLineChart
               visData={revenueTimelineData}
