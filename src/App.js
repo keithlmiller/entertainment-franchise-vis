@@ -17,6 +17,9 @@ import {
   filterPropertyNonNumbers,
   fillRange,
 } from './utils/data-utils';
+import {
+  truncate,
+} from './utils/format-utils';
 import './App.scss';
 // import 'normalize.css';
 
@@ -50,7 +53,8 @@ class App extends Component {
         const boxOffice = parseInt(movie.BoxOffice.replace(/[\$\,]/g, ""));
 
         return {
-          title: movie.Title,
+          title: truncate(movie.Title, 27),
+          fullTitle: movie.Title,
           date,
           boxOffice: boxOffice,
           genre: movie.Genre.split(", "),

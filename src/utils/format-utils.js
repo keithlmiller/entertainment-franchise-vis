@@ -1,7 +1,8 @@
 import * as d3 from 'd3';
 
 export const truncate = (string, length = 10) => {
-    return string.substring(0, length);
+    const isTruncated = string.length > length;
+    return `${string.substring(0, length)}${isTruncated ? '...' : ''}`;
 }
 
 export const commadList = (array) => (array.map((li, i) => `${li}${(i + 1) !== array.length ? ', ' : ''}`));

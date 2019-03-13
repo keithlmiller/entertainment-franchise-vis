@@ -18,7 +18,7 @@ export default function SelectedMovie({ selectedMovie, selectedMovieDetails, sor
                     <div className='movie-details-header'>
                         <img src={selectedMovieDetails.poster} className='movie-poster' alt='poster' />
                         <div className='general-details'>
-                            <h3 className='selected-movie-title'>{selectedMovieDetails.title}</h3>
+                            <h3 className='selected-movie-title'>{selectedMovieDetails.fullTitle}</h3>
                             <ul className='movie-details-list'>
                                 <li><label>Director:</label> {selectedMovieDetails.director}</li>
                                 <li><label>Rated:</label> {selectedMovieDetails.rated}</li>
