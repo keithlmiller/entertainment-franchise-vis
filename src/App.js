@@ -312,16 +312,6 @@ class App extends Component {
                 onDataHover={this.updateHoveredMovie}
                 onDataClick={this.updateSelectedMovie}
               />
-              <ExtendedScatterPlot 
-                visData={visData} 
-                width={defaultChartWidth} height={defaultChartHeight} 
-                hoveredMovie={hoveredMovie} 
-                selectedMovie={selectedMovie}
-                sortClass={sortProperty}
-                chartTitle={'Box Office vs MetaScore'}
-                onDataHover={this.updateHoveredMovie}
-                onDataClick={this.updateSelectedMovie}
-              />
               <RatingsBarChartHorizontal
                 visData={visData}
                 width={defaultChartWidth} height={defaultChartHeight}
@@ -329,6 +319,16 @@ class App extends Component {
                 selectedMovie={selectedMovie}
                 sortClass={sortProperty}
                 chartTitle={'Score on MetaCritic'}
+                onDataHover={this.updateHoveredMovie}
+                onDataClick={this.updateSelectedMovie}
+              />
+              <ExtendedScatterPlot 
+                visData={visData} 
+                width={defaultChartWidth} height={defaultChartHeight} 
+                hoveredMovie={hoveredMovie} 
+                selectedMovie={selectedMovie}
+                sortClass={sortProperty}
+                chartTitle={'Box Office vs MetaScore'}
                 onDataHover={this.updateHoveredMovie}
                 onDataClick={this.updateSelectedMovie}
               />

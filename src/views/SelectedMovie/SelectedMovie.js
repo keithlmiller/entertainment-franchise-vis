@@ -8,7 +8,7 @@ import './SelectedMovie.scss';
 export default function SelectedMovie({ selectedMovie, selectedMovieDetails, sortProperty }) {
 
     return (
-        <div className='selected-movie-section'>
+        <div className={`selected-movie-section ${sortProperty}`}>
             <div className={`fixed-section-title ${sortProperty}`}>
                 <span>Selected Movie:</span>
             </div>
