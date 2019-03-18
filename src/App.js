@@ -303,7 +303,25 @@ class App extends Component {
 
     return (
       <div className="App">
-        <h1 className='article-title'>Box Office Revenue vs MetaScore</h1>
+        <div className='page-header'>
+          <div className='page-intro'>
+            <h1 className='article-title'>Box Office Revenue vs MetaScore</h1>
+            <h3 className='article-subtitle'>Explore the domestic (US) revenue and Metascores of top blockbusters in the past two decades</h3>
+            <p className='article-description'>
+              This dataset includes the top 10 grossing movies from each year between 1999 and 2017
+              The data was originally pulled from IMDB. I found it through a <a href='https://frontendmasters.com/courses/d3-js-custom-charts/' target='_blank'>Front End Masters Course</a>
+            </p>
+            <p className='article-description'>I made this visualization for learning and experimentation, hopefully you find it fun!</p>
+          </div>
+          <DataOptions
+            genresList={genresList}
+            genreFilter={genreFilter}
+            dateRange={dateRange}
+            sortProperty={sortProperty}
+            updateGenre={this.updateGenreFilter}
+            updateSortProperty={this.updateSortProperty}
+          />
+        </div>
         {!!visData.length ?
           <div className='content-container'>
             <div className='primary-visualizations'>
@@ -341,15 +359,6 @@ class App extends Component {
                 selectedMovie={selectedMovie}
                 selectedMovieDetails={selectedMovieDetails}
                 sortProperty={sortProperty}
-              />
-
-              <DataOptions
-                genresList={genresList}
-                genreFilter={genreFilter}
-                dateRange={dateRange}
-                sortProperty={sortProperty}
-                updateGenre={this.updateGenreFilter}
-                updateSortProperty={this.updateSortProperty}
               />
             </div>
 

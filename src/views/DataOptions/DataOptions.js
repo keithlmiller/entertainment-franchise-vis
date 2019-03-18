@@ -8,15 +8,16 @@ export default function DataOptions({ genresList, genreFilter, dateRange, sortPr
 
     return (
         <div className='display-options'>
-            <div className='sort-options'>
-                <SectionTitle title='Sort By:' />
-                <div className='buttons-container'>
-                <SortButton title='Box Office' icon='dollar-sign' sortClass='boxOffice' onClick={() => updateSortProperty('boxOffice')} active={sortProperty === 'boxOffice'} />
-                <SortButton title='MetaCritic' icon='star-half-alt' sortClass='metascore' onClick={() => updateSortProperty('metascore')} active={sortProperty === 'metascore'} />
+            <div className='sort-filter'>
+                <div className='sort-options'>
+                    <SectionTitle title='Sort By:' />
+                    <div className='buttons-container'>
+                    <SortButton title='Box Office' icon='dollar-sign' sortClass='boxOffice' onClick={() => updateSortProperty('boxOffice')} active={sortProperty === 'boxOffice'} />
+                    <SortButton title='MetaCritic' icon='star-half-alt' sortClass='metascore' onClick={() => updateSortProperty('metascore')} active={sortProperty === 'metascore'} />
+                    </div>
                 </div>
+                <GenresFilter genres={genresList} activeGenre={genreFilter} sortClass={sortProperty} onClick={(genre) => updateGenre(genre)} />
             </div>
-
-            <GenresFilter genres={genresList} activeGenre={genreFilter} sortClass={sortProperty} onClick={(genre) => updateGenre(genre)} />
 
             <div className='active-filters'>
                 <div className='active-date-range'>Showing blockbusters between <span className={`active-filter ${sortProperty}`}>{dateRange[0]}</span> and <span className={`active-filter ${sortProperty}`}>{dateRange[1]}</span></div>
