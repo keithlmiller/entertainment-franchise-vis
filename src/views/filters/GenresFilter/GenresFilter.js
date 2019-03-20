@@ -3,7 +3,7 @@ import FilterButton from '../../../components/FilterButton/FilterButton';
 import SectionTitle from '../../../components/SectionTitle/SectionTitle';
 import './GenresFilter.scss';
 
-export default function GenresFilter({genres, onClick, activeGenre, sortClass, isDropDown = true}) {
+export default function GenresFilter({genres, onClick, activeGenre, sortClass, isDropDown = false}) {
     const genreButtons = genres.map((genre) => <FilterButton title={genre} active={activeGenre === genre} sortClass={sortClass} onClick={() => onClick(genre)} />);
     const genreDropdownOptions = genres.map((genre) => <option value={genre} onClick={() => onClick(genre)}>{genre}</option>);
 

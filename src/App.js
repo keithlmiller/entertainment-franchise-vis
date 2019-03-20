@@ -77,7 +77,7 @@ class App extends Component {
 
     // get genres for genre timeline chart
     const moviesOfGenrePerYear = getFirstX(this.getMoviesOfGenrePerYear(moviesWithBoxOffice), 10);
-    const genresList = moviesOfGenrePerYear.map((genre) => genre.genre);
+    const genresList = moviesOfGenrePerYear.map((genre) => genre.genre).sort();
 
     const dateRange = d3.extent(moviesWithBoxOffice, d => d.year);
     const allYears = fillRange(dateRange);
@@ -304,7 +304,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className='page-header'>
-          <div className='page-intro'>
+          <div className={`page-intro ${sortProperty}`}>
             <h1 className='article-title'>Box Office Revenue vs MetaScore</h1>
             <h3 className='article-subtitle'>Explore the domestic (US) revenue and Metascores of top blockbusters in the past two decades</h3>
             <p className='article-description'>

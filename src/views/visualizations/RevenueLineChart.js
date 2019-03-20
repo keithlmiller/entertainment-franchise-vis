@@ -160,26 +160,28 @@ class RevenueLineChart extends Component {
     return (
         <div
           className={`brush-timeline ${fixedBottom ? 'timeline-fixed' : 'timeline-standard'} ${collapsed ? 'timeline-collapsed' : ''}`}>
-            <button className={`toggle-chart-height ${!collapsed ? 'collapse-chart' : ''}`} onClick={this.handleToggleHeight}>
-              <FontAwesomeIcon icon='angle-down' />
-            </button>
-            
-            <div className='timeline-explanation'>
-                <h3 className='timeline-title'>Average Revenue of Top Ten Movies</h3>
-                {!collapsed && <p className='timeline-description'>Click and drag to select a range of time to adjust the global date range</p>}
+            <div className='timeline-content'>
+              <button className={`toggle-chart-height ${!collapsed ? 'collapse-chart' : ''}`} onClick={this.handleToggleHeight}>
+                <FontAwesomeIcon icon='angle-down' />
+              </button>
+              
+              <div className='timeline-explanation'>
+                  <h3 className='timeline-title'>Average Revenue of Top Ten Movies</h3>
+                  {!collapsed && <p className='timeline-description'>Click and drag to select a range of time to adjust the global date range</p>}
+              </div>
+
+              
+              <svg width={width} height={height}>
+                  {!collapsed && <g ref="yAxisLines" className='background-lines' transform={`translate(${width - margin.right}, 0)`} />}
+
+                  <path fill='none' stroke='#4da000' stroke-width={1.5} d={line(visData)} />))
+                  {displayMinYear && <text x={this.getBrushLabelPos(x1, 'left')} y={height/4} className='year-text'>{displayMinYear}</text>}
+                  <g ref="brush" />
+                  {displayMaxYear && <text x={this.getBrushLabelPos(x2, 'right')} y={height/4} className='year-text'>{displayMaxYear}</text>}
+                  <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
+                  {!collapsed && <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />}
+              </svg>
             </div>
-
-            
-            <svg width={width} height={height}>
-                {!collapsed && <g ref="yAxisLines" className='background-lines' transform={`translate(${width - margin.right}, 0)`} />}
-
-                <path fill='none' stroke='#4da000' stroke-width={1.5} d={line(visData)} />))
-                {displayMinYear && <text x={this.getBrushLabelPos(x1, 'left')} y={height/4} className='year-text'>{displayMinYear}</text>}
-                <g ref="brush" />
-                {displayMaxYear && <text x={this.getBrushLabelPos(x2, 'right')} y={height/4} className='year-text'>{displayMaxYear}</text>}
-                <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
-                {!collapsed && <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />}
-            </svg>
         </div>
       
     );
