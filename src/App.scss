@@ -43,8 +43,10 @@ body {
       font-size: 24px;
     }
 
-    a:visited {
+    a, a:visited {
       color: #fff;
+      text-decoration: none;
+      font-weight: bold;
     }
   
     .article-subtitle {

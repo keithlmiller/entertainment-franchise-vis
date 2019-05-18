@@ -4,11 +4,14 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import '../../App.scss';
 const width = 800;
 const margin = { top: 20, right: 45, bottom: 20, left: 120 };
+const collapsedHeight = 75;
+const fullHeight = 200;
 
 class RevenueLineChart extends Component {
   xAxis = d3.axisBottom();
   yAxis = d3.axisLeft();
   yAxisLines = d3.axisLeft();
+  brush = d3.brushX();
 
   constructor(props) {
     super(props);
@@ -16,8 +19,8 @@ class RevenueLineChart extends Component {
         lines: [],
         displayMinYear: null,
         displayMaxYear: null,
-        height: 200,
-        collapsed: false,
+        height: collapsedHeight,
+        collapsed: true,
     };
   }
 
@@ -46,15 +49,14 @@ class RevenueLineChart extends Component {
 
   componentDidMount() {
     const { height, xScale } = this.state;
-    const initialBrush = [xScale(2007), xScale(2017) ]
+    const initialBrush = [xScale(2007), xScale(2017)]
 
-    this.brush = d3
-      .brushX()
+    this.brush
       .extent([
         [margin.left, margin.top],
         [width - margin.right, height - margin.bottom]
       ])
-      .on("end", this.brushmove);
+      .on('end', this.brushmove);
     d3.select(this.refs.brush)
       .call(this.brush)
       .call(this.brush.move, initialBrush);
@@ -63,11 +65,15 @@ class RevenueLineChart extends Component {
     d3.select(this.refs.xAxis).call(this.xAxis);
   }
 
-  componentDidUpdate() {
+  componentDidUpdate(prevProps, prevState) {
     const {
       xScale,
       yScale,
+      height,
+      x1, x2,
     } = this.state;
+
+    const { height: prevHeight } = prevState;
 
     this.xAxis
       .scale(xScale)
@@ -96,6 +102,19 @@ class RevenueLineChart extends Component {
       .selectAll('line')
       .attr('stroke', '#b3b3b3')
       .attr('stroke-dasharray', '2,2')
+
+    if (height !== prevHeight) {
+      const currentBrush = [x1, x2]
+      this.brush
+        .extent([
+          [margin.left, margin.top],
+          [width - margin.right, height - margin.bottom]
+        ]);
+      d3.select(this.refs.brush)
+        .call(this.brush)
+        .call(this.brush.move, currentBrush);
+    }
+    
   }
 
   brushmove = () => {
@@ -134,10 +153,11 @@ class RevenueLineChart extends Component {
   }
 
   handleToggleHeight = () => {
+    const { collapsed } = this.state;
     this.setState({
       ...this.state,
-      height: this.state.height === 200 ? 75 : 200,
-      collapsed: !this.state.collapsed,
+      height: collapsed ? fullHeight : collapsedHeight,
+      collapsed: !collapsed,
     })
   }
 
@@ -160,23 +180,21 @@ class RevenueLineChart extends Component {
     return (
         <div
           className={`brush-timeline ${fixedBottom ? 'timeline-fixed' : 'timeline-standard'} ${collapsed ? 'timeline-collapsed' : ''}`}>
+            <div className='timeline-explanation'>
+                  <h3 className='timeline-title'>Average Revenue of Top Ten Movies</h3>
+                  {!collapsed && <p className='timeline-description'>Click and drag to select a range of time to adjust the global date range</p>}
+              </div>
             <div className='timeline-content'>
               <button className={`toggle-chart-height ${!collapsed ? 'collapse-chart' : ''}`} onClick={this.handleToggleHeight}>
                 <FontAwesomeIcon icon='angle-down' />
               </button>
-              
-              <div className='timeline-explanation'>
-                  <h3 className='timeline-title'>Average Revenue of Top Ten Movies</h3>
-                  {!collapsed && <p className='timeline-description'>Click and drag to select a range of time to adjust the global date range</p>}
-              </div>
-
               
               <svg width={width} height={height}>
                   {!collapsed && <g ref="yAxisLines" className='background-lines' transform={`translate(${width - margin.right}, 0)`} />}
 
                   <path fill='none' stroke='#4da000' stroke-width={1.5} d={line(visData)} />))
                   {displayMinYear && <text x={this.getBrushLabelPos(x1, 'left')} y={height/4} className='year-text'>{displayMinYear}</text>}
-                  <g ref="brush" />
+                  <g ref='brush' />
                   {displayMaxYear && <text x={this.getBrushLabelPos(x2, 'right')} y={height/4} className='year-text'>{displayMaxYear}</text>}
                   <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
                   {!collapsed && <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />}
