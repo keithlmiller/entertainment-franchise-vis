@@ -1,0 +1,22 @@
+@import '../../../constants/styles/colors.scss';
+
+.active-filters {
+    text-align: right;
+    width: 250px;
+    font-size: 16px;
+    margin-top: 25px;
+  
+    .active-filter {
+      font-weight: bold;
+      font-size: 21px;
+      text-transform: capitalize;
+  
+      &.boxOffice {
+        color: $dollar-color;
+      }
+  
+      &.metascore {
+        color: $reviews-color;
+      }
+    }
+  }

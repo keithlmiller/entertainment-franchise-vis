@@ -10,6 +10,7 @@ import RevenueLineChart from './views/visualizations/RevenueLineChart';
 
 // import other app section components
 import DataOptions from './views/DataOptions/DataOptions';
+import ActiveFilters from './views/filters/ActiveFilters/ActiveFilters';
 import SelectedMovie from './views/SelectedMovie/SelectedMovie';
 
 // import utils
@@ -316,10 +317,14 @@ class App extends Component {
           <DataOptions
             genresList={genresList}
             genreFilter={genreFilter}
-            dateRange={dateRange}
             sortProperty={sortProperty}
             updateGenre={this.updateGenreFilter}
             updateSortProperty={this.updateSortProperty}
+          />
+          <ActiveFilters 
+            genreFilter={genreFilter} 
+            dateRange={dateRange}
+            sortProperty={sortProperty}
           />
         </div>
         {!!visData.length ?
