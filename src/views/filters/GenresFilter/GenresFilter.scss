@@ -1,11 +1,11 @@
 .genres-filter {
-    width: 340px;
+    width: 310px;
     margin-top: 20px;
+    text-align: left;
 
     .genres-filter-list {
         display: flex;
         flex-wrap: wrap;
-        justify-content: center;
     }
 
     .filter-button {
