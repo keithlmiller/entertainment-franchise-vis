@@ -25,30 +25,42 @@ body {
 
   .page-intro {
     text-align: left;
-    background: #444;
-    color: #fff;
-    padding: 15px 20px;
+    color: #444;
+    padding: 10px 20px 15px;
+    margin: 2px 15px 15px 2px;
+    border: 1px solid $light-primary-offset;
+    box-shadow: 10px 10px 0px 0px #444;
 
-    &.boxOffice {
-      background: $dollar-color;
-    }
-
-    &.metascore {
-      background: $reviews-color;
-    }
+    
 
     .article-title {
-      font-size: 24px;
+      font-size: 32px;
+      margin: 0;
+      
+      .boxOffice {
+        color: $dollar-color;
+      }
+  
+      .metascore {
+        color: $reviews-color;
+      }
     }
 
     a, a:visited {
-      color: #fff;
+      color: #444;
       text-decoration: none;
       font-weight: bold;
     }
   
     .article-subtitle {
+      margin: 5px 0px 10px;
       font-weight: normal;
+      font-style: italic;
+    }
+
+    p {
+      margin: 3px 0px;
+      font-size: 12px;
     }
   }
 
