@@ -24,18 +24,23 @@ body {
   }
 
   .page-intro {
-    text-align: left;
     color: #444;
+    background: #fff;
     padding: 10px 20px 15px;
     margin: 2px 15px 15px 2px;
     border: 1px solid $light-primary-offset;
     box-shadow: 10px 10px 0px 0px #444;
-
-    
+    text-align: left;
 
     .article-title {
       font-size: 32px;
       margin: 0;
+
+      .title-transition {
+        font-size: 24px;
+        font-style: italic;
+        color: #888;
+      }
       
       .boxOffice {
         color: $dollar-color;

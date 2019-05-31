@@ -13,7 +13,7 @@ export default function DataOptions({ genresList, genreFilter, sortProperty, upd
                     <SectionTitle title='Sort By:' />
                     <div className='buttons-container'>
                     <SortButton title='Box Office' icon='dollar-sign' sortClass='boxOffice' onClick={() => updateSortProperty('boxOffice')} active={sortProperty === 'boxOffice'} />
-                    <SortButton title='MetaCritic' icon='star-half-alt' sortClass='metascore' onClick={() => updateSortProperty('metascore')} active={sortProperty === 'metascore'} />
+                    <SortButton title='MetaScore' icon='star-half-alt' sortClass='metascore' onClick={() => updateSortProperty('metascore')} active={sortProperty === 'metascore'} />
                     </div>
                 </div>
                 <GenresFilter genres={genresList} activeGenre={genreFilter} sortClass={sortProperty} onClick={(genre) => updateGenre(genre)} />

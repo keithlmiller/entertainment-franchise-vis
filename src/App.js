@@ -306,7 +306,7 @@ class App extends Component {
       <div className="App">
         <div className='page-header'>
           <div className='page-intro'>
-            <h1 className='article-title'><span className='boxOffice'>Box Office Revenue</span> vs <span className='metascore'>MetaScore</span></h1>
+            <h1 className='article-title'><span className='boxOffice'>Box Office Revenue</span> <span className='title-transition'>vs</span> <span className='metascore'>MetaScore</span></h1>
             <h3 className='article-subtitle'>Explore the domestic (US) revenue and Metascores of top blockbusters in the past two decades</h3>
             <p className='article-description'>
               This dataset includes the top 10 grossing movies from each year between 1999 and 2017

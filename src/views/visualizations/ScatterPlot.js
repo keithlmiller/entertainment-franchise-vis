@@ -169,7 +169,7 @@ class ExtendedScatterPlot extends Component {
             </g>
             <g ref="xAxis" transform={`translate(0, ${height - margin.bottom})`} />
             <g ref="yAxis" transform={`translate(${margin.left}, 0)`} />
-            <text x={width / 2} y={height - 2} className='axis-label'>Critical Response</text>
+            <text x={width / 2} y={height - 2} className='axis-label'>MetaScore</text>
             <text x={-40} y={height / 2 + 10} className='axis-label y-axis-label'>Box Office Revenue</text>
           </svg>
           {isTooltipOpen && 
