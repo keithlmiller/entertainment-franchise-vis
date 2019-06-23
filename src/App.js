@@ -26,8 +26,9 @@ import {
   truncate,
 } from './utils/format-utils';
 import './App.scss';
-// import 'normalize.css';
 
+const scrollTopThreshold = 140;
+const scrollTopThresholdTwo = 400;
 class App extends Component {
   constructor(props) {
     super(props);
@@ -47,10 +48,13 @@ class App extends Component {
         moviesPerChart: 7,
         hoveredMovie: '',
         selectedMovie: '',
+        scrollTop: 0,
     };
   }
 
   componentWillMount() {
+    window.addEventListener('scroll', this.handleScroll);
+
     const movieDataArray =
       Object.keys(movieData).map((key) => {
         const movie = movieData[key];
@@ -104,6 +108,10 @@ class App extends Component {
     });
   }
 
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.handleScroll);
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const {
       sortProperty: prevSortProperty,
@@ -138,6 +146,12 @@ class App extends Component {
       })
     }
     return moviesPerYear;
+  }
+
+  handleScroll = (e) => {
+    this.setState({
+      scrollTop: window.scrollY,
+    });
   }
 
   // get list of genres
@@ -283,7 +297,6 @@ class App extends Component {
   render() {
     const { 
       visData,
-      timelineData,
       revenueTimelineData,
       defaultChartWidth,
       defaultChartHeight,
@@ -294,6 +307,7 @@ class App extends Component {
       selectedMovie,
       dateRange,
       rawData,
+      scrollTop,
     } = this.state;
 
     let selectedMovieDetails = {};
@@ -305,8 +319,8 @@ class App extends Component {
     return (
       <div className="App">
         <div className='page-header'>
-          <div className='page-intro'>
-            <h1 className='article-title'><span className='boxOffice'>Box Office Revenue</span> <span className='title-transition'>vs</span> <span className='metascore'>MetaScore</span></h1>
+          <div className={`page-intro ${scrollTop > scrollTopThreshold ? 'page-intro-min' : ''}`}>
+            <h1 className={`article-title ${scrollTop > scrollTopThresholdTwo ? 'article-title-min' : ''}`}><span className='boxOffice'>Box Office Revenue</span> <span className='title-transition'>vs</span> <span className='metascore'>MetaScore</span></h1>
             <h3 className='article-subtitle'>Explore the domestic (US) revenue and Metascores of top blockbusters in the past two decades</h3>
             <p className='article-description'>
               This dataset includes the top 10 grossing movies from each year between 1999 and 2017
