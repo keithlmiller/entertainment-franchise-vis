@@ -17,12 +17,52 @@ body {
     display: flex;
     justify-content: center;
     width: 100%;
-    background: #fbfbfb;
+    background: $lightest;
     margin-bottom: 30px;
   }
 
   .content-container {
     padding-bottom: 240px;
+  }
+
+  .article-title {
+    font-size: 32px;
+    margin: 0;
+    opacity: 1;
+    transition: opacity .5s;
+
+    &-min {
+      // opacity: 0;
+      font-size: 16px;
+      background: $lightest;
+    }
+
+    .title-transition {
+      font-size: 24px;
+      font-style: italic;
+      color: #888;
+    }
+    
+    .boxOffice {
+      color: $dollar-color;
+    }
+
+    .metascore {
+      color: $reviews-color;
+    }
+  }
+
+  .page-header-small {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: $lightest;
+    z-index: 100;
+
+    .article-title, .title-transition {
+      padding: 15px 0;
+      font-size: 16px;
+    }
   }
 
   .page-intro {
@@ -35,31 +75,6 @@ body {
     text-align: left;
     height: 500px;
     margin-bottom: 30px;
-
-    .article-title {
-      font-size: 32px;
-      margin: 0;
-      opacity: 1;
-      transition: opacity .5s;
-
-      &-min {
-        opacity: 0;
-      }
-
-      .title-transition {
-        font-size: 24px;
-        font-style: italic;
-        color: #888;
-      }
-      
-      .boxOffice {
-        color: $dollar-color;
-      }
-  
-      .metascore {
-        color: $reviews-color;
-      }
-    }
 
     a, a:visited {
       color: #444;
@@ -81,23 +96,7 @@ body {
       opacity: 1;
       transition: opacity 1s;
     }
-
-    &-min {
-      // height: 40px;
-      .article-title {
-        position: fixed;
-        top: 30px;
-      }
-  
-      .article-subtitle, p {
-        opacity: 0;
-      }
-    }
-
-
   }
-
-  
 
   .page-options {
     display: flex;
