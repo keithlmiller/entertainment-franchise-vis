@@ -96,7 +96,6 @@ class App extends Component {
     const { visData, fullVisData } = this.getNewVisData(moviesWithBoxOffice);
 
     this.setState({
-      ...this.state,
       dateRange,
       rawData: moviesWithBoxOffice,
       visData,
@@ -214,13 +213,11 @@ class App extends Component {
   updateSelectedMovie = (movie) => {
     if (movie) {
       return this.setState({
-        ...this.state,
         selectedMovie: movie,
       });
     }
 
     this.setState({
-      ...this.state,
       selectedMovie: '',
     });
   }
@@ -228,13 +225,11 @@ class App extends Component {
   updateHoveredMovie = (movie) => {
     if (movie) {
       return this.setState({
-        ...this.state,
         hoveredMovie: movie,
       });
     }
 
     this.setState({
-      ...this.state,
       hoveredMovie: '',
     });
   }
@@ -242,7 +237,6 @@ class App extends Component {
   updateDateRange = (range) => {
     if (range) {
       this.setState({
-        ...this.state,
         selectedMovie: '',
         dateRange: range,
       });
@@ -251,7 +245,6 @@ class App extends Component {
 
   updateGenreFilter = (genre) => {
     this.setState({
-      ...this.state,
       selectedMovie: '',
       genreFilter: genre,
     });
@@ -259,7 +252,6 @@ class App extends Component {
 
   updateSortProperty = (sortProperty) => {
     this.setState({
-      ...this.state,
       selectedMovie: '',
       sortProperty,
     });
@@ -268,7 +260,6 @@ class App extends Component {
   updateVisData = (data) => {
     const { visData, fullVisData } = this.getNewVisData(data);
     this.setState({
-      ...this.state,
       visData,
       fullVisData,
     });
@@ -355,6 +346,7 @@ class App extends Component {
                 hoveredMovie={hoveredMovie}
                 selectedMovie={selectedMovie}
                 sortClass={sortProperty}
+                chartTitle={'US Box Office Revenue'}
                 onDataHover={this.updateHoveredMovie}
                 onDataClick={this.updateSelectedMovie}
               />
