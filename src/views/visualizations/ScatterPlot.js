@@ -34,6 +34,8 @@ class ExtendedScatterPlot extends Component {
       .range([margin.left, width - margin.right]);
 
     const [yMin, yMax] = d3.extent(visData, d => d.boxOffice);
+    console.log(yMin)
+    
     const yTickFormat = yMax >= 1000000 ? 1000000 : 1000;
     const yTickLabel = yMax >= 1000000 ? 'M' : 'k';
     const yScale = d3

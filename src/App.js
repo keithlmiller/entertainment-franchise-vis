@@ -59,7 +59,7 @@ class App extends Component {
       Object.keys(movieData).map((key) => {
         const movie = movieData[key];
         const date = new Date(movie.Released);
-        const boxOffice = parseInt(movie.BoxOffice.replace(/[\$\,]/g, ""));
+        const boxOffice = parseInt(movie.BoxOffice.replace(/[,]/g, ""));
 
         return {
           title: truncate(movie.Title, 27),
@@ -139,7 +139,7 @@ class App extends Component {
       .map(year => ({year: year[0], numMovies: year[1].length}));
     if (allYears) {
       moviesPerYear = allYears.map(year => {
-        const yearHasMovie = moviesPerYear.find(movieYear => movieYear.year == year)
+        const yearHasMovie = moviesPerYear.find(movieYear => movieYear.year === year)
         return yearHasMovie ? yearHasMovie : {year, numMovies: 0}
 
       })
@@ -317,7 +317,7 @@ class App extends Component {
             <h3 className='article-subtitle'>Explore the domestic (US) revenue and Metascores of top blockbusters in the past two decades</h3>
             <p className='article-description'>
               This dataset includes the top 10 grossing movies from each year between 1999 and 2017
-              The data was originally pulled from IMDB. I found it through a <a href='https://frontendmasters.com/courses/d3-js-custom-charts/' target='_blank'>Front End Masters Course</a>.
+              The data was originally pulled from IMDB. I found it through a <a href='https://frontendmasters.com/courses/d3-js-custom-charts/' target='_blank' rel="noopener noreferrer">Front End Masters Course</a>.
             </p>
             <p className='article-description'>I made this visualization for learning and experimentation, hopefully you find it fun!</p>
           </div>

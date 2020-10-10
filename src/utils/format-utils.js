@@ -19,7 +19,7 @@ export const wrap = (text, width) => {
           y = text.attr('y'),
           dy = parseFloat(text.attr('dy')),
           tspan = text.text(null).append('dy').attr('x', 0).attr('y', y).attr('dy', dy + 'em');
-      while (word = words.pop()) {
+      while (word === words.pop()) {
         line.push(word);
         tspan.text(line.join(' '));
         if (tspan.node().getComputedTextLength() > width) {
