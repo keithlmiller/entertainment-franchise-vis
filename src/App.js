@@ -59,7 +59,8 @@ class App extends Component {
       Object.keys(movieData).map((key) => {
         const movie = movieData[key];
         const date = new Date(movie.Released);
-        const boxOffice = parseInt(movie.BoxOffice.replace(/[,]/g, ""));
+        // eslint-disable-next-line
+        const boxOffice = parseInt(movie.BoxOffice.replace(/[\$\,]/g, ""));
 
         return {
           title: truncate(movie.Title, 27),
@@ -79,6 +80,7 @@ class App extends Component {
       });
 
     const moviesWithBoxOffice = filterPropertyNonNumbers(movieDataArray, 'boxOffice');
+
 
     // get genres for genre timeline chart
     const moviesOfGenrePerYear = getFirstX(this.getMoviesOfGenrePerYear(moviesWithBoxOffice), 10);
